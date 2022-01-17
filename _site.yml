@@ -1,0 +1,12 @@
+name: "stat479_s22"
+title: "&quot;Statistical Data Visualization - Spring 2022&quot;"
+description: |
+  &quot;Statistical Data Visualization - Spring 2022&quot;
+output_dir: "_site"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+output: distill::distill_article
