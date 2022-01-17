@@ -1,0 +1,21 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this site",
+      "description": "Some additional details about the website",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2022-01-16T18:16:03-06:00"
+    },
+    {
+      "path": "index.html",
+      "title": "Statistical Data Visualization - Spring 2022",
+      "description": "Welcome to the website. I hope you enjoy it!\n",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2022-01-16T18:16:04-06:00"
+    }
+  ],
+  "collections": []
+}
