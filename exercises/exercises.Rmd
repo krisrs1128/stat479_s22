@@ -1,6 +1,6 @@
 ---
 title: "STAT 479 Exercises"
-output: rmarkdown::pdf_document
+output: bookdown::pdf_book
 header-includes:
     - \usepackage {hyperref}
     - \hypersetup {colorlinks = true, linkcolor = red, urlcolor = red}
@@ -12,8 +12,56 @@ opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, incl
 ```
 
 
-## Module 1: Building Blocks of Data Visualization
+# Module 1: Building Blocks of Data Visualization
 
+1. [Formulating Questions] Pick a dataset from
+[TidyTuesday](https://github.com/rfordatascience/tidytuesday#datasets), [Data Is
+Plural](https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0),
+[Kaggle Datasets](https://www.kaggle.com/datasets), or [Google Dataset
+Search](https://datasetsearch.research.google.com/) that you think would be
+interesting to visualize this semester. Give an example of a question or
+comparison for which this data might be useful. You do not need to download the
+dataset, but do provide a link, so we can use it to create future exercises.
+
+1. [Data Types] For the following parts, specify whether the data field is
+Nominal, Ordinal, or Quantitative.
+    a. `BuildingArea` in the Melbourne Homes [dataset](https://uwmadison.box.com/shared/static/h5u176syp4xkret4w89n70efsp1tubex.csv)
+    b. `Sport` in the 2012 Olympics [dataset](https://uwmadison.box.com/shared/static/rzw8h2x6dp5693gdbpgxaf2koqijo12l.csv)
+    c. `age_group` in the Language Learning [dataset](https://uwmadison.box.com/shared/static/m53dea9w5ipczs3d7nqdnxqxx5ao501b.csv)
+
+1. [Critique - Infographic] Figure 1 below is from the Information is Beautiful Infographic "Food Waste
+is a Big Climate Problem We Can Actually Solve." It shows the breakdown of
+sources of food waste in the UK. Give an example of a question that this
+visualization helps answer. How easy / difficult is it to answer based on the
+current design? What is one design choice that you like? What is one thing you
+would do differently if you were redesigning it?
+    
+    ```{r fig.cap = "Sources of food waste, from Information is Beautiful infographic.", out.width = 250, fig.align = "center", echo = FALSE}
+    include_graphics("figure/info-food-waste.png")
+    ```
+  
+1. [Critique - Science paper] Figure 2 below is from the scientific article *Both consumptive and non-consumptive effects of predators impact mosquito populations and have implications for disease transmission* by Russell et al. (2022). It describes the predators of mosquitos at different points in their life cycles. Give an example of a question that this visualization helps answer. How
+easy / difficult is it to answer based on the current design? What is one design
+choice that you like? What is one thing you would do differently if you were
+redesigning it?
+    
+    ```{r, fig.cap = "Animals that eat mosquitos, depending on the age of the mosquito, from Russell et al. (2022).", out.width = 250, fig.align = "center", echo = FALSE}
+    include_graphics("figure/mosquito-predators.jpeg")
+    ```
+  
+1. [Critique - Science Paper] Figure 3 below is from the scientific article *Genetic basis and dual adaptive role of floral pigmentation in sunflowers* by Todesco et al. (2022).
+While all sunflower petals look the same to us (they look yellow), they actually
+vary quite a bit in how they reflect ultraviolet light, which is visible to
+pollinators. The figure studies the variation in this ultraviolet proportion
+(LUVp) across populations of sunflowers. Give an example of a question that this visualization helps answer. How
+easy / difficult is it to answer based on the current design? What is one design
+choice that you like? What is one thing you would do differently if you were
+redesigning it?
+    
+    ```{r fig.cap = "Variation in amount of ultraviolet proportion of sunflower petals, from Todesco et al. (2022).", out.width = 250, fig.align = "center", echo = FALSE}
+    include_graphics("figure/elife_sunflower.jpeg")
+    ```
+  
 1. [Ikea Furniture] The dataset below shows prices of pieces of Ikea furniture.
 We will compare prices of different furniture categories and label the
 (relatively few) articles which cannot be bought online.
@@ -32,17 +80,15 @@ to lowest average prices.
 cannot be purchased online, add a text label giving the name of that item of
 furniture.
 
-2. [Penguins] The data below measures properties of various Antarctic penguins.
+1. [Penguins] The data below measures properties of various Antarctic penguins.
     ```{r, echo = TRUE}
     penguins <- read_csv("https://uwmadison.box.com/shared/static/ijh7iipc9ect1jf0z8qa2n3j7dgem1gh.csv")
     ```
-    Create a single plot that makes it easy to answer both of these questions,
-        * How is bill length related to bill depth within and across species? 
-        * On which islands are which species found?
+    Create a single plot that makes it easy to answer both of these questions, (i) How is bill length related to bill depth within and across species? (ii) On which islands are which species found?
     
     Read about [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox) and summarize it in your own words. Then, explain how part (i) provides a real-world example of this paradox.
 
-3. [London Olympics] The data at this
+1. [London Olympics] The data at this
 [link](https://uwmadison.box.com/s/rzw8h2x6dp5693gdbpgxaf2koqijo12l) describes
 all participants in the London 2012 Olympics.
     a. Create a layered display that shows (i) the ages of athletes across sports
@@ -50,7 +96,7 @@ and (ii) the average age within each sport. Use different marks for participants
 and for averages. To avoid overplotting, jitter the `Age` variable.
     b. Sort the sports from lowest to highest average age.
 
-4. [German Traffic] We will use `geom_ridgeline` to compare traffic volumes
+1. [German Traffic] We will use `geom_ridgeline` to compare traffic volumes
 across a set of cities. The data are read in below,
     ```{r}
     traffic <- read_csv("https://uwmadison.box.com/shared/static/x0mp3rhhic78vufsxtgrwencchmghbdf.csv")
@@ -78,8 +124,8 @@ were used to compute the associated statistics. The resulting data are available
     b. Create a ribbon plot showing confidence intervals for average test scores as
     a function of starting age. Include a line for the average score within that
     combination. Interpret the results of the study.
-    
-6. [Homelessness] Take a static screenshot from any of the visualizations in
+   
+1. [Homelessness] Take a static screenshot from any of the visualizations in
 this
 [article](https://www.theguardian.com/us-news/ng-interactive/2017/dec/20/bussed-out-america-moves-homeless-people-country-study),
 and deconstruct its associated visual encodings. 
@@ -91,7 +137,7 @@ and deconstruct its associated visual encodings.
     from the underlying abstract data?
     d. Is multi-view composition being used? If so, how?
   
-7. [Plant Growth Experiment] This problem will give you practice with tidying a
+1. [Plant Growth Experiment] This problem will give you practice with tidying a
 dataset so that it can be easily visualized. The data describe the height of
 several plants measured every 7 days. The plants have been treated with
 different amounts of a growth stimulant. The first few rows are printed below --
@@ -109,7 +155,7 @@ different amounts of a growth stimulant. The first few rows are printed below --
     c. Using the dataset from (b), design and implement a visualization showing the
     growth of the plants over time according to different treatments.
     
-8. [California Wildfires] In this problem, we will interactively visualize a
+1. [California Wildfires] In this problem, we will interactively visualize a
 [dataset](https://uwmadison.box.com/shared/static/k5vvekf1bhh9e16qb9s66owygc70t7dm.csv)
 giving statistics of recent California wildfires. The steps below guide you
 through the process of building this visualization.
@@ -127,7 +173,7 @@ through the process of building this visualization.
     that is not described by this visualization or dataset that you think would
     enrich your interpretation?
   
-9. [Pokemon]  This problem gives practice in deriving new variables to improve a
+1. [Pokemon]  This problem gives practice in deriving new variables to improve a
 faceted plot. The data below give attack and defense statistics for Pokemon,
 along with their types. We will build a visualization to answer the question --
 how do the different types of Pokemon vary in their attack and defense
@@ -151,8 +197,19 @@ potential?
     of dynamic queries. What questions would the visualization answer? What would be
     the structure of interaction, and how would the display update when the user
     provides a cue?
-  
-9.  In this problem, we'll create a visualization to dynamically query a
+    
+1. Consider the plot of missingness in the Melbourne Homes dataset in Figure 4. Select all the true conclusions.
+
+    * The `Landsize` variable is always missing.
+    * The variable with the highest number of missing values is `BuildingArea`. 
+    * There are 560 rows where exactly one of `CouncilArea`, `YearBuilt`, or `BuildingArea` are missing.
+    * In more than 2/3 of the rows where `BuildingArea` is missing, `YearBuilt` is also missing.
+    
+    ```{r, out.width = 400, fig.cap = "Upset plot of missingness in the Melbourne Homes dataset.", echo = FALSE}
+    include_graphics("figure/melbourne_missigness.png")
+    ```
+    
+1.  In this problem, we'll create a visualization to dynamically query a
 [dataset](https://uwmadison.box.com/shared/static/zi72ugnpku714rbqo2og9tv2yib5xped.csv)
 of Airbnb rentals in Manhattan in 2019. The steps below guide you through the
 process of building this visualization.
@@ -171,7 +228,37 @@ process of building this visualization.
     d. Comment on the resulting visualization. If you had a friend who was
     interested in renting an Airbnb in NYC, what would you tell them?
     
-## Module 2: Visualizing Structured Data
+1. Study the visualization at [this link](https://observablehq.com/@d3/collapsible-tree). Its design reflects which of the following visualization techniques? (select all that apply).
+    * Faceting
+    * Details-on-demand
+    * Ridgelines
+    * Overview + detail
+    * Tidy data
+    
+1. [Yu-Gi-Oh!] This question asks you to tidy a Yi-Gi-Oh! [dataset](https://uwmadison.box.com/shared/static/asjb29rhu1hrm2zizv0iu7eqqw9mj0ds.csv).
+    a. Write code that provides more meaningful attribute and type columns. The result of your transformation should look like [this](https://uwmadison.box.com/shared/static/6akcs5d1khcgxa4blgtcrylq8rl2dx9h.csv).
+    b. Count the number of attribute and type combinations. Derive new features that count the fraction of each combination that are on the trading and official card game banlists (Banned trading and official cards have non-NA values in the tcg_ban and ocg_ban columns, respectively). The result of your transformation should look like [this](https://uwmadison.box.com/shared/static/frwm9uhqzx3rnjnh6j6vyt4ypvjwcb89.csv).
+    c. Reshape the dataset so that the trading and official card game
+    proportions are listed in a single column and the Spell and Trap cards are
+    at the top. The result of your transformation should look like [this](https://uwmadison.box.com/shared/static/56mn6kfajqxua6tx4fgpq7r7ixs2zt0o.csv).
+
+1. [Reshaping practice] The following parts ask you to provide R code that
+transforms one dataset (I) into another (II).
+    a. Regional murder rates: Turn [I](https://uwmadison.box.com/shared/static/h4gau9heqy3uue9rmpq9b55s3kw37zd8.csv) into [II](https://uwmadison.box.com/shared/static/h4gau9heqy3uue9rmpq9b55s3kw37zd8.csv). 
+    b. Antiobitics and bacteria. Turn [I](https://uwmadison.box.com/shared/static/bq4afq9kl2zn9qlb89q2rxhrrv73iuil.csv) into [II](https://uwmadison.box.com/shared/static/gmzul7bp78o6kwtutl73hkiyxea4dr21.csv)
+    
+1. [Interactive Penguins] This problem visualizes the Penguins [dataset](https://uwmadison.box.com/shared/static/ijh7iipc9ect1jf0z8qa2n3j7dgem1gh.csv) interactively.
+    a. Create two static scatterplots: one of of bill length vs. depth and
+    another of flipper length vs. body mass.
+    b. Create selection menus that can be used to highlight the island that the
+    penguin came from, along with its gender.
+    c. Create selection brushes that can be used to link the two plots together.
+    That is, highlighting points in a brush for one view should highlight the
+    corresponding penguins in the other.
+    d. Provide one takeaway from the interactive visualization that is not
+    possible to make using the original staitic version.
+    
+# Module 2: Visualizing Structured Data
 
 1. [Matching Autocorrelation Functions] The purpose of this problem is to build
 further intuition about auto-correlation. We'll simulate data with known
@@ -198,7 +285,7 @@ structure and then see what happens to the associated autocorrelation functions.
     the relationship between the strength of the trend and the shape of the
     function.
   
-2. [Spotify Time Series]  In this problem, we will study music streaming on
+1. [Spotify Time Series]  In this problem, we will study music streaming on
 Spotify in 2017. We'll start by looking at some characteristics of the most
 streamed song, and then will practice how to extract features from across the
 collection of most streamed songs.
@@ -230,9 +317,42 @@ collection of most streamed songs.
     the statistics could not be calculated.
     
     e. Which tracks had the highest and lowest `trend_strength`'s? Visualize their
-    streams over the course of the year.
+    streams over the course of the year. 
     
-3. [NYC Trees] In this problem, we'll use vector data to enrich a visualization
+1. [Bike Demand] This problem asks you to visualize a [dataset](https://uwmadison.box.com/shared/static/f16jmkkskylfl1hnd5rpslzduja929g2.csv) of hourly bikeshare demand. Provide your code and make sure it is readable.
+
+    a. Make a line plot of bike demand (`count`) by hour, faceted out across the 7 days of the week (`weekday`).
+    b. Create a new summary data.frame giving the 25 and 75 percent quantiles of demand (`count`) for each hour (`hr`) by day of the week (`weekday`) combination, separately within each year (`yr`) that the data was collected.
+    c. Using a ribbon plot, overlay the quantities from (b) onto your plot from part (a). Use color to distinguish between the ribbons for the first and second year that the data were collected.
+    d. Provide a brief description of some takeaways from the final
+    visualization.
+    
+1. [Australian Pharmaceuticals] The PBS dataset contains the number of orders
+filed every month for different classes of pharmaceutical drugs, as tracked by
+the Australian Pharmaceutical Benefits Scheme. It is read in below,
+    
+    ```{r}
+    library(readr)
+    library(dplyr)
+    pbs <- read_csv("https://uwmadison.box.com/shared/static/fcy9q1uleqru7gcs287q903y0rcnw2a2.csv") %>%
+      mutate(Month = as.Date(Month))
+    ```
+    
+    a. In the text box below, provide code that will transform the data into a tsibble object, with month as the index and ATC2_desc as the key.
+    b. Using the feasts package, extract features for this time series collection. The series with the largest trend_strength is...
+    c. Perform a PCA on the following subset of extracted features (these are just trend_strength, features that start with "seasonal", or features containing the string "acf"), Make sure to normalize all features first.
+    ```
+     "trend_strength", "seasonal_strength_week", "seasonal_peak_week", "seasonal_trough_week", 
+     "stl_e_acf1", "stl_e_acf10", "acf1", "acf10", "diff1_acf1",
+     "diff1_acf10", "diff2_acf1", "diff2_acf10", "season_acf1",
+     "pacf5", "diff1_pacf5", "diff2_pacf5", "season_pacf"
+    ```
+    d. Make a plot of the top two principal components. Show the 17 features for
+    each component, and order the features according to the magnitude of their
+    contribution. Provide a brief interpretation of the second principal
+    component direction.
+    
+1. [NYC Trees] In this problem, we'll use vector data to enrich a visualization
 of trees in New York City. In the process, we'll practice reading in and
 generating summaries of geospatial data.
     
@@ -255,7 +375,7 @@ generating summaries of geospatial data.
     c. Generate a version of the plot in (a) that has the roads and buildings in the
     background.
     
-4. [Himalayan Glaciers] In this problem, we'll apply the reading's discussion of
+1. [Himalayan Glaciers] In this problem, we'll apply the reading's discussion of
 raster data to understand a
 [dataset](https://uwmadison.box.com/shared/static/2z3apyg4t7ct5qd4mcwh9rpr63t02jql.tif)
 containing Landsat 7 satellite imagery of a Himalayan glacier system.
@@ -269,7 +389,7 @@ containing Landsat 7 satellite imagery of a Himalayan glacier system.
     
     c. Make a plot of the slopes associated with each pixel within this region.
   
-5. [CalFresh Enrollment] In this problem, we will investigate spatial and
+1. [CalFresh Enrollment] In this problem, we will investigate spatial and
 temporal aspects of enrollment in CalFresh, a nutritional assistance program in
 California.
     
@@ -304,7 +424,7 @@ California.
     the structure of interaction, and how would the display update when the user
     provides a cue?
     
-6. [Political Book Recommendations] In this problem, we'll study a network
+1. [Political Book Recommendations] In this problem, we'll study a network
 dataset of Amazon bestselling US Politics books. Books are linked by an edge if
 they appeared together in the recommendations ("customers who bought this book
 also bought these other books").
@@ -330,8 +450,14 @@ also bought these other books").
     c. Use the result from part (b) to visualize the network using. Include the
     book's title in the node label, and shade in the node according to political
     ideology.
+    
+1. [Network Vis T/F] Select all the true statements about network visualization.
+    * For large, dense networks, node-link diagrams are preferable to adjacency matrix visualizations.
+    * For tasks related to local topology, node-link diagrams are preferable to adjacency matrix visualizations.
+    * It is possible to visually encode edge weight in either node-link or adjacency matrix visualizations.
+    * It is possible to visually encode node category in either node-link or adjacency matrix visualizations.
   
-## Module 3: Visualizing Models
+# Module 3: Visualizing Models
 
 1. [Polio incidence] In this problem, we will use a heatmap to visualize a large
 collection of time series. The
@@ -361,7 +487,7 @@ states).
     visualizing a collection of time series as a heatmap, instead of as a collection
     of line plots.
     
-2. [Silhouette Statistics Simulation] This problem uses simulation to build
+1. [Silhouette Statistics Simulation] This problem uses simulation to build
 intuition about silhouette statistics. The function below simulates a mixture of
 three Gaussians, with means evenly spaced out between `(start, 0)` and `(end,
 0)`. We will investigate what happens to the silhouette statistics for each
@@ -392,8 +518,19 @@ point as the three clusters are made to gradually overlap.
     
     c. Visualize the silhouette statistics from part (b) overlaid onto the simulated
     data. Discuss the results.
+
+1. [Hierarchical Clustering T/F] Figure \@ref(fig-hclusttf) shows a subset of a large hierarchical clustering tree. Select all the true statements below.
+    * Samples C and D are more similar to one another than A and B.
+    * If this subtree were cut to form K = 5 clusters, then C and D would belong to the same cluster.
+    * A and B are more similar to each other than B and C.
+    * If this subtree were cut to form K = 2 clusters, then A and B would belong to the same cluster.
+
+```{r hclusttf, echo = FALSE, fig.cap = "A subset of a large hierarchical clustering tree", fig.align = "center"}
+include_graphics("figure/hclust.png")
+```
+
     
-3. [Taxi Trips] In this problem, we will use hierarchical clustering to find
+1. [Taxi Trips] In this problem, we will use hierarchical clustering to find
 typical taxi trip trajectories in Porto, Portugal. The data are a subset from
 the the [ECML / PKDD 2015
 Challenge](http://www.geolink.pt/ecmlpkdd2015-challenge/dataset.html) -- the
@@ -425,7 +562,27 @@ format spreads each point of the journey into a separate row.
     Visualize the trajectories of the taxi trips either colored or faceted by their
     cluster.
     
-4. [Food nutrients] This problem will use PCA to provide a low-dimensional view
+1. [Support for Animal Research] This problem utilizes response data from a
+survey of UW–Madison students and faculty by Sandgren and Streiffer (2019). The
+survey assessed respondents’ support for the use of non-human animals in
+scientific research. Questions were categorized into various groups. The heatmap
+in figure \@ref(fig-sandgren) shows each respondent’s average response by question type. Higher-valued
+responses indicate more support for the use of non-human animals in scientific
+research.
+    a. The definition of “strong support” is not given. However, one cluster
+    seems to correspond to the strong support group. Which one, and why?
+    b. True or False: There appears to be a weak relationship between support
+    for non-human animal research across question types.
+    c. Cluster 3 contains the fewest respondents. Discuss potential reasons why
+    this may have been the case.
+    
+    ```{r, fig.cap = "Responses from Sandgren and Streiffer (2022).", out.width = 300, fig.align = "center", echo = FALSE}
+    include_graphics("figure/animal.png")
+    ```
+  
+
+    
+1. [Food nutrients] This problem will use PCA to provide a low-dimensional view
 of a 14-dimensional nutritional facts
 [dataset](https://uwmadison.box.com/shared/static/nmgouzobq5367aex45pnbzgkhm7sur63.csv).
 The data were originally curated by the USDA and are regularly used in
@@ -449,7 +606,7 @@ The data were originally curated by the USDA and are regularly used in
     and sort the facets according to the results of part (c). How does the result
     compare with your guess from part (b)?
     
-6. [Topics in _Pride and Prejudice_] This problem uses LDA to analyze the full
+1. [Topics in _Pride and Prejudice_] This problem uses LDA to analyze the full
 text of _Pride and Prejudice_. The code below creates two R objects, `paragraph`
 and `dtm`. `paragraph` is a data.frame whose rows are paragraphs^[We've filtered
 very short paragraphs; e.g., from dialogue.] from the book. `dtm` is a
@@ -483,7 +640,7 @@ $i^{th}$ row of `dtm` corresponds to the $i^{th}$ row of `paragraph`.
     the at least a few of the words with high probability for this topic appear.
     Only copy the first sentence into your solution.
   
-7. [Single-Cell Genomics]  In this problem, we will apply UMAP to a
+1. [Single-Cell Genomics]  In this problem, we will apply UMAP to a
 [dataset](https://uwmadison.box.com/shared/static/ai539s30rjsw5ke4vxbjrxjaiihq7edk.csv)
 of Peripheral Blood Mononuclear Cells (PBMC) released by 10X Genomics. The first
 column, `cell_tag`, gives an identifier for each cell in the dataset. All other
@@ -501,8 +658,8 @@ molecule often found on the surface of T-cells.
     
     b. Compute the UMAP embeddings across cells. Color points in by their value of
     the GNLY molecule.
-  
-8. [Political Blogs] In this problem, we will use topic modeling to see how the topics discussed
+ 
+1. [Political Blogs] In this problem, we will use topic modeling to see how the topics discussed
 across the political blogsphere evolved over course of 2008. We have fitted a
 model to a subsample of [The CMU 2008 Political Blog
 Corpus](http://reports-archive.adm.cs.cmu.edu/anon/ml2010/CMU-ML-10-101.pdf),
@@ -546,7 +703,7 @@ nonlinear approaches are substantively different.
     weekend (`weekend`) features? Briefly justify your answer using a grouped CP
     plot.
   
-10. [Contrastive Profiles for Bikesharing] This problem continues the exploration
+1. [Contrastive Profiles for Bikesharing] This problem continues the exploration
 in the previous one. Here, we study whether the choice of GBM was critical, or
 whether any other model would have learned the same relationship between the
 predictors and bikesharing demand.
@@ -563,14 +720,14 @@ predictors and bikesharing demand.
         
     b. Repeat part (a), but comparing the GBM with the CART model fitted below.
     Comment on the result.
+      
+    ```{r, echo = TRUE, include = TRUE}
+    library(caret)
+    hyper <- data.frame(cp = 0.01)
+    fit_cart <- train(x = x, y = bike$count, method = "rpart", tuneGrid = hyper)
+    ```
   
-```{r, echo = TRUE, include = TRUE}
-library(caret)
-hyper <- data.frame(cp = 0.01)
-fit_cart <- train(x = x, y = bike$count, method = "rpart", tuneGrid = hyper)
-```
-
-11. [Representation Analysis for CIFAR10] This problem asks you to investigate
+1. [Representation Analysis for CIFAR10] This problem asks you to investigate
 the features learned by a deep learning model trained to the [CIFAR10
 dataset](https://www.cs.toronto.edu/~kriz/cifar.html). We will study the
 structure of the dataset and develop some intuition for what representations
@@ -603,13 +760,13 @@ different neurons are learning.
     images that have the highest activation for neuron 1. What does this neuron seem
     to be responsive to?
         
-  ```{r, echo = TRUE, include = TRUE}
-  activation_model <- keras_model(inputs = model$input, outputs = model$layers[[7]]$output)
-  features <- activation_model(cifar$x[1:5000,,, ]) %>%
-    as.matrix()
-  ```
+    ```{r, echo = TRUE, include = TRUE}
+    activation_model <- keras_model(inputs = model$input, outputs = model$layers[[7]]$output)
+    features <- activation_model(cifar$x[1:5000,,, ]) %>%
+      as.matrix()
+    ```
 
-12. [Household Radon Levels] This problem analyzes a
+1. [Household Radon Levels] This problem analyzes a
 [dataset](https://uwmadison.box.com/shared/static/3yn994tc1ft73z3br4ys18uri700gvik.csv)
 of household radon levels in Minnesota. The data were gathered by the EPA in [an
 effort](https://pubmed.ncbi.nlm.nih.gov/8919076/) to understand which factors
@@ -679,7 +836,7 @@ visualize their outputs.
       filter(.draw > 990)
     ```
   
-13. [Reading Response] This problem asks you to reflect on one of the three
+1. [Reading Response] This problem asks you to reflect on one of the three
 readings from week 14
 ([a](https://www.datasketch.es/project/655-frustrations-doing-data-visualization),
 [b](https://simplystatistics.org/2019/04/17/tukey-design-thinking-and-better-questions/),
