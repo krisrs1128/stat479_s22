@@ -17,11 +17,12 @@ opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, incl
 1. [Formulating Questions] Pick a dataset from
 [TidyTuesday](https://github.com/rfordatascience/tidytuesday#datasets), [Data Is
 Plural](https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0),
-[Kaggle Datasets](https://www.kaggle.com/datasets), or [Google Dataset
-Search](https://datasetsearch.research.google.com/) that you think would be
-interesting to visualize this semester. Give an example of a question or
-comparison for which this data might be useful. You do not need to download the
-dataset, but do provide a link, so we can use it to create future exercises.
+[Kaggle Datasets](https://www.kaggle.com/datasets), [Google Dataset
+Search](https://datasetsearch.research.google.com/), or your own personal studies that you 
+would like to visualize this semester. Are there application areas that you
+would be especially excited to see datasets from? Give an example of a question
+or comparison for which this data might be useful. You do not need to download
+the dataset, but do provide a link, so we can use it to create future exercises.
 
 1. [Data Types] For the following parts, specify whether the data field is
 Nominal, Ordinal, or Quantitative.
