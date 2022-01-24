@@ -81,6 +81,29 @@ to lowest average prices.
 cannot be purchased online, add a text label giving the name of that item of
 furniture.
 
+1. [City Temperatures] Let's versions of Figure 2.3 and 2.4 from the
+[reading](https://clauswilke.com/dataviz/aesthetic-mapping.html) this week. The
+command below reads in the data. We've filtered to a slightly different set of
+cities (Barrow is in Alaska, Honolulu is in Hawaii), but we should still be able
+to study changes in temperature over time.
+
+    ```{r}
+    temperature <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/data/temperatures.csv")
+    ```
+    a. Make a version of Figure 2.3 using a line mark (`geom_line`). Make at
+    least one customization of the theme to make the plot more similar to the
+    version in Figure 2.3. _Hint: To group the lines by city, use the `group = `
+    aesthetic mapping like in point (11) of the Week 1 [2] notes.
+    b. Using the `group_by` + `summarise` pattern, compute the mean temperature
+    for each month in each city.
+    c. Using the data generated in (b), Make a version of Figure 2.4 using a
+    tile mark (`geom_tile`). Try either (i) adding the `scale_fill_viridis_c(option =
+    "magma")` scale to match the color scheme from the reading or (ii) adding
+    `coord_fixed()` to make sure the marks are squares, not rectangles.
+    d. Compare and contrast the two displays. What types of comparisons are
+    easier to make / what patterns are most readily visible using Figure 2.3 vs.
+    Figure 2.4, and vice versa?
+  
 1. [Penguins] The data below measures properties of various Antarctic penguins.
     ```{r, echo = TRUE}
     penguins <- read_csv("https://uwmadison.box.com/shared/static/ijh7iipc9ect1jf0z8qa2n3j7dgem1gh.csv")

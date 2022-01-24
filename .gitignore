@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
-_site/exercises
-_site/syllabus
+docs/exercises
+docs/data
+docs/schedule*
+docs/syllabus
 *cache*
