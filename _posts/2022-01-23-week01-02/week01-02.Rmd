@@ -10,7 +10,7 @@ output:
     self_contained: false
 ---
 
-_[Reading](https://clauswilke.com/dataviz/aesthetic-mapping.html), [Recording](https://mediaspace.wisc.edu/media/Week%201%20%5B2%5D%20A%20Vocabulary%20of%20Marks/1_1tjacb3v),  [Rmarkdown](https://raw.githubusercontent.com/krisrs1128/stat479_s22/master/_posts/2022-01-23-week01-01/week01-01.Rmd)_
+_[Reading](https://clauswilke.com/dataviz/aesthetic-mapping.html), [Recording](https://mediaspace.wisc.edu/media/Week%201%20%5B2%5D%20A%20Vocabulary%20of%20Marks/1_1tjacb3v),  [Rmarkdown](https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-01-23-week01-02/week01-02.Rmd)_
 
 
 ```{r, echo = FALSE}
