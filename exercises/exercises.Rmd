@@ -131,7 +131,7 @@ across a set of cities. The data are read in below,
     b. Describe two takeaways from the resulting figure. Discuss, but do not implement
     c. Propose an alternative encoding of the same data. What are the strengths of your approach? What are the strengths of the ridgeline approach?
 
-5. [Language Learning] This problem will look at a simplified version of the 
+1. [Language Learning] This problem will look at a simplified version of the 
 data from the study _A critical period for second language acquisition: Evidence from 2/3 million English speakers_, 
 which measured the effect of the the age of initial language learning on
 performance in grammar quizzes. We have downloaded the raw data from the
@@ -168,7 +168,7 @@ different amounts of a growth stimulant. The first few rows are printed below --
 `height.x` denotes the height of the plant on day `x`.
     
     ```{r}
-    plants <- read.csv("https://uwmadison.box.com/shared/static/qg9gwk2ldjdtcmmmiropcunf34ddonya.csv")
+    plants <- read_csv("https://uwmadison.box.com/shared/static/qg9gwk2ldjdtcmmmiropcunf34ddonya.csv")
     ```
     
     a. Propose an alternative arrangement of rows and columns that conforms to the
@@ -717,6 +717,7 @@ nonlinear approaches are substantively different.
     provide a brief interpretation.
           
     ```{r, echo = TRUE, include = TRUE}
+    library(caret)
     bike <- read_csv("https://uwmadison.box.com/shared/static/aa91qdqehagag8wg8mqsm4z5b4g2hu0x.csv")
     x <- dplyr::select(bike, -count, -dteday)
     hyper <- data.frame(n.trees = 100, interaction.depth = 4, shrinkage = 0.1, n.minobsinnode = 10)
@@ -832,6 +833,7 @@ visualize their outputs.
     which type of prior was used for that simulation.
      
     ```{r, echo = TRUE, include = TRUE}
+    library(tidybayes)
     prior_preds <- map_dfr(priors, ~ add_predicted_draws(radon, .), .id = "prior") %>%
       filter(.draw > 3995)
     
