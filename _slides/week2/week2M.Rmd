@@ -196,7 +196,7 @@ Re-ordering by average temperature,
 
 ```{r, fig.width = 5.5, fig.height = 2}
 ggplot(averages) +
-  geom_tile(aes(new_month, reorder(city, mean_temp, mean), fill = mean_temp)) +
+  geom_tile(aes(new_month, reorder(city, -mean_temp, mean), fill = mean_temp)) +
   labs(x = "month", y = "city") +
   scale_fill_viridis_c(option = "magma") +
   coord_fixed()
@@ -299,6 +299,7 @@ Bonus 2: Can you think of another way of selecting columns for part (a)?
 ### Exercise Hints
 
 * It looks like the plants are growing over time, but time is not a column in the dataset
+* Try sketching out the transformation / code on paper before implementing it
 * `starts_with()` selects all columns starting with a phrase, e.g.,
 
 ```{r}

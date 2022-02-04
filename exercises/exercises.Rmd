@@ -8,6 +8,7 @@ header-includes:
 
 ```{r, echo = FALSE}
 library(knitr)
+library(tidyverse)
 opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, include = TRUE)
 ```
 
@@ -68,7 +69,6 @@ We will compare prices of different furniture categories and label the
 (relatively few) articles which cannot be bought online.
 
     ```{r}
-    library(readr)
     ikea <- read_csv("https://uwmadison.box.com/shared/static/iat31h1wjg7abhd2889cput7k264bdzd.csv")
     ```
     a. Make a plot that shows the relationship between the `category` of furniture
@@ -280,8 +280,102 @@ transforms one dataset (I) into another (II).
     That is, highlighting points in a brush for one view should highlight the
     corresponding penguins in the other.
     d. Provide one takeaway from the interactive visualization that is not
-    possible to make using the original staitic version.
+    possible to make using the original static version.
     
+1. [Olympics Derivations] This problem gives some practice with deriving new variables.
+    a. Create new columns for the city and country of birth for each athlete in the
+    London 2012 Olympics
+    [dataset](https://uwmadison.box.com/s/rzw8h2x6dp5693gdbpgxaf2koqijo12l).
+    b. Compute the standard deviation of athlete age within each sport. Which sport
+    has widest SD in age?
+    c. Make a visualization of sports against participant age. Sort sports by
+    age variance.
+    
+    ```{r}
+    olympics <- read_csv("https://uwmadison.box.com/shared/static/rzw8h2x6dp5693gdbpgxaf2koqijo12l.csv")
+    ```
+    
+    
+1. [Birds Code Review] This exercise asks you to conduct an imaginary code
+review. These are often used in data science teams to,
+    
+    * Catch potential bugs
+    * Make sure code is transparent to others
+    * Create a shared knowledge base
+    
+    It is important to be perceptive but friendly.
+    
+    * Can the code be made more compact?
+    * Are there visual design choices / encodings that could be refined?
+    * If your colleague did something well, say so!
+
+    They can also be a great way to learn new functions and programming patterns.
+    Unlike standard code-reviews, I ask you to give an example implementing your
+    recommendations.
+        
+    Specifically, in this review, suppose you are working with a scientific
+    colleague on your study of bird egg properties and their evolutionary
+    implications. They have written the code below. Provide your code review as a
+    set of bullet points, and include code giving an example implementation of your
+    ideas. The original data are from [this study](https://www.science.org/doi/10.1126/science.aaj1945).
+      
+    ```{r, fig.cap = "An example figure for code review.", fig.height = 4, fig.width = 8}
+    library(ggrepel)
+    
+    birds <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/birds.csv") %>%
+      separate(Species, c("genus", "species2"))
+    
+    bird_summaries <- birds %>%
+      group_by(genus) %>%
+      summarise(across(c("Asymmetry", "Ellipticity", "AvgLength (cm)", "Number of images", "Number of eggs"), list(MEAN = mean, STANDARD_DEVIATION = sd))) %>%
+      arrange(-Ellipticity_MEAN)
+    
+    ggplot(bird_summaries) +
+      geom_point(aes(Asymmetry_MEAN, Ellipticity_MEAN)) +
+      geom_text_repel(aes(Asymmetry_MEAN, Ellipticity_MEAN, label = genus))
+    ```
+  
+1. [Soccer Code Review] This exercise asks you to conduct an imaginary code
+review. These are often used in data science teams to,
+    
+    * Catch potential bugs
+    * Make sure code is transparent to others
+    * Create a shared knowledge base
+    
+    It is important to be perceptive but friendly.
+    * Can the code be made more compact?
+    * Are there visual design choices / encodings that could be refined?
+    * If your colleague did something well, say so!
+    
+    They can also be a great way to learn new functions and programming patterns.
+    Unlike standard code-reviews, I ask you to give an example implementing your
+    recommendations.
+      
+    Specifically, in this review, suppose you are working on a sports blog, and
+    your colleague is soccer interested in which teams won the most games in a
+    few European leagues over the last few years. They have written the code
+    below. Provide your code review as a set of bullet points, and include code
+    giving an example implementation of your ideas. The original data are from
+    [this
+    link](https://www.kaggle.com/slehkyi/extended-football-stats-for-european-leagues-xg).
+    
+    ```{r, fig.cap = "An example figure for code review.", fig.width = 16, fig.height = 4}
+    win_props <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/understat_per_game.csv") %>%
+      group_by(team, year) %>%
+      summarise(n_games = n(), wins = sum(wins) / n_games)
+    
+    best_teams <- win_props %>%
+      ungroup() %>%
+      slice_max(wins, prop = 0.2) %>%
+      pull(team)
+    
+    win_props %>%
+      filter(team %in% best_teams) %>%
+      ggplot() +
+      geom_point(aes(year, team, size = n_games, alpha = wins))
+    ```
+    
+
 # Module 2: Visualizing Structured Data
 
 1. [Matching Autocorrelation Functions] The purpose of this problem is to build
@@ -356,8 +450,6 @@ filed every month for different classes of pharmaceutical drugs, as tracked by
 the Australian Pharmaceutical Benefits Scheme. It is read in below,
     
     ```{r}
-    library(readr)
-    library(dplyr)
     pbs <- read_csv("https://uwmadison.box.com/shared/static/fcy9q1uleqru7gcs287q903y0rcnw2a2.csv") %>%
       mutate(Month = as.Date(Month))
     ```
@@ -638,8 +730,6 @@ very short paragraphs; e.g., from dialogue.] from the book. `dtm` is a
 $i^{th}$ row of `dtm` corresponds to the $i^{th}$ row of `paragraph`.
     
     ```{r}
-    library(readr)
-    library(dplyr)
     library(tidytext)
     
     paragraphs <- read_csv("https://uwmadison.box.com/shared/static/pz1lz301ufhbedzsj9iioee77r95xz4v.csv") 
