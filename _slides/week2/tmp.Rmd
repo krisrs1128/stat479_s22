@@ -1,0 +1,77 @@
+---
+author: "Kris Sankaran"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+---
+
+```{r}
+library(tidyverse)
+win_props <- read_csv("~/Downloads/tmp/understat_per_game.csv") %>%
+  group_by(team, year) %>%
+  summarise(n_games = n(), wins = sum(wins) / n_games)
+
+best_teams <- win_props %>%
+  ungroup() %>%
+  slice_max(wins, prop = 0.1) %>% # check ?slice_max. What does this do?
+  pull(team)
+
+win_props %>%
+  filter(team %in% best_teams) %>%
+  ggplot() +
+  geom_point(aes(year, team, size = n_games, alpha = wins))
+```
+
+```{r}
+covid <- read_csv("~/Downloads/tmp/covid-variants.csv") %>%
+  filter(perc_sequences > 0) %>%
+  mutate(
+    variant2 = as.factor(variant),
+    variant2 = fct_lump_n(variant2, n = 12) # what does this do? Use help(fct_lump_n)
+  )
+
+ggplot(covid %>% filter(location == "United States")) +
+  geom_bar(aes(date, num_sequences, col = variant2), stat = "identity")
+```
+
+```{r}
+library(ggrepel)
+birds <- read_csv("~/Downloads/aaj1945_datas1_egg_shape_by_species_v2.csv") %>%
+  separate(Species, c("genus", "species2"), remove = FALSE) %>%
+  mutate(common_orders = fct_lump_n(Order, 10))
+
+bird_summaries <- birds %>%
+  group_by(Order) %>%
+  summarise(across(Asymmetry:`Number of eggs`, list(mean = mean, sd = sd)))  %>%
+  arrange(-Ellipticity_mean)
+
+ggplot(bird_summaries) +
+  geom_point(aes(Asymmetry_mean, Ellipticity_mean)) +
+  geom_text_repel(aes(Asymmetry_mean, Ellipticity_mean, label = Order))
+```
+

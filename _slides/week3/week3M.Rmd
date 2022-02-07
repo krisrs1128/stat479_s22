@@ -1,0 +1,248 @@
+---
+author: "Kris Sankaran"
+title: "week3M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Faceting Review
+
+.pull-left[
+February 4, 2022
+]
+
+---
+
+### Announcements
+
+* View exercises as opportunity for experimentation
+* We will go over additional muddy points on Wednesday and Friday
+ 
+---
+
+## Exercise Review
+ 
+---
+
+### Part (a)
+
+```{r}
+olympics <- read_csv("https://uwmadison.box.com/shared/static/rzw8h2x6dp5693gdbpgxaf2koqijo12l.csv") %>%
+  separate(Sport, c("Sport", "Sport2", "Sport3"), sep = ",")
+
+olympics %>%
+  group_by(Sport) %>%
+  summarise(sd = sd(Age)) %>%
+  arrange(-sd)
+```
+
+---
+
+### Part (b)
+
+One approach is to use reorder within `aes()`.
+
+```{r, fig.height = 10, fig.width = 12, echo = TRUE, eval = FALSE}
+ggplot(olympics) +
+  geom_point(
+    aes(Age, reorder(Sport, Age, sd)),
+    position = position_jitter(height = 0.25),
+    alpha = 0.7, size = 0.8
+  )
+```
+
+---
+
+```{r, fig.height = 8, fig.width = 12, echo = FALSE}
+ggplot(olympics) +
+  geom_point(
+    aes(Age, reorder(Sport, Age, sd)),
+    position = position_jitter(height = 0.25),
+    alpha = 0.7, size = 0.8
+  )
+```
+
+
+---
+
+It is reasonable to use a boxplot to summarize the sports-level distributions.
+It does reduce the amount of information displayed, but the main takeaways are
+the same.
+
+```{r, fig.height = 8, fig.width = 12, eval = FALSE}
+ggplot(olympics) +
+  geom_boxplot(aes(Age, reorder(Sport, Age, sd)))
+```
+
+---
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 12}
+ggplot(olympics) +
+  geom_boxplot(aes(Age, reorder(Sport, Age, sd)))
+```
+
+---
+
+Instead of calling `reorder()`, it is also possible to code the `Sports`
+variable as a factor and set its levels according to part (a).
+
+```{r}
+sports_order <- olympics %>%
+  group_by(Sport) %>%
+  summarise(sd = sd(Age)) %>%
+  arrange(sd) %>%
+  pull(Sport)
+
+sports_order
+```
+
+---
+
+Instead of calling `reorder()`, it is also possible to code the `Sports`
+variable as a factor and set its levels according to part (a).
+
+```{r, fig.height = 8, fig.width = 12, eval = FALSE}
+olympics <- olympics %>%
+  mutate(Sport = factor(Sport, levels = sports_order))
+
+ggplot(olympics) +
+  geom_boxplot(aes(Age, Sport))
+```
+
+---
+
+```{r, fig.height = 8, fig.width = 12, echo = FALSE}
+olympics <- olympics %>%
+  mutate(Sport = factor(Sport, levels = sports_order))
+
+ggplot(olympics) +
+  geom_boxplot(aes(Age, Sport))
+```
+
+---
+
+### Exercise 2.3
+
+* Many creative encodings,
+  - Reordering according to win frequency
+  - Point color instead of transparency
+  - Tile color, and discard size
+  - Line plots for top teams
+  - Bar plots ordered by win frequency
+* Many clarity improvements
+  - Labeling axes
+  - Resizing to legibility
+
+---
+
+```{r}
+win_props <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/understat_per_game.csv") %>%
+  group_by(team, year) %>%
+  summarise(n_games = n(), wins = sum(wins) / n_games)
+
+best_teams <- win_props %>%
+  ungroup() %>%
+  slice_max(wins, prop = 0.2) %>%
+  pull(team)
+```
+
+---
+
+```{r, fig.width = 10, fig.height = 9, out.width = 500}
+win_props <- filter(win_props, team %in% best_teams)
+ggplot(win_props) +
+  geom_point(aes(year, reorder(team, wins), size = n_games, col = wins)) +
+  scale_color_gradient2(midpoint = 0.5)
+```
+
+---
+
+```{r, fig.width = 10, fig.height = 9, out.width = 500}
+win_props <- filter(win_props, team %in% best_teams)
+ggplot(win_props) +
+  geom_tile(aes(year, reorder(team, wins), fill = wins, col = wins)) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) +
+  scale_fill_gradient2(midpoint = 0.5) +
+  scale_color_gradient2(midpoint = 0.5)
+```
+
+---
+
+```{r, fig.width = 10, fig.height = 5}
+library(ggrepel)
+ggplot(win_props, aes(n_games, wins)) +
+  geom_point() +
+  geom_text_repel(aes(label = team), size = 4) +
+  ylim(0.7, 0.85) +
+  facet_wrap(~ year)
+```
+
+---
+
+```{r, fig.height = 6, fig.width = 10}
+ggplot(win_props) +
+  geom_point(aes(wins, reorder(team, wins), size = n_games, col = year)) +
+  scale_size(range = c(0, 2)) +
+  theme(axis.text = element_text(size = 8))
+```
+
+---
+
+### Exercise [Pokemon]
+
+This problem gives practice in deriving new variables to improve a faceted plot.
+The data below give attack and defense statistics for Pokemon, along with their
+types. We will build a visualization to answer the question – how do the
+different types of Pokemon vary in their attack and defense potential?
+
+a. Derive a new column containing the attack-to-defense ratio, defined as $\frac{\text{Attack}}{\text{Defense}}$.
+c. Provide a plot of the attack vs. defense scores for each Pokemon, faceted by
+`type_1`.
+
+Bonus 1: Label those pokemon that have exceptionally high (or low) ratios.
+Bonus 2: Sort the facets according to median attack to defense ratio.
+
+```{r}
+pokemon <- read_csv("https://uwmadison.box.com/shared/static/hf5cmx3ew3ch0v6t0c2x56838er1lt2c.csv")
+```
+
+---
+
+### Exercise Hints
+
+* For Bonus 1: Remember the derivation methods we discussed last week.
+* For Bonus 2: Faceting order can be controlled by the levels of the factor
+defining the facets. See today's notes / recording for an example.
+
+---
+
+### Exercise
+
+* Exercise 3.1 on Canvas
+* Discuss in groups, but submit own solution
+* Until 2:00pm, then regroup and answer questions
