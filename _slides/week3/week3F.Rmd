@@ -1,6 +1,6 @@
 ---
 author: "Kris Sankaran"
-title: "week2F"
+title: "week3F"
 output:
   xaringan::moon_reader:
     css: ["default", "css/xaringan-themer.css"]
@@ -29,255 +29,57 @@ options(width = 100)
 ```
 class: bottom
 
-# Pivoting and Derivation Review
+# Compound Figures Review
 
 .pull-left[
-February 4, 2022
+February 11, 2022
 ]
  
 ---
 
 ### Announcements
 
-* Group formation deadline is this weekend
-* Exercise 2.2 is extended to Monday
  
 ---
 
-### Exercise 2.2 Discussion
-
-* Many of you found that there are some "sports" that have only one athlete in
-them
-* These are actually not tidy: Recommend to drop these rows
-
-```{r}
-olympics <- read_csv("https://uwmadison.box.com/shared/static/rzw8h2x6dp5693gdbpgxaf2koqijo12l.csv")
-olympics %>%
-  count(Sport) %>%
-  arrange(n)
-```
+### Exercise 3.2 Discussion
 
 ---
 
-```{r}
-library(tidyverse)
-olympics %>%
-  separate(`Place of birth`, c("sep = "()")
-```
+## Muddiest Points
 
-
-Could tidy the sport column by storing one sport at a time.
-```{r}
-olympics %>%
-  separate(Sport, c("Sport", "Sport2", "Sport3"), sep = ",") %>%
-  select(Name, Country, Sport, Sport2)
-```
+* When is a dataset tidy?
+* When we receive a dataset, how should we re-arrange the rows and columns?
 
 ---
 
-Could filter sports that appear less than 3 times.
-```{r}
-olympics %>%
-  group_by(Sport) %>%
-  mutate(n = n()) %>%
-  filter(n > 3)
-```
-
-
----
-
-### Muddiest Points
-
-Which plots to use when?
-
-.pull-left[
-* We will get lots of practice over the semester
-* Not a decision chart, instead...
-  * Build fluency in many visual idioms (scatterplots, heatmaps, line plots, ...)
-  * Learn to evaluate critically using a few guiding principles
-]
-
-.pull-right[
-Some guiding principles are,
-* Clarity: Remove distracting elements
-* Effectiveness: Interfaces increase efficiency for specific tasks
-* Information density: Avoid premature summarization
-]
+1. Often, "tidyness" depends on the purpose of the analysis. 
+1. Each mark on the page should correspond to a single row in the input
+`data.frame`, but this may vary from figure to figure.
+  - In a survey, we can tidy so that each survey respondent is in a row
+  and questions are along columns (so $n$ rows, one per respondent).
+  - Alternatively, we can reshape it so that each question response gets its own
+  rows (so $n \times Q$ rows, one per respondent-question pair).
 
 ---
 
-### Muddiest Points
-
-Resizing figures,
-
-.pull-left[
-```r
-{r, fig.height = 3, fig.width = 7}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
-
-.pull-right[
-```{r, fig.height = 3, fig.width = 7, echo = FALSE}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
+1. In practice, create one folder with the raw data. Never touch this folder.
+1. Prepare a script to generate a few versions of the "derived" data. These can
+be tidied into several forms.
+  - One derived dataset with respondents on rows
+  - Another with question responses on rows
+1. Downstream visualizations can refer to either derived dataset
 
 ---
 
-### Muddiest Points
+### Notes review
 
-Resizing figures,
-.pull-left[
-```r
-{r, fig.height = 6, fig.width = 7}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
-
-
-.pull-right[
-```{r, fig.height = 6, fig.width = 7, echo = FALSE}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
-
----
-
-### Muddiest Points
-
-Executing longer tidying pipelines
-
-* Try sketching transformations as a graph
-* Build transformations piece-by-piece
-
-```{r, fig.cap = "Example pipeline from Wang, Cook, Hyndman (2020).", echo = FALSE, out.width = 800}
-include_graphics("figure/tsibble.png")
-```
-
----
-### Muddiest Points
-
-Executing longer tidying pipelines
-
-* Try sketching transformations as a graph
-* Build transformations piece-by-piece
-
-```{r, echo = FALSE, out.width = 900, fig.cap = "Representation of today's recording."}
-include_graphics("figure/pipelines.png")
-```
-
----
-
-### Exercise 2.3
-
-.pull-left[
-This exercise asks you to conduct an imaginary code review. These are often used
-in data science teams to,
-
-* Catch potential bugs
-* Make sure code is transparent to others
-* Create a shared knowledge base
-]
-
-.pull-right[
-It is important to be perceptive but friendly.
-* Can the code be made more compact?
-* Are there visual design choices / encodings that could be refined?
-* If your colleague did something well, say so!
-]
-
-Unlike standard code-reviews, I ask you to give an example implementing your
-recommendations.
-
----
-
-### Example
-
-```{r, fig.width = 8.5, fig.height = 3.5}
-covid <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week2/data/covid-variants.csv") %>%
-  filter(perc_sequences > 0) %>%
-  mutate(
-    variant2 = as.factor(variant),
-    variant2 = fct_lump_n(variant2, n = 12)
-  )
-
-ggplot(covid %>% filter(location == "United States")) +
-  geom_line(aes(x = date, y = num_sequences, col = variant2, group = variant))
-```
-
----
-
-### Example
-
-* We could increase information density by ordering the color legend by
-variants' overall frequencies
-* Is it worth encoding the total number of sequences? For this, it would make
-more sense to use a stacked barchart
-* We could make the code more compact by filtering `perc_sequences` and
-`location` at the same time, instead of in two different places
-* I didn't know about `fct_lump_n` -- it looks very useful!
-* I would consider trimming the number of variants, since it's hard to
-distinguish between some colors. We could also merge `Other` with
-`others`
-* Since we no longer need the original `variant` column, it's safe to merge
-`variant2` with `variant` during the mutate.
-* We could use custom axis labels to increase readability
-
----
-
-```{r, fig.width = 8.5, fig.height = 3.2}
-covid <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week2/data/covid-variants.csv") %>%
-  filter(perc_sequences > 0, location == "United States") %>%
-  mutate(
-    variant = fct_lump_n(variant, n = 10, other_level = "others"),
-    variant = fct_infreq(variant)
-  )
-
-ggplot(covid) +
-  geom_bar(aes(date, num_sequences, fill = variant), stat = "identity", width = 14) +
-  scale_x_date(expand = c(0, 0, 0, 0), date_labels = "%b %Y") +
-  scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::label_number_si()) +
-  labs(x = "Date", y = "Sequences", fill = "COVID-19 Variant") +
-  scale_fill_brewer(palette = "Set3")
-```
+(go to [link]()
 
 ---
 
 ### Exercise
 
-* Exercise 2.3 on Canvas
+* Exercise 3.3 on Canvas
 * Discuss in groups, but submit own solution
-* Until 2:00pm, then regroup and answer questions
+* Until: 

@@ -1,6 +1,6 @@
 ---
 author: "Kris Sankaran"
-title: "week2F"
+title: "week3W"
 output:
   xaringan::moon_reader:
     css: ["default", "css/xaringan-themer.css"]
@@ -29,255 +29,304 @@ options(width = 100)
 ```
 class: bottom
 
-# Pivoting and Derivation Review
+# Ridge Plots Review
 
 .pull-left[
-February 4, 2022
+February 9, 2022
 ]
  
 ---
 
 ### Announcements
 
-* Group formation deadline is this weekend
-* Exercise 2.2 is extended to Monday
+* Project Milestone 1 due Sunday evening
  
 ---
 
-### Exercise 2.2 Discussion
-
-* Many of you found that there are some "sports" that have only one athlete in
-them
-* These are actually not tidy: Recommend to drop these rows
-
-```{r}
-olympics <- read_csv("https://uwmadison.box.com/shared/static/rzw8h2x6dp5693gdbpgxaf2koqijo12l.csv")
-olympics %>%
-  count(Sport) %>%
-  arrange(n)
-```
-
----
+### Exercise 3.1 Discussion
 
 ```{r}
 library(tidyverse)
-olympics %>%
-  separate(`Place of birth`, c("sep = "()")
+pokemon <- read_csv("https://uwmadison.box.com/shared/static/hf5cmx3ew3ch0v6t0c2x56838er1lt2c.csv")
+```
+
+---
+
+One approach is to plot Pokemon by their Attack-to-Defense ratio.
+
+```{r, fig.height = 8, fig.width= 15}
+pokemon <- pokemon %>%
+  mutate(attack_to_defense = Attack / Defense)
+
+ggplot(pokemon) +
+  geom_point(aes(attack_to_defense, reorder(Name, attack_to_defense))) +
+  facet_grid(type_1 ~ ., scales = "free_y", space = "free") +
+  theme(strip.text.y = element_text(angle = 0, size = 18))
+```
+
+---
+
+One nice trick is to use `facet_grid_paginate` to split the facets across
+several plots.
+
+```{r, fig.height = 8, fig.width= 15}
+library(ggforce)
+ggplot(pokemon %>% filter(type_1 %in% c("Bug", "Dark", "Dragon", "Electric"))) +
+  geom_point(aes(attack_to_defense, reorder(Name, attack_to_defense))) +
+  facet_grid_paginate(type_1 ~ ., ncol = 1, nrow = 2, scales = "free_y") +
+  theme(strip.text.y = element_text(angle = 0, size = 18))
+```
+
+---
+
+This is the same, except I changed `page` to 2.
+
+```{r, fig.height = 8, fig.width= 15}
+ggplot(pokemon) +
+  geom_point(aes(attack_to_defense, reorder(Name, attack_to_defense))) +
+  facet_grid_paginate(type_1 ~ ., ncol = 1, nrow = 2, page = 2, scales = "free_y") +
+  theme(strip.text.y = element_text(angle = 0, size = 18))
 ```
 
 
-Could tidy the sport column by storing one sport at a time.
+---
+
+Alternatively, we can plot these two scores against one another in a
+scatterplot (what are the trade-offs?).
+
+```{r, fig.height = 5.5, fig.width = 10}
+ggplot(pokemon) +
+  geom_abline(slope = 1, col = "#d3d3d3", size = .5) +
+  geom_point(aes(Defense, Attack)) +
+  facet_wrap(~ type_1)
+```
+
+---
+
+We can reorder the facets by releveling the `type_1` factor according to the
+median Attack-to-Defense ratio. 
+
 ```{r}
-olympics %>%
-  separate(Sport, c("Sport", "Sport2", "Sport3"), sep = ",") %>%
-  select(Name, Country, Sport, Sport2)
+type_1_order <- pokemon %>%
+  group_by(type_1) %>%
+  summarise(med_ad = median(attack_to_defense)) %>%
+  arrange(med_ad) %>%
+  pull(type_1)
+
+pokemon2 <- pokemon %>%
+  mutate(type_1 = factor(type_1, levels = type_1_order))
 ```
 
 ---
 
-Could filter sports that appear less than 3 times.
+```{r, fig.height = 6, fig.width = 10}
+ggplot(pokemon2) +
+  geom_abline(slope = 1, col = "#d3d3d3", size = .5) +
+  geom_point(aes(Defense, Attack)) +
+  facet_wrap(~ type_1)
+```
+
+---
+
+Alternatively, we can directly use the `reorder()` function within `facet_wrap`.
+
+```{r, fig.height = 6, fig.width = 10}
+ggplot(pokemon) +
+  geom_abline(slope = 1, col = "#d3d3d3", size = .5) +
+  geom_point(aes(Defense, Attack)) +
+  facet_wrap(~ reorder(type_1, attack_to_defense, median))
+```
+
+---
+
+This labels a subset with very low or high `attack_to_defense`.
+
+```{r, fig.height = 6, fig.width = 10, eval = FALSE}
+library(ggrepel)
+ggplot(pokemon, aes(Defense, Attack)) +
+  geom_abline(slope = 1, col = "#d3d3d3", size = .5) +
+  geom_point(aes(Defense, Attack, col = Legendary)) +
+  geom_text_repel(
+    data = pokemon %>% filter(abs(log(attack_to_defense)) > 1), 
+    aes(label = Name)
+    ) +
+  facet_wrap(~ reorder(type_1, attack_to_defense, median), ncol = 6)
+```
+
+---
+
+```{r, fig.height = 6, fig.width = 10, echo = FALSE}
+library(ggrepel)
+ggplot(pokemon, aes(Defense, Attack)) +
+  geom_abline(slope = 1, col = "#d3d3d3", size = .5) +
+  geom_point(aes(Defense, Attack, col = Legendary)) +
+  geom_text_repel(data = pokemon %>% filter(abs(log(attack_to_defense)) > 1), aes(label = Name), size = 2) +
+  scale_color_manual(values = c("#49896F", "#B74555")) +
+  facet_wrap(~ reorder(type_1, attack_to_defense, median), ncol = 6)
+```
+
+Colors from the bulbasaur [color palette](https://www.schemecolor.com/bulbasaur-pokemon-colors.php)...
+
+---
+
+## Muddiest Points
+
+---
+
+### Learning about functions
+
+If you run into a function `f` that is confusing, useful helpers are,
+
+* `?f` or `help(f)` pulls up the help page
+* `example(f)` runs a few examples
+
+If we want an extended example from a package, we can use `browseVignettes("packageName")`.
+
 ```{r}
-olympics %>%
-  group_by(Sport) %>%
-  mutate(n = n()) %>%
-  filter(n > 3)
+?facet_grid_paginate
+example(facet_grid_paginate)
 ```
 
 
 ---
 
-### Muddiest Points
+### What does `reorder()` actually do?
 
-Which plots to use when?
-
-.pull-left[
-* We will get lots of practice over the semester
-* Not a decision chart, instead...
-  * Build fluency in many visual idioms (scatterplots, heatmaps, line plots, ...)
-  * Learn to evaluate critically using a few guiding principles
-]
-
-.pull-right[
-Some guiding principles are,
-* Clarity: Remove distracting elements
-* Effectiveness: Interfaces increase efficiency for specific tasks
-* Information density: Avoid premature summarization
-]
-
----
-
-### Muddiest Points
-
-Resizing figures,
-
-.pull-left[
-```r
-{r, fig.height = 3, fig.width = 7}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
-
-.pull-right[
-```{r, fig.height = 3, fig.width = 7, echo = FALSE}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
-
----
-
-### Muddiest Points
-
-Resizing figures,
-.pull-left[
-```r
-{r, fig.height = 6, fig.width = 7}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
-
-
-.pull-right[
-```{r, fig.height = 6, fig.width = 7, echo = FALSE}
-olympics %>%
-  count(Country, Gold) %>%
-  slice_max(n, n = 30) %>%
-  ggplot() +
-  geom_bar(
-    aes(n, reorder(Country, n)), 
-    stat = "identity"
-    ) +
-  theme(panel.grid = element_blank())
-```
-]
-
----
-
-### Muddiest Points
-
-Executing longer tidying pipelines
-
-* Try sketching transformations as a graph
-* Build transformations piece-by-piece
-
-```{r, fig.cap = "Example pipeline from Wang, Cook, Hyndman (2020).", echo = FALSE, out.width = 800}
-include_graphics("figure/tsibble.png")
-```
-
----
-### Muddiest Points
-
-Executing longer tidying pipelines
-
-* Try sketching transformations as a graph
-* Build transformations piece-by-piece
-
-```{r, echo = FALSE, out.width = 900, fig.cap = "Representation of today's recording."}
-include_graphics("figure/pipelines.png")
-```
-
----
-
-### Exercise 2.3
-
-.pull-left[
-This exercise asks you to conduct an imaginary code review. These are often used
-in data science teams to,
-
-* Catch potential bugs
-* Make sure code is transparent to others
-* Create a shared knowledge base
-]
-
-.pull-right[
-It is important to be perceptive but friendly.
-* Can the code be made more compact?
-* Are there visual design choices / encodings that could be refined?
-* If your colleague did something well, say so!
-]
-
-Unlike standard code-reviews, I ask you to give an example implementing your
-recommendations.
-
----
-
-### Example
-
-```{r, fig.width = 8.5, fig.height = 3.5}
-covid <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week2/data/covid-variants.csv") %>%
-  filter(perc_sequences > 0) %>%
-  mutate(
-    variant2 = as.factor(variant),
-    variant2 = fct_lump_n(variant2, n = 12)
+```{r}
+df <- data.frame(
+  x = factor(c("a", "a", "b")), 
+  y = 3:1
   )
-
-ggplot(covid %>% filter(location == "United States")) +
-  geom_line(aes(x = date, y = num_sequences, col = variant2, group = variant))
+levels(df$x)
 ```
 
 ---
 
-### Example
+### What does `reorder()` actually do?
 
-* We could increase information density by ordering the color legend by
-variants' overall frequencies
-* Is it worth encoding the total number of sequences? For this, it would make
-more sense to use a stacked barchart
-* We could make the code more compact by filtering `perc_sequences` and
-`location` at the same time, instead of in two different places
-* I didn't know about `fct_lump_n` -- it looks very useful!
-* I would consider trimming the number of variants, since it's hard to
-distinguish between some colors. We could also merge `Other` with
-`others`
-* Since we no longer need the original `variant` column, it's safe to merge
-`variant2` with `variant` during the mutate.
-* We could use custom axis labels to increase readability
+Though it doesn't explicitly reorder rows, it changes the levels of the
+associated factors.
+
+```{r}
+df$x <- reorder(df$x, df$y)
+levels(df$x)
+```
 
 ---
 
-```{r, fig.width = 8.5, fig.height = 3.2}
-covid <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week2/data/covid-variants.csv") %>%
-  filter(perc_sequences > 0, location == "United States") %>%
-  mutate(
-    variant = fct_lump_n(variant, n = 10, other_level = "others"),
-    variant = fct_infreq(variant)
-  )
+### When to use pivot_wider?
 
-ggplot(covid) +
-  geom_bar(aes(date, num_sequences, fill = variant), stat = "identity", width = 14) +
-  scale_x_date(expand = c(0, 0, 0, 0), date_labels = "%b %Y") +
-  scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::label_number_si()) +
-  labs(x = "Date", y = "Sequences", fill = "COVID-19 Variant") +
-  scale_fill_brewer(palette = "Set3")
+This is an example from `example(pivot_wider)`
+
+```{r}
+us_rent_income
 ```
+
+---
+
+```{r}
+us_rent_income %>%
+  pivot_wider(names_from = variable, values_from = c("estimate", "moe"))
+```
+
+---
+
+### How to plan a visualization analysis?
+
+There are many questions around the themes of,
+
+* How can we know which types of new variables to derive?
+* How do we identify the interesting plots for a given dataset?
+* When will know whether a plot is done?
+
+---
+
+### Tips
+
+.pull-left[
+* Use visualization to identify main sources of variation
+* Use visualization to evaluate implicit assumptions (null hypotheses)
+* Think of a visualization as more like an essay than a program
+]
+
+---
+
+### Tips
+
+.pull-left[
+* **Use visualization to identify main sources of variation**
+* Use visualization to evaluate implicit assumptions (null hypotheses)
+* Think of a visualization as more like an essay than a program
+]
+
+.pull-right[
+```{r, echo = FALSE, out.width = 400}
+include_graphics("figures/structuration.png")
+```
+]
+
+---
+
+### Tips
+
+.pull-left[
+* Use visualization to identify main sources of variation
+* **Use visualization to evaluate implicit assumptions (null hypotheses)**
+* Think of a visualization as more like an essay than a program
+]
+
+.pull-right[
+"The age ranges for all Olympics sports are about the same."
+]
+
+---
+
+### Tips
+
+.pull-left[
+* Use visualization to identify main sources of variation
+* Use visualization to evaluate implicit assumptions (null hypotheses)
+* **Think of a visualization as more like an essay than a program**
+]
+
+.pull-right[
+Good essays benefit from iterative refinement.
+]
+
+---
+
+### Notes Review
+
+(go to [link](https://drive.google.com/file/d/1snowl_dTLG8QJviHH8qA48dxzUfGlYDO/view?usp=sharing))
+
+---
+
+### Exercise 3.2
+
+Prepare two slides describing the main context and workflow for your project.
+You will share feedback with one other team at the end of class.
+
+.pull-left[
+Context
+
+* Problem: What is the main problem that you would like to study? Who is your
+audience?
+* References: From what sources do you draw inspiration? If you do not know many
+relevant materials, how do you plan on finding more references?
+]
+
+.pull-right[
+Workflow
+
+* Questions: Based on the tips above, what question might you start with?
+* Implementation: How will you organize readings, code, and writing?
+* Values: What do you strive for individually and as a team?
+]
 
 ---
 
 ### Exercise
 
-* Exercise 2.3 on Canvas
-* Discuss in groups, but submit own solution
-* Until 2:00pm, then regroup and answer questions
+* Exercise 3.2 on Canvas
+* Prepare with project groups: 
+* Discuss with a team (listed on Canvas): 

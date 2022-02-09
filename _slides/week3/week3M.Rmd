@@ -32,7 +32,7 @@ class: bottom
 # Faceting Review
 
 .pull-left[
-February 4, 2022
+February 7, 2022
 ]
 
 ---
@@ -41,6 +41,7 @@ February 4, 2022
 
 * View exercises as opportunity for experimentation
 * We will go over additional muddy points on Wednesday and Friday
+* I'll start assigning project-related in-class exercises this week
  
 ---
 
@@ -50,10 +51,51 @@ February 4, 2022
 
 ### Part (a)
 
+Reading in the data and addressing merged sports issue,
+
 ```{r}
 olympics <- read_csv("https://uwmadison.box.com/shared/static/rzw8h2x6dp5693gdbpgxaf2koqijo12l.csv") %>%
   separate(Sport, c("Sport", "Sport2", "Sport3"), sep = ",")
+```
 
+
+---
+
+### Part (a)
+
+Using separate on its own splits on characters.
+
+.pull-left[
+```{r}
+olympics %>%
+  select(`Place of birth`)
+```
+]
+
+.pull-right[
+```{r}
+olympics %>%
+  separate(`Place of birth`, c("birth_city", "birth_country")) %>%
+  select(starts_with("birth"))
+```
+]
+
+---
+
+We need to customize the separate argument. Here, we separate by `(` or `)`.
+
+```{r}
+olympics %>%
+  separate(`Place of birth`, c("birth_city", "birth_country"), sep = "\\(") %>%
+  separate(birth_country, c("birth_country", "tmp"), sep = "\\)") %>%
+  select(starts_with("birth"))
+```
+
+---
+
+### Part (b)
+
+```{r}
 olympics %>%
   group_by(Sport) %>%
   summarise(sd = sd(Age)) %>%
@@ -62,7 +104,7 @@ olympics %>%
 
 ---
 
-### Part (b)
+### Part (c)
 
 One approach is to use reorder within `aes()`.
 
@@ -95,7 +137,7 @@ the same.
 
 ```{r, fig.height = 8, fig.width = 12, eval = FALSE}
 ggplot(olympics) +
-  geom_boxplot(aes(Age, reorder(Sport, Age, sd)))
+  geom_violin(aes(Age, reorder(Sport, Age, sd)))
 ```
 
 ---
@@ -213,6 +255,12 @@ ggplot(win_props) +
 
 ---
 
+### Notes Summary
+
+See [link](https://drive.google.com/file/d/1uf_VN9sCKf5FibGLhpPneix_HlXZ2a7G/view?usp=sharing).
+
+---
+
 ### Exercise [Pokemon]
 
 This problem gives practice in deriving new variables to improve a faceted plot.
@@ -221,6 +269,7 @@ types. We will build a visualization to answer the question – how do the
 different types of Pokemon vary in their attack and defense potential?
 
 a. Derive a new column containing the attack-to-defense ratio, defined as $\frac{\text{Attack}}{\text{Defense}}$.
+
 c. Provide a plot of the attack vs. defense scores for each Pokemon, faceted by
 `type_1`.
 
@@ -235,6 +284,7 @@ pokemon <- read_csv("https://uwmadison.box.com/shared/static/hf5cmx3ew3ch0v6t0c2
 
 ### Exercise Hints
 
+* An example for this problem is in the Canvas course image
 * For Bonus 1: Remember the derivation methods we discussed last week.
 * For Bonus 2: Faceting order can be controlled by the levels of the factor
 defining the facets. See today's notes / recording for an example.
