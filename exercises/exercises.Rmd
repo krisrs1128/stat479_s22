@@ -335,7 +335,7 @@ review. These are often used in data science teams to,
       geom_text_repel(aes(Asymmetry_MEAN, Ellipticity_MEAN, label = genus))
     ```
   
-1. [Soccer Code Review] This exercise asks you to conduct an imaginary code
+1. [Soccer Code Review] This exercise ask777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777s you to conduct an imaginary code
 review. These are often used in data science teams to,
     
     * Catch potential bugs
@@ -375,6 +375,28 @@ review. These are often used in data science teams to,
       geom_point(aes(year, team, size = n_games, alpha = wins))
     ```
     
+1. [Multiple Weather Variables] In this problem, we will construct a compound
+figure to simultaneously visualize several weather variables in one display. The
+block below reads a dataset that includes temperature, precipitation, and wind
+measurements for New York City and Seattle over the course of several years. It
+then then averages each variable for each day (1 - 365) in the year.
+
+    ```{r}
+    weather <- read_csv("data/weather.csv") %>%
+      mutate(day_in_year = lubridate::yday(date)) %>%
+      group_by(location, day_in_year) %>%
+      summarise(across(precipitation:wind, mean))
+    ```
+  
+    a. Construct three base `ggplot2` plots based on the variables that are
+    provided. For example, you may construct a line plot (`geom_line`) of
+    average precipitation, a histogram (`geom_histogram`) of per-city
+    windspeeds, or a ribbon plot (`geom_ribbon`) of temperature ranges over
+    time. Make sure to display at least two weather variables from among the
+    four that are provided.
+    b. Design a compound figure based on the base plots in part (a). Ensure that
+    consistent visual encodings are used throughout, that legends are collected,
+    and that the clear but unobtrusive annotation is provided.
 
 # Module 2: Visualizing Structured Data
 
@@ -964,4 +986,25 @@ response. For example, you may discuss any of the following points,
     your future projects or plans?
     * How would you explain the main ideas of the reading to a friend who is not
     technically trained in visualization?
+  
+  
+  
+  
+```{r}
+split_fun <- function(x, group= "group") {
+  group <- enquo(group)
+  x %>%
+    mutate(group = as.factor(!!group)) %>%
+    split(.$group)
+}
+
+x <- data.frame(
+  a = c("A", "A", "B", "C"),
+  b = c(1, 1, 2, 2)
+)
+split_fun(x, b)
+```
+  
+  
+  
   
