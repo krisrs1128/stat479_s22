@@ -39,10 +39,13 @@ February 11, 2022
 
 ### Announcements
 
+* Project Milestone 1 due Sunday evening
  
 ---
 
 ### Exercise 3.2 Discussion
+
+---
 
 ---
 
@@ -74,7 +77,29 @@ be tidied into several forms.
 
 ### Notes review
 
-(go to [link]()
+(go to [link](https://drive.google.com/file/d/1r1HEhAn9SCxqicuX2VNbdUv3w-qQBeRj/view?usp=sharing))
+
+---
+
+## Exercise
+
+---
+
+### Options
+
+* Ridgelines practice: German Traffic [Module 1, Problem 10]
+* Compound figures practice: Weather [Module 1, Problem 25]
+
+---
+
+### Hints
+
+* For the traffic dataset, consider using the amount of traffic (`value`) for the
+`height` and the city (`name`) for the `y` argument in `geom_ridgeline()`
+* It may be interesting to reorder the cities by some property of their traffic patterns
+* For the weather dataset, make sure to distinguish between the two locations
+* For the weather dataset, a `geom_ribbon` might be interesting to compare
+`temp_min` and `temp_max`
 
 ---
 

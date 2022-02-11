@@ -127,8 +127,8 @@ across a set of cities. The data are read in below,
 ```
     Each row is a timepoint of traffic within a city in Germany. 
 
-    a. Using `geom_ridges`, make a plot of traffic over time, within each of the cities.
-    b. Describe two takeaways from the resulting figure. Discuss, but do not implement
+    a. Using `geom_ridgeline`, make a plot of traffic over time, within each of the cities.
+    b. Describe two takeaways from the resulting figure.
     c. Propose an alternative encoding of the same data. What are the strengths of your approach? What are the strengths of the ridgeline approach?
 
 1. [Language Learning] This problem will look at a simplified version of the 
@@ -335,7 +335,7 @@ review. These are often used in data science teams to,
       geom_text_repel(aes(Asymmetry_MEAN, Ellipticity_MEAN, label = genus))
     ```
   
-1. [Soccer Code Review] This exercise ask777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777s you to conduct an imaginary code
+1. [Soccer Code Review] This exercise asks you to conduct an imaginary code
 review. These are often used in data science teams to,
     
     * Catch potential bugs
@@ -382,7 +382,7 @@ measurements for New York City and Seattle over the course of several years. It
 then then averages each variable for each day (1 - 365) in the year.
 
     ```{r}
-    weather <- read_csv("data/weather.csv") %>%
+    weather <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/weather.csv") %>%
       mutate(day_in_year = lubridate::yday(date)) %>%
       group_by(location, day_in_year) %>%
       summarise(across(precipitation:wind, mean))
@@ -394,9 +394,13 @@ then then averages each variable for each day (1 - 365) in the year.
     windspeeds, or a ribbon plot (`geom_ribbon`) of temperature ranges over
     time. Make sure to display at least two weather variables from among the
     four that are provided.
-    b. Design a compound figure based on the base plots in part (a). Ensure that
-    consistent visual encodings are used throughout, that legends are collected,
-    and that the clear but unobtrusive annotation is provided.
+    b. Design a compound figure based on the base plots in part (a). Why did you
+    lay out the subplots in the locations that you did? Ensure that consistent
+    visual encodings are used throughout, that legends are collected, and that
+    clear but unobtrusive annotation is provided.
+    c. Discuss, but do not implement, an alternative compound figure for the
+    same data, with either different base plots or overall layout (or both). For
+    which visual comparisons are either designs best suited?
 
 # Module 2: Visualizing Structured Data
 
@@ -986,25 +990,3 @@ response. For example, you may discuss any of the following points,
     your future projects or plans?
     * How would you explain the main ideas of the reading to a friend who is not
     technically trained in visualization?
-  
-  
-  
-  
-```{r}
-split_fun <- function(x, group= "group") {
-  group <- enquo(group)
-  x %>%
-    mutate(group = as.factor(!!group)) %>%
-    split(.$group)
-}
-
-x <- data.frame(
-  a = c("A", "A", "B", "C"),
-  b = c(1, 1, 2, 2)
-)
-split_fun(x, b)
-```
-  
-  
-  
-  
