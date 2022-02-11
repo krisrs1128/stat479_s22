@@ -43,13 +43,43 @@ February 11, 2022
  
 ---
 
-### Exercise 3.2 Discussion
+## Exercise 3.2 Discussion
 
 ---
+
+### Community Knowledge
+
+1. Think about the community you will engage with
+
+  - What is the present body of knowledge?
+  - How do people make decisions? Will you work influence it?
+  - Avoid statements that are only about the data (and not about the context)
+  
+1. It will be important to read about your problem area
+
+  - It will be easier to develop good questions if you are familiar with the
+  topic
+  - The most interesting ideas often just link existing work in surprising ways
+  
+---
+
+### Imitation
+
+1. Find work that inspires you, and try to deconstruct it
+
+1. Don't be afraid of imitation, especially when learning a new area
+
+  - By imitating someone's solution technique in your own problem, you can learn
+  it more deeply
+  - My first visualization [project](https://krisrs1128.github.io/OpioidAtlas)
+  was a (poor) imitation of [work](http://nbremer.github.io/urbanization/) that
+  I thought was beautiful
 
 ---
 
 ## Muddiest Points
+
+---
 
 * When is a dataset tidy?
 * When we receive a dataset, how should we re-arrange the rows and columns?
@@ -62,7 +92,31 @@ February 11, 2022
   - In a survey, we can tidy so that each survey respondent is in a row
   and questions are along columns (so $n$ rows, one per respondent).
   - Alternatively, we can reshape it so that each question response gets its own
-  rows (so $n \times Q$ rows, one per respondent-question pair).
+  row (so $n \times Q$ rows, one per respondent-question pair).
+  
+---
+
+```{r, fig.width = 6, fig.height = 4}
+library(tidyverse)
+plants <- read_csv("https://uwmadison.box.com/shared/static/qg9gwk2ldjdtcmmmiropcunf34ddonya.csv")
+ggplot(plants, aes(height.7, height.21)) +
+  stat_smooth(method = "lm", se = F) +
+  geom_point()
+```
+
+---
+
+```{r, fig.width = 6, fig.height = 2.5}
+plants %>%
+  pivot_longer(
+    starts_with("height"), names_sep = "\\.", 
+    names_to = c("prefix", "time"), 
+    names_transform = list(time = as.integer) ,
+    values_to = "height"
+  ) %>%
+  ggplot() +
+    geom_line(aes(time, height, group = interaction(plantid, treatment), col = treatment))
+```
 
 ---
 
