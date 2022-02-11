@@ -1,0 +1,19 @@
+---
+title: "Introduction to Reactivity"
+description: |
+  Viewing shiny code execution as a graph.
+author:
+  - name: Kris Sankaran
+date: 02-15-2022
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r, echo = FALSE}
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
+```
+
+
+_[Reading](), [Recording](),  [Rmarkdown]()_
