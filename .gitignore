@@ -7,3 +7,6 @@ docs/data
 docs/schedule*
 docs/syllabus
 *cache*
+_slides/*/*.html
+_slides/*/*.pdf
+_posts/*/*.html
