@@ -17,7 +17,7 @@ knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRU
 ```
 
 
-_[Reading](https://search.library.wisc.edu/catalog/9911196629502121), [Recording](),  [Rmarkdown](https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-10-week04-03/week04-03.Rmd)_
+_[Reading](https://search.library.wisc.edu/catalog/9911196629502121), [Recording](https://mediaspace.wisc.edu/media/Week%204%20%5B3%5D%20IMDB%20Shiny%20Application/1_xcl1c85h),  [Rmarkdown](https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-10-week04-03/week04-03.Rmd)_
 
 1. So far, all of our Shiny applications have been based on toy simulated data.
 In this set of notes, we'll use Shiny to explore a real dataset, illustrating
