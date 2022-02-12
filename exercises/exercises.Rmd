@@ -124,7 +124,7 @@ and for averages. To avoid overplotting, jitter the `Age` variable.
 across a set of cities. The data are read in below,
     ```{r}
     traffic <- read_csv("https://uwmadison.box.com/shared/static/x0mp3rhhic78vufsxtgrwencchmghbdf.csv")
-```
+    ```
     Each row is a timepoint of traffic within a city in Germany. 
 
     a. Using `geom_ridgeline`, make a plot of traffic over time, within each of the cities.

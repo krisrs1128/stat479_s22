@@ -65,6 +65,29 @@ these variables.
     include_graphics("app2.png")
     ```
     
-1. These visualizations are an instance of the more general idea of using filtering to reduce complexity in data. Filtering is an especially powerful technique in the interactive paradigm, where it is possible to easily reverse (or compare) filtering choices.
+1. We'll include a final version of this plot which additionally shows the movie
+name when points are hovered. To accomplish this, we can no longer use `ggplot2`
+on its own -- it has to be linked with a plotting library that renders web-based
+visualizations (not just static image files). This is what the `ggplotly()` call
+does in the updated version of the app. The mouseover text is added through the
+`tooltip` argument.
 
-Interpretation 2: Dynamic queries allow rapid evaluation of conditional probabilities. The visualization above was designed to answer: What is the joint distribution of movie ratings, conditional on being a drama?
+    ```{r code=readLines("apps/app3.R")}
+    ```
+    
+    ```{r, echo = FALSE}
+    appshot(app = "apps/app3.R", file = "app3.png", vheight = 400, delay=5)
+    include_graphics("app3.png")
+    ```
+    
+1. These visualizations are an instance of the more general idea of using
+filtering to reduce complexity in data. Filtering is an especially powerful
+technique in the interactive paradigm, where it is possible to easily reverse
+(or compare) filtering choices. 
+
+1. Conceptually, what we are doing falls under the name of "Dynamic Querying,"
+which refers more generally to updating a visualization based on user queries.
+There are several ways to think about these dynamic queries,
+
+    * Interpretation 1: Dynamic queries create the visual analog of a database interaction. Rather than using a programming-based interface to filter elements or select attributes, we can design interactive visual equivalents.
+    * Interpretation 2: Dynamic queries allow rapid evaluation of conditional probabilities. The visualization above was designed to answer: What is the joint distribution of movie ratings, conditional on being a drama?

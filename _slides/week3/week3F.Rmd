@@ -162,3 +162,4 @@ be tidied into several forms.
 * Exercise 3.3 on Canvas
 * Discuss in groups, but submit own solution
 * Until: 
+
