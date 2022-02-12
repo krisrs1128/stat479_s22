@@ -3,7 +3,7 @@ library(tidyverse)
 library(lubridate)
 library(plotly)
 
-movies <- read_csv("~/Downloads/movies.csv") %>%
+movies <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_posts/2022-02-10-week04-03/apps/data/movies.csv") %>%
   mutate(
     date = as_date(Release_Date, format = "%b %d %Y"),
     year = year(date),
