@@ -16,8 +16,7 @@ library(webshot)
 knitr::opts_chunk$set(cache = FALSE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
 ```
 
-
-_[Reading](), [Recording](),  [Rmarkdown]()_
+_[Reading](https://mastering-shiny.org/basic-reactivity.html), [Recording](),  [Rmarkdown](https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-10-week04-01/week04-01.Rmd)_
 
 1. All Shiny apps are made up from the same few building blocks. These notes
 review the main types of blocks. When reading code from more complex apps, it

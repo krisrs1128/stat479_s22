@@ -6,7 +6,7 @@
       "description": "Some additional details about the website",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-02-12T10:26:40-06:00"
+      "last_modified": "2022-02-12T10:34:44-06:00"
     },
     {
       "path": "index.html",
@@ -14,14 +14,14 @@
       "description": "Public materials for STAT 479 at UW Madison.\n",
       "author": [],
       "contents": "\nThis page contains notes and links to readings / recordings for STAT 479.\n\n\n\n",
-      "last_modified": "2022-02-12T10:26:41-06:00"
+      "last_modified": "2022-02-12T10:34:45-06:00"
     },
     {
       "path": "notes.html",
       "title": "Notes",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-02-12T10:26:41-06:00"
+      "last_modified": "2022-02-12T10:34:46-06:00"
     }
   ],
   "collections": ["posts/posts.json"]
