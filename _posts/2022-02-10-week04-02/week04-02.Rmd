@@ -36,8 +36,11 @@ server should be used to populate the visible interface.
 graph. Note that I've drawn input and output nodes differently, to emphasize the
 flow of computation. I've also copied the code from the original app for
 reference.
-
-    (insert hand drawn figure)
+    
+    ```{r, echo = FALSE}
+    include_graphics("figures/names.png")
+    ```
+        
 
     ```{r code=readLines("apps/app1.R")}
     ```
@@ -58,7 +61,10 @@ never made directly visible to the user. This is why we've drawn them as a kind
 of special intermediate node. Below, I've drawn the graph for our random normal
 plotter, with the reactive `samples()` expression.
 
-    (insert hand rawn figure)
+    ```{r, echo = FALSE}
+    include_graphics("figures/reactive_histo.png")
+    ```
+  
 
     ```{r code=readLines("apps/app2.R")}
     ```
@@ -74,8 +80,10 @@ to trim away many edges. For example, our initial implementation of the random
 normal plotter (which didn't use the reactive expression) has a much more
 complicated graph, since many inputs feed directly into outputs.
 
-    (insert hand drawn figure)
-    
+    ```{r, echo = FALSE}
+    include_graphics("figures/nonreactive_histo.png")
+    ```
+
 1. Let's see these principles in action for a similar, but more complex app. The
 app below can be used for power analysis. It simulates two groups of samples,
 both from normal distributions, but with different (user specified) means. We've

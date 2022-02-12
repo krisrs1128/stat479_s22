@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["app1.png","app2.png","app3.png","app4.png","apps/app1.R","apps/app2.R","apps/app3.R","apps/app4.R","week04-02_files/anchor-4.2.2/anchor.min.js","week04-02_files/bowser-1.9.3/bowser.min.js","week04-02_files/distill-2.2.21/template.v2.js","week04-02_files/header-attrs-2.11/header-attrs.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.min.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.min.map","week04-02_files/popper-2.6.0/popper.min.js","week04-02_files/tippy-6.2.7/tippy-bundle.umd.min.js","week04-02_files/tippy-6.2.7/tippy-light-border.css","week04-02_files/tippy-6.2.7/tippy.css","week04-02_files/tippy-6.2.7/tippy.umd.min.js","week04-02_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["app1.png","app2.png","app3.png","app4.png","apps/app1.R","apps/app2.R","apps/app3.R","apps/app4.R","figures/names.png","figures/nonreactive_histo.png","figures/reactive_histo.png","week04-02_files/anchor-4.2.2/anchor.min.js","week04-02_files/bowser-1.9.3/bowser.min.js","week04-02_files/distill-2.2.21/template.v2.js","week04-02_files/header-attrs-2.11/header-attrs.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.min.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.min.map","week04-02_files/popper-2.6.0/popper.min.js","week04-02_files/tippy-6.2.7/tippy-bundle.umd.min.js","week04-02_files/tippy-6.2.7/tippy-light-border.css","week04-02_files/tippy-6.2.7/tippy.css","week04-02_files/tippy-6.2.7/tippy.umd.min.js","week04-02_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2297,7 +2297,9 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <li><p>These notes will explore the idea of reactivity in more depth. Recall that reactivity refers to the fact that Shiny app code is not run from top to bottom, like an ordinary R script. Instead, it runs reactively, depending on inputs that the user has provided. This can make writing Shiny code a bit unintuitive at first, but there are a few higher-level concepts that can help when writing reactive code.</p></li>
 <li><p>The most important of these concepts is that reactive code can be viewed as a graph. The <code>ui</code> and <code>server</code> define an explicit dependency structure for how components depend on one another. The <code>input$</code>’s within <code>render*</code> functions in the server specify how UI inputs affect server computations. The IDs within the <code>*Output</code> elements in the <code>ui</code> specify which of the rendered <code>output$</code>’s in the server should be used to populate the visible interface.</p></li>
 <li><p>For example, our first “Hello” app has the following (simple) reactivity graph. Note that I’ve drawn input and output nodes differently, to emphasize the flow of computation. I’ve also copied the code from the original app for reference.</p>
-<p>(insert hand drawn figure)</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="figures/names.png" width="846" /></p>
+</div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
@@ -2323,7 +2325,9 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 </div></li>
 <li><p>Even though the graph is simple, note that the outputs will be recomputed each time that the input is changed. For more general graphs, all downstream nodes will be re-executed whenever an upstream source is changed (typically by a user input, though it’s possible to trigger changes automatically).</p></li>
 <li><p>Reactive expressions provide a special kind of node that live between inputs and outputs. They depend on inputs, and they feed into outputs, but they are never made directly visible to the user. This is why we’ve drawn them as a kind of special intermediate node. Below, I’ve drawn the graph for our random normal plotter, with the reactive <code>samples()</code> expression.</p>
-<p>(insert hand rawn figure)</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="figures/reactive_histo.png" width="758" /></p>
+</div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
@@ -2335,9 +2339,9 @@ d-article ul > li { /*to add back in space between bullet items that I took away
  <span class='op'>}</span>
 
  <span class='va'>histogram_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'>geom_histogram</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span>, bins <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
+   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span>, bins <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='co'>### Defines the app</span>
@@ -2366,7 +2370,9 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <p><img src="app2.png" width="496" /></p>
 </div></li>
 <li><p>A useful perspective is to think of reactive expressions as simplifying the overall reactivity graph. Specifically, by adding a reactive node, it’s possible to trim away many edges. For example, our initial implementation of the random normal plotter (which didn’t use the reactive expression) has a much more complicated graph, since many inputs feed directly into outputs.</p>
-<p>(insert hand drawn figure)</p></li>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="figures/nonreactive_histo.png" width="757" /></p>
+</div></li>
 <li><p>Let’s see these principles in action for a similar, but more complex app. The app below can be used for power analysis. It simulates two groups of samples, both from normal distributions, but with different (user specified) means. We’ve used a reactive expression to generate the samples, so that both the histogram and hypothesis test result outputs can refer to the same intermediate simulated data.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2383,19 +2389,19 @@ d-article ul > li { /*to add back in space between bullet items that I took away
  <span class='op'>}</span>
 
  <span class='va'>histogram_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'>geom_histogram</span><span class='op'>(</span>
-       <span class='fu'>aes</span><span class='op'>(</span><span class='va'>values</span>, fill <span class='op'>=</span> <span class='va'>group</span><span class='op'>)</span>, 
+   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>
+       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>values</span>, fill <span class='op'>=</span> <span class='va'>group</span><span class='op'>)</span>, 
        bins <span class='op'>=</span> <span class='fl'>100</span>, position <span class='op'>=</span> <span class='st'>"identity"</span>,
        alpha <span class='op'>=</span> <span class='fl'>0.8</span>
      <span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='va'>test_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
    <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>values</span> <span class='op'>~</span> <span class='va'>group</span>, data <span class='op'>=</span> <span class='va'>df</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
      <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'>select</span><span class='op'>(</span><span class='va'>p.value</span>, <span class='va'>conf.low</span>, <span class='va'>conf.high</span><span class='op'>)</span>
+     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>p.value</span>, <span class='va'>conf.low</span>, <span class='va'>conf.high</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='co'>### Defines the app</span>
@@ -2446,19 +2452,19 @@ d-article ul > li { /*to add back in space between bullet items that I took away
  <span class='op'>}</span>
 
  <span class='va'>histogram_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'>geom_histogram</span><span class='op'>(</span>
-       <span class='fu'>aes</span><span class='op'>(</span><span class='va'>values</span>, fill <span class='op'>=</span> <span class='va'>group</span><span class='op'>)</span>, 
+   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>
+       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>values</span>, fill <span class='op'>=</span> <span class='va'>group</span><span class='op'>)</span>, 
        bins <span class='op'>=</span> <span class='fl'>100</span>, position <span class='op'>=</span> <span class='st'>"identity"</span>,
        alpha <span class='op'>=</span> <span class='fl'>0.8</span>
      <span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='va'>test_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
    <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>values</span> <span class='op'>~</span> <span class='va'>group</span>, data <span class='op'>=</span> <span class='va'>df</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
      <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'>select</span><span class='op'>(</span><span class='va'>p.value</span>, <span class='va'>conf.low</span>, <span class='va'>conf.high</span><span class='op'>)</span>
+     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>p.value</span>, <span class='va'>conf.low</span>, <span class='va'>conf.high</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='co'>### Defines the app</span>

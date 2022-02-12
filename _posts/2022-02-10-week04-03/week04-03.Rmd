@@ -12,6 +12,7 @@ output:
 
 ```{r, echo = FALSE}
 library(knitr)
+library(webshot)
 knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
 ```
 
@@ -52,6 +53,10 @@ graphical marks depending on user selections is called "conditional encoding."
     include_graphics("app1.png")
     ```
 
+    ```{r, echo = FALSE}
+    include_graphics("figures/initial_imdb.png")
+    ```
+
 1. We can extend this further. Let's allow the user to filter by year and MPAA
 rating. Notice that there are some years in the future! We also find that there
 are systematic differences in IMDB and Rotten Tomatoes ratings as a function of
@@ -63,6 +68,10 @@ these variables.
     ```{r, echo = FALSE}
     appshot(app = "apps/app2.R", file = "app2.png", vheight = 400, delay=5)
     include_graphics("app2.png")
+    ```
+
+    ```{r, echo = FALSE}
+    include_graphics("figures/final_imdb.png")
     ```
     
 1. We'll include a final version of this plot which additionally shows the movie

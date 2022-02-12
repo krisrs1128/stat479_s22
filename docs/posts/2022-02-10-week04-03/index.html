@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["app1.png","app2.png","app3.png","apps/app1.R","apps/app2.R","apps/app3.R","apps/app4.R","apps/data/movies.csv","week04-03_files/anchor-4.2.2/anchor.min.js","week04-03_files/bowser-1.9.3/bowser.min.js","week04-03_files/distill-2.2.21/template.v2.js","week04-03_files/header-attrs-2.11/header-attrs.js","week04-03_files/jquery-3.6.0/jquery-3.6.0.js","week04-03_files/jquery-3.6.0/jquery-3.6.0.min.js","week04-03_files/jquery-3.6.0/jquery-3.6.0.min.map","week04-03_files/popper-2.6.0/popper.min.js","week04-03_files/tippy-6.2.7/tippy-bundle.umd.min.js","week04-03_files/tippy-6.2.7/tippy-light-border.css","week04-03_files/tippy-6.2.7/tippy.css","week04-03_files/tippy-6.2.7/tippy.umd.min.js","week04-03_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["app1.png","app2.png","app3.png","apps/app1.R","apps/app2.R","apps/app3.R","apps/app4.R","apps/data/movies.csv","figures/final_imdb.png","figures/initial_imdb.png","week04-03_files/anchor-4.2.2/anchor.min.js","week04-03_files/bowser-1.9.3/bowser.min.js","week04-03_files/distill-2.2.21/template.v2.js","week04-03_files/header-attrs-2.11/header-attrs.js","week04-03_files/jquery-3.6.0/jquery-3.6.0.js","week04-03_files/jquery-3.6.0/jquery-3.6.0.min.js","week04-03_files/jquery-3.6.0/jquery-3.6.0.min.map","week04-03_files/popper-2.6.0/popper.min.js","week04-03_files/tippy-6.2.7/tippy-bundle.umd.min.js","week04-03_files/tippy-6.2.7/tippy-light-border.css","week04-03_files/tippy-6.2.7/tippy.css","week04-03_files/tippy-6.2.7/tippy.umd.min.js","week04-03_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2350,6 +2350,9 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="app1.png" width="496" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="figures/initial_imdb.png" width="766" /></p>
 </div></li>
 <li><p>We can extend this further. Let’s allow the user to filter by year and MPAA rating. Notice that there are some years in the future! We also find that there are systematic differences in IMDB and Rotten Tomatoes ratings as a function of these variables.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2414,6 +2417,9 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="app2.png" width="496" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="figures/final_imdb.png" width="850" /></p>
 </div></li>
 <li><p>We’ll include a final version of this plot which additionally shows the movie name when points are hovered. To accomplish this, we can no longer use <code>ggplot2</code> on its own – it has to be linked with a plotting library that renders web-based visualizations (not just static image files). This is what the <code>ggplotly()</code> call does in the updated version of the app. The mouseover text is added through the <code>tooltip</code> argument.</p>
 <div class="layout-chunk" data-layout="l-body">
