@@ -61,7 +61,7 @@ to.
     )
     ```
 
-  This piece of code will be run anytime the plot is clicked.
+    This piece of code will be run anytime the plot is clicked.
   
 1. For (b), we can use the `nearPoints` helper function. Suppose the plot was
 made using the data.frame `x`. Then
