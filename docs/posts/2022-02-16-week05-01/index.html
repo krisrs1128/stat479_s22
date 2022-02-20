@@ -2296,29 +2296,23 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <ol type="1">
 <li><p>Some of the most sophisticated interactive data visualizations are based on the idea that user queries can themselves be defined visually. For example, to select a date range, we could directly interact with a time series plot, rather than relying on a slider input. Or, instead of a long dropdown menu of items, a user could select items by clicking on bars in a bar plot. There are many variations of this idea, but they all leverage graphical (rather than textual) displays to define queries. The advantage of this approach is that it increases information density – the selection inputs themselves encode data.</p></li>
 <li><p>To implement this in Shiny, we first need a way of registering user interactions on plots themselves. We will consider two types of plot interaction mechanisms: clicks and brushes. These can be specified by adding <code>click</code> or <code>brush</code> events to <code>plotOutput</code> objects.</p></li>
-</ol>
-<h2 id="click-events">Click Events</h2>
-<p>This creates a UI with a single plot on which we will be able to track user clicks,</p>
-<pre><code>&lt;div class=&quot;layout-chunk&quot; data-layout=&quot;l-body&quot;&gt;
-&lt;div class=&quot;sourceCode&quot;&gt;&lt;pre class=&quot;sourceCode r&quot;&gt;&lt;code class=&quot;sourceCode r&quot;&gt;&lt;span class=&#39;va&#39;&gt;ui&lt;/span&gt; &lt;span class=&#39;op&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;fu&#39;&gt;&lt;a href=&#39;https://rdrr.io/pkg/shiny/man/fluidPage.html&#39;&gt;fluidPage&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;op&#39;&gt;(&lt;/span&gt;
-  &lt;span class=&#39;fu&#39;&gt;&lt;a href=&#39;https://rdrr.io/pkg/shiny/man/plotOutput.html&#39;&gt;plotOutput&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;op&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;st&#39;&gt;&quot;plot&quot;&lt;/span&gt;, click &lt;span class=&#39;op&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;st&#39;&gt;&quot;plot_click&quot;&lt;/span&gt;&lt;span class=&#39;op&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;op&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;/div&gt;
-
-
-Here, `plot_click` is an ID that can be used as `input$plot_click` in the
-server. We could name it however we want, but we need to be consistent
-across the UI and server (just like ordinary, non-graphical inputs).</code></pre>
-<ol type="1">
+<li><p>This creates a UI with a single plot on which we will be able to track user clicks,</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"plot"</span>, click <span class='op'>=</span> <span class='st'>"plot_click"</span><span class='op'>)</span>
+ <span class='op'>)</span>
+ </code></pre>
+</div>
+</div>
+<p>Here, <code>plot_click</code> is an ID that can be used as <code>input$plot_click</code> in the server. We could name it however we want, but we need to be consistent across the UI and server (just like ordinary, non-graphical inputs).</p></li>
 <li><p>Before, we just needed to place the <code>input$id</code> items within <code>render</code> and <code>reactive</code> server components, and the associated outputs would automatically know to redraw each time the value of any input was changed. Clicks are treated slightly differently. We have to both (a) recognize when a click event has occurred and (b) extract relevant information about what the click was referring to.</p></li>
 <li><p>For (a), we generally use <code>observeEvent</code>,</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  input<span class="sc">$</span>plot_click,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  ... things to do when the plot is clicked ...</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  input<span class="sc">$</span>plot_click,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  ... things to do when the plot is clicked ...</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div></li>
 </ol>
 <p>This piece of code will be run anytime the plot is clicked.</p>
@@ -2357,18 +2351,18 @@ across the UI and server (just like ordinary, non-graphical inputs).</code></pre
 </div>
 <p>The code above uses one new concept, the <code>reactiveVal</code> on the first line of the function. It is a variable that doesn’t directly depend on any inputs, which can become a source node for downstream <code>reactive</code> and <code>render</code> nodes in the reactive graph. Anytime the variable’s value is changed, all downstream nodes will be recomputed. A very common pattern is use an <code>observeEvent</code> to update a <code>reactiveVal</code> every time a graphical query is performed. Any plots that depend on this value will then be updated. For example,</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>val <span class="ot">&lt;-</span> <span class="fu">reactiveVal</span>(initial_val) <span class="co"># initialize the reactive value</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  ...some input event...</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  ...do some computation...</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">val</span>(new_value) <span class="co"># update val to new_val</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># runs each time the reactiveVal changes</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">renderPlot</span>({</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">val</span>() <span class="co"># get the current value of the reactive value</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>val <span class="ot">&lt;-</span> <span class="fu">reactiveVal</span>(initial_val) <span class="co"># initialize the reactive value</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  ...some input event...</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  ...do some computation...</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">val</span>(new_value) <span class="co"># update val to new_val</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># runs each time the reactiveVal changes</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">renderPlot</span>({</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">val</span>() <span class="co"># get the current value of the reactive value</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
 </div></li>
 <li><p>So, revisiting the <code>dist</code> in the earlier code block, we see that it is initialized as a vector of <code>1</code>’s whose length is equal to the number of rows of <code>x</code>. Everytime the plot is clicked, we update the value of <code>dist</code> according to the function <code>reset_dist</code>. Finally, the changed value of <code>dist</code> triggers a rerun of <code>renderPlot</code>. Let’s look at the full application in action. It makes a scatterplot using the cars dataset and resizes points every time the plot is clicked.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2461,7 +2455,7 @@ across the UI and server (just like ordinary, non-graphical inputs).</code></pre
 
 </div></li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
