@@ -15,7 +15,7 @@ library(knitr)
 knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
 ```
 
-_[Reading](https://mastering-shiny.org/action-graphics.html), [Recording](),  [Rmarkdown]()_
+_[Reading](https://mastering-shiny.org/action-graphics.html), [Recording](https://mediaspace.wisc.edu/media/Week%205%20%5B4%5D%20Linked%20Brushing/1_n402dlqy),  [Rmarkdown](https://github.com/krisrs1128/stat479_s22/tree/main/_posts/2022-02-16-week05-03)_
 
 1. These notes provide more realistic examples of linked brushing. Though the
 visual design problems they address are more complex, they follow the same
@@ -216,7 +216,6 @@ corresponding only to the first 500 movies in the dataset.
     )
     ```
      
-   
 1. The logic for drawing the overlays is encapsulated by the functions below.
 The `bar_plot` function draws two bar plots over one another, one referring to a
 global `counts` object of unchanging histogram bar heights. The second refers to

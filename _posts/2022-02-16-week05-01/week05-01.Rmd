@@ -15,8 +15,7 @@ library(knitr)
 knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
 ```
 
-
-_[Reading](https://mastering-shiny.org/action-graphics.html), [Recording](),  [Rmarkdown]()_
+_[Reading](https://mastering-shiny.org/action-graphics.html), [Recording](https://mediaspace.wisc.edu/media/Week%205%20%5B2%5D%20Graphical%20Queries%3A%20Click%20Events/1_lmlkeubk),  [Rmarkdown](https://github.com/krisrs1128/stat479_s22/tree/main/_posts/2022-02-16-week05-01)_
 
 1. Some of the most sophisticated interactive data visualizations are based on
 the idea that user queries can themselves be defined visually. For example, to
