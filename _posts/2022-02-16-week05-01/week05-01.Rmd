@@ -37,7 +37,7 @@ mechanisms: clicks and brushes. These can be specified by adding `click` or
 This creates a UI with a single plot on which we will be able to track user
 clicks,
     
-    ```{r}
+    ```{r, eval = FALSE}
     ui <- fluidPage(
       plotOutput("plot", click = "plot_click")
     )
@@ -68,7 +68,7 @@ to.
 1. For (b), we can use the `nearPoints` helper function. Suppose the plot was
 made using the data.frame `x`. Then
 
-    ```{r}
+    ```{r, eval = FALSE}
     nearPoints(x, input$click)
     ```
 

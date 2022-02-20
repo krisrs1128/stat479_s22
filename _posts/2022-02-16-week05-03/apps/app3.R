@@ -1,9 +1,6 @@
-library(plotly)
 library(DT)
-library(crosstalk)
 library(shiny)
 library(tidyverse)
-library(lubridate)
 library(nycflights13)
 
 flights <- flights %>%
@@ -18,17 +15,17 @@ counts <- list(
   "distance" = count(flights, distance)
 )
 
-bar_plot <- function(sub_flights, v) {
+bar_plot <- function(sub_flights, v, width = 100) {
   ggplot(counts[[v]], aes_string(v, "n")) +
-    geom_bar(fill = "#d3d3d3", stat = "identity") +
-    geom_bar(data = sub_flights, stat = "identity")
+    geom_bar(fill = "#d3d3d3", stat = "identity", width = width) +
+    geom_bar(data = sub_flights, stat = "identity", width = width)
 }
 
-plot_overlay <- function(selected_, v, width=10) {
+plot_overlay <- function(selected_, v, width = 100) {
   flights %>%
     filter(selected_) %>%
     count(.data[[v]]) %>%
-    bar_plot(v)
+    bar_plot(v, width)
 }
 
 reset_selection <- function(x, brush) {
@@ -54,7 +51,7 @@ server <- function(input, output) {
     selected(reset_selection(flights, input$plot_brush))
   )
   
-  output$h1 <- renderPlot(plot_overlay(selected(), "dep_delay"))
+  output$h1 <- renderPlot(plot_overlay(selected(), "dep_delay", width = 1))
   output$h2 <- renderPlot(plot_overlay(selected(), "sched_dep_time"))
   output$h3 <- renderPlot(plot_overlay(selected(), "distance"))
   output$table <- renderDataTable(filter(flights, selected()))

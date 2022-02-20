@@ -43,11 +43,11 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  #samples <- reactive({
-  #  generate_data(input$n, input$mean1, input$mean2, input$sigma)
-  #})
-  output$histogram <- renderPlot(histogram_fun(generate_data(input$n, input$mean1, ...))
-  output$test_result <- renderPlot(test_fun(generate_data(input$n, input$mean1, ...))
+  samples <- reactive({
+    generate_data(input$n, input$mean1, input$mean2, input$sigma)
+  })
+  output$histogram <- renderPlot(histogram_fun(generate_data(input$n, input$mean1, ...)))
+  output$test_result <- renderPlot(test_fun(generate_data(input$n, input$mean1, ...)))
 }
 
 app <- shinyApp(ui, server)

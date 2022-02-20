@@ -1,5 +1,5 @@
 ---
-title: "Linked Brushing and Cross-Filtering"
+title: "Linked Brushing"
 description: |
   More examples defining brush queries using Shiny and `ggplot2`.
 author:
@@ -15,12 +15,11 @@ library(knitr)
 knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
 ```
 
-
 _[Reading](https://mastering-shiny.org/action-graphics.html), [Recording](),  [Rmarkdown]()_
 
-1. These notes provide more realistic examples of linked brushing and
-cross-filtering (defined below). Though the visual design problems they address
-are more complex, they follow the same recipe described earlier,
+1. These notes provide more realistic examples of linked brushing. Though the
+visual design problems they address are more complex, they follow the same
+recipe described earlier,
 
     * A `reactiveVal` is defined to track the currently selected samples.
     * An `observeEvent` is used to update the `reactiveVal` every time a plot is
@@ -59,7 +58,7 @@ create an interactive version of the histogram below,
     slider-based implementation.
     
     ```{r}
-    ggplot() +
+    ggplot(movies) +
       geom_point(aes(Rotten_Tomatoes_Rating, IMDB_Rating))
     ```
     
@@ -78,7 +77,7 @@ which movie falls into the currently brushed time range. Each time the brushed
 range is changed, the `output$scatterplot` and `output$table` outputs are
 regenerated, highlighting those movies that appear in the `selected()` list.
 
-    ```{r}
+    ```{r, eval = FALSE}
     ui <- fluidPage(
       fluidRow(
         column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
@@ -124,7 +123,7 @@ ranges, for example.
     * We are passing in the reactive value of the `selected()` movies into the
     histogram as well.
     
-    ```{r}
+    ```{r, eval = FALSE}
     ui <- fluidPage(
       fluidRow(
         column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
@@ -181,4 +180,67 @@ corresponding only to the first 500 movies in the dataset.
  information without having to introduce any peripheral UI components or
  graphical marks.
  
- 1. 
+ 1. In our last problem, we would like to use a dataset of flight delays to
+ understand what characteristics of the flights make some more / less likely to
+ be delayed. The basic difficulty is that there are many potentially relevant
+ variables, and they might interact in ways that are not obvious in advance.
+     
+    ```{r}
+    library(nycflights13)
+    head(flights)
+    ```
+   
+ 1. Our solution strategy will be to dynamically link complementary histograms.
+ By brushing the histogram of delays time, we'll be able to see the conditional
+ distributions for other variables of interest. In principle, we could do this
+ for every variable in the dataset, but for the example, we'll focus on just the
+ scheduled departure time and flight distance.
+ 
+ 1. The UI in this case creates three separate histograms, each of which
+ introduces a brush. We will plan on brushing one histogram at a time, which is
+ then used to update overlays on each.
+ 
+    ```{r}
+    ui <- fluidPage(
+      fluidRow(
+        column(
+          6, 
+          plotOutput("h1", brush = brushOpts("plot_brush", direction = "x"), height = 200),
+          plotOutput("h2", brush = brushOpts("plot_brush", direction = "x"), height = 200),
+          plotOutput("h3", brush = brushOpts("plot_brush", direction = "x"), height = 200)
+        ),
+        column(6, dataTableOutput("table"))
+      ),
+    )
+    ```
+     
+   
+1. The logic for drawing the overlays is encapsulated by the functions below.
+The `bar_plot` function draws two bar plots over one another, one referring to a
+global `counts` object of unchanging histogram bar heights. The second refers to
+the bar heights for the continually updated overlays. Notice that we use
+`aes_string` to use variable names encoded in strings. The `plot_overlay`
+function provides the histogram bar heights for variable `v` after brushing over
+the movies in `selected_`.
+    
+    ```{r}
+    bar_plot <- function(sub_flights, v) {
+      ggplot(counts[[v]], aes_string(v, "n")) +
+        geom_bar(fill = "#d3d3d3", stat = "identity") +
+        geom_bar(data = sub_flights, stat = "identity")
+    }
+    
+    plot_overlay <- function(selected_, v) {
+      flights %>%
+        filter(selected_) %>%
+        count(.data[[v]]) %>%
+        bar_plot(v)
+    }
+    ```
+    
+1. Code for the full application is linked
+[here](https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-16-week05-03/apps/app3.R).
+Thanks to shiny's `reactiveVal` and `brushedPoints` definitions, implementing
+interactivity only requires about 20 lines (starting from `ui <- ...` to the
+end). The rest of the code is used to draw new static plots depending on the
+current selection.

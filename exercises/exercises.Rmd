@@ -6,7 +6,7 @@ header-includes:
     - \hypersetup {colorlinks = true, linkcolor = red, urlcolor = red}
 ---
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(knitr)
 library(tidyverse)
 opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, include = TRUE)
@@ -184,19 +184,20 @@ different amounts of a growth stimulant. The first few rows are printed below --
 giving statistics of recent California wildfires. The steps below guide you
 through the process of building this visualization.
     
-    a. (Static) Plot the day of the year that each fire started against the county
-    within which it was located. Use the size of the mark to encode the number of
-    acres burned in each fire. Sort the counties according to the average latitude
-    of the fires within it.
+    a. (Static) Plot the day of the year that each fire started against the
+    county within which it was located. Use the size of the mark to encode the
+    number of acres burned in each fire.
     
-    b. (Interactive) Add a tooltip so that the name of the fire can be identified by
-    hovering over the points. Introduce a slider to interactively highlight selected
-    years.
+    b. (Interactive) Provide a way for the viewer to interactively highlight or
+    reveal details about subsets of fires. For example, introduce a slider to
+    interactively highlight selected years, a tooltip to highlight the name of a
+    fire, or a select to search for counties, or a slider to filter by fire
+    size.
     
-    c. Discuss two takeaways from the visualization. Is there additional information
-    that is not described by this visualization or dataset that you think would
-    enrich your interpretation?
-  
+    c. Introduce at least one other UI output. For example, print a table of the
+    selected fires, interactively print summary statistics, or show a histogram
+    of fire sizes. Sketch the reactivity graph associated with your application.
+    
 1. [Pokemon]  This problem gives practice in deriving new variables to improve a
 faceted plot. The data below give attack and defense statistics for Pokemon,
 along with their types. We will build a visualization to answer the question --
