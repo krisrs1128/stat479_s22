@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["app3.png","app4.png","apps/app1.R","apps/app2.R","apps/app3.R","apps/app4.R","apps/app5.R","apps-pre/app1.R","apps-pre/app2.R","apps-pre/app3.R","apps-pre/app4.R","apps-pre/app5.R","apps-pre/app6.R","week05-02_files/anchor-4.2.2/anchor.min.js","week05-02_files/bowser-1.9.3/bowser.min.js","week05-02_files/distill-2.2.21/template.v2.js","week05-02_files/figure-html5/unnamed-chunk-4-1.png","week05-02_files/figure-html5/unnamed-chunk-6-1.png","week05-02_files/header-attrs-2.11/header-attrs.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.min.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.min.map","week05-02_files/popper-2.6.0/popper.min.js","week05-02_files/tippy-6.2.7/tippy-bundle.umd.min.js","week05-02_files/tippy-6.2.7/tippy-light-border.css","week05-02_files/tippy-6.2.7/tippy.css","week05-02_files/tippy-6.2.7/tippy.umd.min.js","week05-02_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["app3.png","app4.png","apps/app3.R","apps/app4.R","apps-pre/app1.R","apps-pre/app2.R","apps-pre/app3.R","apps-pre/app4.R","apps-pre/app5.R","apps-pre/app6.R","week05-02_files/anchor-4.2.2/anchor.min.js","week05-02_files/bowser-1.9.3/bowser.min.js","week05-02_files/distill-2.2.21/template.v2.js","week05-02_files/figure-html5/unnamed-chunk-4-1.png","week05-02_files/figure-html5/unnamed-chunk-6-1.png","week05-02_files/header-attrs-2.11/header-attrs.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.min.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.min.map","week05-02_files/popper-2.6.0/popper.min.js","week05-02_files/tippy-6.2.7/tippy-bundle.umd.min.js","week05-02_files/tippy-6.2.7/tippy-light-border.css","week05-02_files/tippy-6.2.7/tippy.css","week05-02_files/tippy-6.2.7/tippy.umd.min.js","week05-02_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2292,7 +2292,7 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
-<p><em><a href="https://mastering-shiny.org/action-graphics.html">Reading</a>, <a href="">Recording</a>, <a href="">Rmarkdown</a></em></p>
+<p><em><a href="https://mastering-shiny.org/action-graphics.html">Reading</a>, <a href="https://mediaspace.wisc.edu/media/Week%205%20%5B3%5D%20Graphical%20Queries%3A%20Brush%20Events/1_axw5u2pr">Recording</a>, <a href="https://github.com/krisrs1128/stat479_s22/tree/main/_posts/2022-02-16-week05-02">Rmarkdown</a></em></p>
 <ol type="1">
 <li><p>Click events are useful for referring to individual samples. However, they are not ideal for referring to groups of samples. In this case, a useful type of plot input is a <code>brush</code>. This is a selection that can be defined by clicking and dragging over a region.</p></li>
 <li><p>In shiny, brush events are treated similarly to click events. For example, to define a new brush input, we can set the <code>brush</code> argument to <code>plotOutput</code>.</p>
@@ -2303,8 +2303,7 @@ d-article ul > li { /*to add back in space between bullet items that I took away
  <span class='op'>)</span>
  </code></pre>
 </div>
-</div></li>
-</ol>
+</div>
 <p>Just like the <code>click</code> argument, the value <code>"plot_brush"</code> is an ID that can be used in the server. Also like in click events, we can setup an observer to change a reactive value every time a brush is drawn<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. The general pattern is similar to what we had before,</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
@@ -2314,27 +2313,27 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ... computation using get new_value ...</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selected</span>(new_value)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>plot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>(... use <span class="fu">scatter</span>() reactive val...)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<ol type="1">
+</div></li>
 <li><p>The example below is similar to the <code>plot_click</code> example from the previous notes. Instead of sorting points by proximity to the click, though, prints the subset of rows that have been currently brushed.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
- <span class='va'>mtcars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/add_rownames.html'>add_rownames</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+ <span class='va'>mtcars</span> <span class='op'>&lt;-</span> <span class='fu'>add_rownames</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 
  <span class='va'>reset_selection</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>brush</span><span class='op'>)</span> <span class='op'>{</span>
    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/brushedPoints.html'>brushedPoints</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>brush</span>, allRows <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>$</span><span class='va'>selected_</span>
  <span class='op'>}</span>
 
- <span class='va'>make_scatter</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>selected_</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>x</span><span class='op'>$</span><span class='va'>selected_</span> <span class='op'>&lt;-</span> <span class='va'>selected_</span>
-   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>hp</span>, alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>selected_</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_alpha.html'>scale_alpha</a></span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+ <span class='va'>scatter</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>selected_</span><span class='op'>)</span> <span class='op'>{</span>
+   <span class='va'>x</span> <span class='op'>%&gt;%</span>
+     <span class='fu'>mutate</span><span class='op'>(</span>selected_ <span class='op'>=</span> <span class='va'>selected_</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+     <span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'>geom_point</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>hp</span>, alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>selected_</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'>scale_alpha</span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
@@ -2349,8 +2348,8 @@ d-article ul > li { /*to add back in space between bullet items that I took away
      <span class='fu'>selected</span><span class='op'>(</span><span class='fu'>reset_selection</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_brush</span><span class='op'>)</span><span class='op'>)</span>
    <span class='op'>)</span>
 
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>plot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>make_scatter</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>table</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>renderDataTable</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>plot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>scatter</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>table</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>renderDataTable</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
