@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["app1.png","apps/app1.R","apps/app2.R","apps/app3.R","week05-03_files/anchor-4.2.2/anchor.min.js","week05-03_files/bowser-1.9.3/bowser.min.js","week05-03_files/distill-2.2.21/template.v2.js","week05-03_files/figure-html5/unnamed-chunk-2-1.png","week05-03_files/figure-html5/unnamed-chunk-3-1.png","week05-03_files/figure-html5/unnamed-chunk-7-1.png","week05-03_files/header-attrs-2.11/header-attrs.js","week05-03_files/jquery-3.6.0/jquery-3.6.0.js","week05-03_files/jquery-3.6.0/jquery-3.6.0.min.js","week05-03_files/jquery-3.6.0/jquery-3.6.0.min.map","week05-03_files/popper-2.6.0/popper.min.js","week05-03_files/tippy-6.2.7/tippy-bundle.umd.min.js","week05-03_files/tippy-6.2.7/tippy-light-border.css","week05-03_files/tippy-6.2.7/tippy.css","week05-03_files/tippy-6.2.7/tippy.umd.min.js","week05-03_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["app1.png","apps/app1.R","apps/app2.R","apps/app3.R","week05-03_files/anchor-4.2.2/anchor.min.js","week05-03_files/bowser-1.9.3/bowser.min.js","week05-03_files/distill-2.2.21/template.v2.js","week05-03_files/figure-html5/unnamed-chunk-2-1.png","week05-03_files/figure-html5/unnamed-chunk-3-1.png","week05-03_files/figure-html5/unnamed-chunk-7-1.png","week05-03_files/figure-html5/unnamed-chunk-8-1.png","week05-03_files/header-attrs-2.11/header-attrs.js","week05-03_files/jquery-3.6.0/jquery-3.6.0.js","week05-03_files/jquery-3.6.0/jquery-3.6.0.min.js","week05-03_files/jquery-3.6.0/jquery-3.6.0.min.map","week05-03_files/popper-2.6.0/popper.min.js","week05-03_files/tippy-6.2.7/tippy-bundle.umd.min.js","week05-03_files/tippy-6.2.7/tippy-light-border.css","week05-03_files/tippy-6.2.7/tippy.css","week05-03_files/tippy-6.2.7/tippy.umd.min.js","week05-03_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2361,6 +2361,9 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <li><p>We haven’t included the full code for <code>histogram</code>, <code>scatterplot</code>, and <code>data_table</code>, since they in and of themselves don’t require any logic for interactivity. You can try out the full code <a href="https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-16-week05-03/apps/app1.R">here</a>, and a screenshot of the initial interface is below.</p>
 <div class="layout-chunk" data-layout="l-body">
 
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="app1.png" width="496" /></p>
 </div></li>
 <li><p>A natural extension of the previous app is to allow brushing on both the histogram and the scatterplot. Brushing over the scatterplot would show the years during which the selected movies were released – this can be used to find out if very poorly or highly rated movies are associated with specific time ranges, for example.</p></li>
 <li><p>The updated application is below. The main differences are that,</p>
@@ -2370,28 +2373,28 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidRow</a></span><span class='op'>(</span>
-     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/column.html'>column</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"histogram"</span>, brush <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/brushOpts.html'>brushOpts</a></span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/column.html'>column</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"scatterplot"</span>, brush <span class='op'>=</span> <span class='st'>"plot_brush"</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'>fluidPage</span><span class='op'>(</span>
+   <span class='fu'>fluidRow</span><span class='op'>(</span>
+     <span class='fu'>column</span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'>plotOutput</span><span class='op'>(</span><span class='st'>"histogram"</span>, brush <span class='op'>=</span> <span class='fu'>brushOpts</span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+     <span class='fu'>column</span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'>plotOutput</span><span class='op'>(</span><span class='st'>"scatterplot"</span>, brush <span class='op'>=</span> <span class='st'>"plot_brush"</span><span class='op'>)</span><span class='op'>)</span>
    <span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>dataTableOutput</a></span><span class='op'>(</span><span class='st'>"table"</span><span class='op'>)</span>
+   <span class='fu'>dataTableOutput</span><span class='op'>(</span><span class='st'>"table"</span><span class='op'>)</span>
  <span class='op'>)</span>
 
  <span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>selected</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactiveVal.html'>reactiveVal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>movies</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='va'>selected</span> <span class='op'>&lt;-</span> <span class='fu'>reactiveVal</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>movies</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span>
+   <span class='fu'>observeEvent</span><span class='op'>(</span>
      <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_brush</span>,
      <span class='fu'>selected</span><span class='op'>(</span><span class='fu'>reset_selection</span><span class='op'>(</span><span class='va'>movies</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_brush</span><span class='op'>)</span><span class='op'>)</span>
    <span class='op'>)</span>
 
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>histogram</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>histogram</span><span class='op'>(</span><span class='va'>movies</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>scatterplot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>scatterplot</span><span class='op'>(</span><span class='va'>movies</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>table</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>renderDataTable</a></span><span class='op'>(</span><span class='fu'>data_table</span><span class='op'>(</span><span class='va'>movies</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>histogram</span> <span class='op'>&lt;-</span> <span class='fu'>renderPlot</span><span class='op'>(</span><span class='fu'>histogram</span><span class='op'>(</span><span class='va'>movies</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>scatterplot</span> <span class='op'>&lt;-</span> <span class='fu'>renderPlot</span><span class='op'>(</span><span class='fu'>scatterplot</span><span class='op'>(</span><span class='va'>movies</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>table</span> <span class='op'>&lt;-</span> <span class='fu'>renderDataTable</span><span class='op'>(</span><span class='fu'>data_table</span><span class='op'>(</span><span class='va'>movies</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
  <span class='op'>}</span>
 
- <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
+ <span class='fu'>shinyApp</span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
  </code></pre>
 </div>
 </div></li>
@@ -2399,17 +2402,17 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r">  <span class='va'>sub_counts</span> <span class='op'>&lt;-</span> <span class='va'>movies</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>500</span>, <span class='op'>]</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span>
+     <span class='fu'>count</span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span>
 
    <span class='va'>movies</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>year</span>, <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"identity"</span>, fill <span class='op'>=</span> <span class='st'>"#d3d3d3"</span>, width <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>sub_counts</span>, stat <span class='op'>=</span> <span class='st'>"identity"</span>, width <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span><span class='op'>(</span>expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+     <span class='fu'>count</span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+     <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>year</span>, <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'>geom_bar</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"identity"</span>, fill <span class='op'>=</span> <span class='st'>"#d3d3d3"</span>, width <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'>geom_bar</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>sub_counts</span>, stat <span class='op'>=</span> <span class='st'>"identity"</span>, width <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'>scale_y_continuous</span><span class='op'>(</span>expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
  </code></pre>
 </div>
-<p><img src="week05-03_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+<p><img src="week05-03_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
 </div></li>
 <li><p>Combining these ideas leads to the app <a href="https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-16-week05-03/apps/app2.R">here</a>. A screenshot of the initial view is given below. Try running the code and brushing on both the scatterplot and the histogram. The especially interesting thing about this approach is that, without introducing any new screen elements, we’ve widened the class of questions of that can be answered. In a sense, we’ve increased the information density of the display – we can present more information without having to introduce any peripheral UI components or graphical marks.</p></li>
 <li><p>In our last problem, we would like to use a dataset of flight delays to understand what characteristics of the flights make some more / less likely to be delayed. The basic difficulty is that there are many potentially relevant variables, and they might interact in ways that are not obvious in advance.</p>
@@ -2437,15 +2440,15 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <li><p>The UI in this case creates three separate histograms, each of which introduces a brush. We will plan on brushing one histogram at a time, which is then used to update overlays on each.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidRow</a></span><span class='op'>(</span>
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/column.html'>column</a></span><span class='op'>(</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'>fluidPage</span><span class='op'>(</span>
+  <span class='fu'>fluidRow</span><span class='op'>(</span>
+    <span class='fu'>column</span><span class='op'>(</span>
       <span class='fl'>6</span>, 
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"h1"</span>, brush <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/brushOpts.html'>brushOpts</a></span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"h2"</span>, brush <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/brushOpts.html'>brushOpts</a></span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"h3"</span>, brush <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/brushOpts.html'>brushOpts</a></span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
+      <span class='fu'>plotOutput</span><span class='op'>(</span><span class='st'>"h1"</span>, brush <span class='op'>=</span> <span class='fu'>brushOpts</span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>,
+      <span class='fu'>plotOutput</span><span class='op'>(</span><span class='st'>"h2"</span>, brush <span class='op'>=</span> <span class='fu'>brushOpts</span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>,
+      <span class='fu'>plotOutput</span><span class='op'>(</span><span class='st'>"h3"</span>, brush <span class='op'>=</span> <span class='fu'>brushOpts</span><span class='op'>(</span><span class='st'>"plot_brush"</span>, direction <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
     <span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/column.html'>column</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>dataTableOutput</a></span><span class='op'>(</span><span class='st'>"table"</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'>column</span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'>dataTableOutput</span><span class='op'>(</span><span class='st'>"table"</span><span class='op'>)</span><span class='op'>)</span>
   <span class='op'>)</span>,
 <span class='op'>)</span>
 </code></pre>
@@ -2455,15 +2458,15 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>bar_plot</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>sub_flights</span>, <span class='va'>v</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>counts</span><span class='op'>[[</span><span class='va'>v</span><span class='op'>]</span><span class='op'>]</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_string</a></span><span class='op'>(</span><span class='va'>v</span>, <span class='st'>"n"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"#d3d3d3"</span>, stat <span class='op'>=</span> <span class='st'>"identity"</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>sub_flights</span>, stat <span class='op'>=</span> <span class='st'>"identity"</span><span class='op'>)</span>
+   <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>counts</span><span class='op'>[[</span><span class='va'>v</span><span class='op'>]</span><span class='op'>]</span>, <span class='fu'>aes_string</span><span class='op'>(</span><span class='va'>v</span>, <span class='st'>"n"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'>geom_bar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"#d3d3d3"</span>, stat <span class='op'>=</span> <span class='st'>"identity"</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'>geom_bar</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>sub_flights</span>, stat <span class='op'>=</span> <span class='st'>"identity"</span><span class='op'>)</span>
  <span class='op'>}</span>
 
  <span class='va'>plot_overlay</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>selected_</span>, <span class='va'>v</span><span class='op'>)</span> <span class='op'>{</span>
    <span class='va'>flights</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>selected_</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>.data</span><span class='op'>[[</span><span class='va'>v</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+     <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>selected_</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+     <span class='fu'>count</span><span class='op'>(</span><span class='va'>.data</span><span class='op'>[[</span><span class='va'>v</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
      <span class='fu'>bar_plot</span><span class='op'>(</span><span class='va'>v</span><span class='op'>)</span>
  <span class='op'>}</span>
  </code></pre>
