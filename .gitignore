@@ -11,3 +11,4 @@ _slides/*/*.html
 _slides/*/*.pdf
 _posts/*/*.html
 *files*
+*site_libs*
