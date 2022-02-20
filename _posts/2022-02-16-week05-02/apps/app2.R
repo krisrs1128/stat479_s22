@@ -1,69 +1,36 @@
-library(plotly)
-library(DT)
-library(crosstalk)
-library(shiny)
 library(tidyverse)
-library(lubridate)
-library(nycflights13)
+library(shiny)
+mtcars <- add_rownames(mtcars)
 
+reset_dist <- function(x, click) {
+  nearPoints(x, click, allRows = TRUE, addDist = TRUE)$dist_
+}
 
-movies <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_posts/2022-02-10-week04-03/apps/data/movies.csv") %>%
-  mutate(
-    id = row_number(),
-    date = as_date(Release_Date, format = "%b %d %Y"),
-    year = year(date),
-    Major_Genre = fct_explicit_na(Major_Genre),
-    MPAA_Rating = fct_explicit_na(MPAA_Rating),
-  )
-
-
-reset_selection <- function(x, brush) {
-  brushedPoints(x, brush, allRows = TRUE)$selected_
+scatter <- function(x, dists) {
+  x %>%
+    mutate(dist = dists) %>%
+    ggplot() +
+    geom_point(aes(mpg, hp, size = dist)) +
+    scale_size(range = c(6, 1))
 }
 
 ui <- fluidPage(
-  fluidRow(
-    column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
-    column(6, plotOutput("scatterplot", brush = "plot_brush"))
-  ),
+  plotOutput("plot", click = "plot_click"),
   dataTableOutput("table")
 )
 
 server <- function(input, output) {
-  selected <- reactiveVal(rep(T, nrow(movies)))
-  
+  dist <- reactiveVal(rep(1, nrow(mtcars)))
   observeEvent(
-    input$plot_brush,
-    selected(reset_selection(movies, input$plot_brush))
+    input$plot_click,
+    dist(reset_dist(mtcars, input$plot_click))
   )
   
-  output$histogram <- renderPlot({
-    counts <- movies %>% count(year)
-    sub_counts <- movies %>%
-      filter(selected()) %>%
-      count(year)
-    
-    ggplot(counts, aes(year, n)) +
-      geom_bar(stat = "identity", fill = "#d3d3d3", width = 1) +
-      geom_bar(data = sub_counts, stat = "identity", width = 1) +
-      scale_y_continuous(expand = c(0, 0))
-    })
-  
-  output$scatterplot <- renderPlot({
-    movies %>%
-      mutate(selected_ = selected()) %>%
-      ggplot() +
-      geom_point(aes(
-        Rotten_Tomatoes_Rating, IMDB_Rating, 
-        col = selected_
-      )) +
-      scale_color_manual(values = c("#d3d3d3", "black"), guide = "none")
-  })
-  
+  output$plot <- renderPlot(scatter(mtcars, dist()))
   output$table <- renderDataTable({
-    movies %>%
-      filter(selected()) %>%
-      select(Title, Major_Genre, Worldwide_Gross, Director, Release_Date)
+    mtcars %>%
+      mutate(dist = dist()) %>%
+      arrange(dist)
   })
 }
 

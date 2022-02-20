@@ -6,14 +6,16 @@ reset_dist <- function(x, click) {
   nearPoints(x, click, allRows = TRUE, addDist = TRUE)$dist_
 }
 
-make_scatter <- function(x) {
-  ggplot(x) +
+scatter <- function(x, dists) {
+  x %>%
+    mutate(dist = dists) %>%
+    ggplot() +
     geom_point(aes(mpg, hp, size = dist)) +
     scale_size(range = c(6, 1))
 }
 
 ui <- fluidPage(
-  plotOutput("plot", click = "plot_click"), # defines both an input and output
+  plotOutput("plot", click = "plot_click"),
   dataTableOutput("table")
 )
 
@@ -24,14 +26,11 @@ server <- function(input, output) {
     dist(reset_dist(mtcars, input$plot_click))
   )
   
-  output$plot <- renderPlot({
-    mtcars$dist <- dist()
-    make_scatter(mtcars)
-  })
-  
+  output$plot <- renderPlot(scatter(mtcars, dist()))
   output$table <- renderDataTable({
-    mtcars$dist <- dist()
-    arrange(mtcars, dist)
+    mtcars %>%
+      mutate(dist = dist()) %>%
+      arrange(dist)
   })
 }
 

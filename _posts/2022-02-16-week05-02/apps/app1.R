@@ -1,64 +1,32 @@
-library(plotly)
-library(DT)
-library(crosstalk)
-library(shiny)
 library(tidyverse)
-library(lubridate)
+library(shiny)
 
-movies <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_posts/2022-02-10-week04-03/apps/data/movies.csv") %>%
-  mutate(
-    id = row_number(),
-    date = as_date(Release_Date, format = "%b %d %Y"),
-    year = year(date),
-    Major_Genre = fct_explicit_na(Major_Genre),
-    MPAA_Rating = fct_explicit_na(MPAA_Rating),
-  )
+# wrapper to get the distances from points to clicks
+reset_dist <- function(x, click) {
+  nearPoints(x, click, allRows = TRUE, addDist = TRUE)$dist_
+}
 
-genres <- pull(movies, Major_Genre) %>%
-  unique() %>%
-  na.omit()
-
-reset_selection <- function(x, brush) {
-  brushedPoints(x, brush, allRows = TRUE)$selected_
+# scatterplot plot with point size dependent on click location
+scatter <- function(x, dists) {
+  x %>%
+    mutate(dist = dists) %>%
+    ggplot() +
+    geom_point(aes(mpg, hp, size = dist)) +
+    scale_size(range = c(6, 1))
 }
 
 ui <- fluidPage(
-  fluidRow(
-    column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
-    column(6, plotOutput("scatterplot"))
-  ),
-  dataTableOutput("table")
+  plotOutput("plot", click = "plot_click")
 )
 
 server <- function(input, output) {
-  selected <- reactiveVal(rep(TRUE, nrow(movies)))
-  
+  dist <- reactiveVal(rep(1, nrow(mtcars)))
   observeEvent(
-    input$plot_brush,
-    selected(reset_selection(movies, input$plot_brush))
+    input$plot_click,
+    dist(reset_dist(mtcars, input$plot_click))
   )
   
-  output$histogram <- renderPlot({
-    movies %>%
-      count(year) %>%
-      ggplot() +
-      geom_bar(aes(year, n), stat = "identity", width = 1) +
-      scale_y_continuous(expand = c(0, 0))
-    })
-  
-  output$scatterplot <- renderPlot({
-    movies %>%
-      mutate(selected_ = selected()) %>%
-      ggplot() +
-      geom_point(aes(Rotten_Tomatoes_Rating, IMDB_Rating, alpha = as.numeric(selected_))) +
-      scale_alpha(range = c(0.05, 0.6))
-  })
-  
-  output$table <- renderDataTable({
-    movies %>%
-      filter(selected()) %>%
-      select(Title, Major_Genre, Worldwide_Gross, Director, Release_Date)
-  })
+  output$plot <- renderPlot(scatter(mtcars, dist()))
 }
 
 shinyApp(ui, server)

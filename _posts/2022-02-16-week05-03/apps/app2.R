@@ -1,30 +1,66 @@
-
-# load libraries ----
-library(ggplot2)
 library(plotly)
 library(DT)
-library(tidyverse)
 library(crosstalk)
+library(shiny)
+library(tidyverse)
+library(lubridate)
 
-scatter <- function(x, var1, var2) {
-  p <- ggplot(x, aes_string(var1, var2)) +
-    geom_point(aes(col = species)) +
-    scale_color_brewer(palette = "Set2", guide = FALSE)
-  ggplotly(p) %>%
-    layout(dragmode = "lasso") %>%
-    highlight(on = "plotly_selected")
+movies <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_posts/2022-02-10-week04-03/apps/data/movies.csv") %>%
+  mutate(
+    date = as_date(Release_Date, format = "%b %d %Y"),
+    year = year(date),
+    Major_Genre = fct_explicit_na(Major_Genre)
+  )
+
+
+reset_selection <- function(x, brush) {
+  brushedPoints(x, brush, allRows = TRUE)$selected_
 }
 
+ui <- fluidPage(
+  fluidRow(
+    column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
+    column(6, plotOutput("scatterplot", brush = "plot_brush"))
+  ),
+  dataTableOutput("table")
+)
 
-# create SharedData ----
-penguins <- read_csv("https://uwmadison.box.com/shared/static/ijh7iipc9ect1jf0z8qa2n3j7dgem1gh.csv") %>%
-  mutate(id = row_number())
-penguins <- SharedData$new(penguins, key = ~id)
+server <- function(input, output) {
+  selected <- reactiveVal(rep(T, nrow(movies)))
+  
+  observeEvent(
+    input$plot_brush,
+    selected(reset_selection(movies, input$plot_brush))
+  )
+  
+  output$histogram <- renderPlot({
+    counts <- movies %>% count(year)
+    sub_counts <- movies %>%
+      filter(selected()) %>%
+      count(year)
+    
+    ggplot(counts, aes(year, n)) +
+      geom_bar(stat = "identity", fill = "#d3d3d3", width = 1) +
+      geom_bar(data = sub_counts, stat = "identity", width = 1) +
+      scale_y_continuous(expand = c(0, 0))
+    })
+  
+  output$scatterplot <- renderPlot({
+    movies %>%
+      mutate(selected_ = selected()) %>%
+      ggplot() +
+      geom_point(aes(
+        Rotten_Tomatoes_Rating, IMDB_Rating, 
+        col = selected_
+      )) +
+      scale_color_manual(values = c("#d3d3d3", "black"), guide = "none")
+  })
+  
+  output$table <- renderDataTable({
+    movies %>%
+      filter(selected()) %>%
+      select(Title, Major_Genre, Worldwide_Gross, Director, Release_Date)
+  })
+}
 
-# plotly scatterplots
-p1 <- scatter(penguins, "bill_length_mm", "bill_depth_mm")
-p2 <- scatter(penguins, "flipper_length_mm", "body_mass_g")
-
-# create final output
-dt <- datatable(penguins)
-bscols(p1, p2, dt, widths = c(6, 6, 12))
+shinyApp(ui, server)

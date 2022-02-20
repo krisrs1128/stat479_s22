@@ -1,37 +1,67 @@
-library(ggplot2)
 library(plotly)
 library(DT)
 library(crosstalk)
+library(shiny)
+library(tidyverse)
+library(lubridate)
 
-download.file("https://github.com/emilyriederer/demo-crosstalk/blob/master/data/stations.rds?raw=true", "stations.rds")
-download.file("https://github.com/emilyriederer/demo-crosstalk/blob/master/data/trips_apr.rds?raw=true", "trips_apr.rds")
-stations <- readRDS("stations.rds")
-trips <- readRDS("trips_apr.rds")
+# read in and clean the dataset
+movies <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_posts/2022-02-10-week04-03/apps/data/movies.csv") %>%
+  mutate(
+    id = row_number(),
+    date = as_date(Release_Date, format = "%b %d %Y"),
+    year = year(date),
+    Major_Genre = fct_explicit_na(Major_Genre),
+    MPAA_Rating = fct_explicit_na(MPAA_Rating),
+  )
 
-# create SharedData ----
-trips_ct <- SharedData$new(trips, key = ~station_id, group = "loc")
-trips_sub_ct <- SharedData$new(trips[,c("station_name", "station_id", "pct_change")], 
-                               key = ~station_id, group = "loc")
-stations_ct <- SharedData$new(stations, key = ~station_id, group = "loc")
+# helper functions used to generate the selection and plots
+reset_selection <- function(x, brush) {
+  brushedPoints(x, brush, allRows = TRUE)$selected_
+}
 
-# basic ggplots
-gg <- ggplot(trips_ct) +
-  geom_point(aes(prop_wend_2019, pct_change, name = station_name)) +
-  scale_x_continuous(labels = scales::percent) +
-  scale_y_continuous(labels = scales::percent)
+histogram <- function(movies) {
+  movies %>%
+    count(year) %>%
+    ggplot() +
+    geom_bar(aes(year, n), stat = "identity", width = 1) +
+    scale_y_continuous(expand = c(0, 0))
+}
 
-gg2 <- ggplot(trips_ct) +
-  geom_bar(aes(year_2020, reorder(station_name, year_2020)), stat = "identity")
+scatterplot <- function(movies, selected_) {
+    movies %>%
+      mutate(selected_ = selected_) %>%
+      ggplot() +
+      geom_point(aes(Rotten_Tomatoes_Rating, IMDB_Rating, alpha = as.numeric(selected_))) +
+      scale_alpha(range = c(0.05, 0.6))
+}
 
-# extend to ggplotly
-gg2_ly <- ggplotly(gg2) %>%
-  layout(dragmode = "select", direction = "v") %>%
-  highlight(on = "plotly_selected")
+data_table <- function(movies, selected_) {
+  movies %>%
+    filter(selected_) %>%
+    select(Title, Major_Genre, Worldwide_Gross, Director, Release_Date)
+}
 
-gg_ly <- ggplotly(gg) %>%
-  layout(dragmode = "select") %>%
-  highlight(on = "plotly_selected")
+# create the app
+ui <- fluidPage(
+  fluidRow(
+    column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
+    column(6, plotOutput("scatterplot"))
+  ),
+  dataTableOutput("table")
+)
 
-# create final output
-dt <- datatable(trips_sub_ct)
-bscols(gg_ly, gg2_ly, dt, widths = c(6, 6, 12))
+server <- function(input, output) {
+  selected <- reactiveVal(rep(TRUE, nrow(movies)))
+  
+  observeEvent(
+    input$plot_brush,
+    selected(reset_selection(movies, input$plot_brush))
+  )
+  
+  output$histogram <- renderPlot(histogram(movies))
+  output$scatterplot <- renderPlot(scatterplot(movies, selected()))
+  output$table <- renderDataTable(data_table(movies, selected()))
+}
+
+shinyApp(ui, server)

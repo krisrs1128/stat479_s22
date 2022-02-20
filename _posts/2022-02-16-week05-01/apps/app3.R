@@ -6,9 +6,10 @@ reset_selection <- function(x, brush) {
   brushedPoints(x, brush, allRows = TRUE)$selected_
 }
 
-make_scatter <- function(x, selected_) {
-  x$selected_ <- selected_
-  ggplot(x) +
+scatter <- function(x, selected_) {
+  x %>%
+    mutate(selected_ = selected_) %>%
+    ggplot() +
     geom_point(aes(mpg, hp, alpha = as.numeric(selected_))) +
     scale_alpha(range = c(0.1, 1))
 }
@@ -25,7 +26,7 @@ server <- function(input, output) {
     selected(reset_selection(mtcars, input$plot_brush))
   )
   
-  output$plot <- renderPlot(make_scatter(mtcars, selected()))
+  output$plot <- renderPlot(scatter(mtcars, selected()))
   output$table <- renderDataTable(filter(mtcars, selected()))
 }
 
