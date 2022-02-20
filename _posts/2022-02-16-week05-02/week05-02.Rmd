@@ -62,7 +62,6 @@ subset of rows that have been currently brushed.
     
     ```{r, echo = FALSE}
     appshot(app = "apps/app3.R", file = "app3.png", vheight = 400, delay=5)
-    include_graphics("app3.png")
     ```
 
 1. It is often useful to combine multi-view composition (_i.e._, faceting or
@@ -82,5 +81,4 @@ contexts, leading to changes in both plots every time the brush is moved.
     
     ```{r, echo = FALSE}
     appshot(app = "apps/app4.R", file = "app4.png", vheight = 400, delay=5)
-    include_graphics("app4.png")
     ```

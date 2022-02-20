@@ -108,7 +108,6 @@ and a screenshot of the initial interface is below.
     
     ```{r, echo = FALSE}
     appshot(app = "apps/app1.R", file = "app1.png", vheight = 400, delay=5)
-    include_graphics("app1.png")
     ```
     
 1. A natural extension of the previous app is to allow brushing on both the

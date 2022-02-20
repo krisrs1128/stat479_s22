@@ -8,7 +8,7 @@ reset_selection <- function(x, brush) {
 
 scatter <- function(x, selected_, var1, var2) {
   x %>%
-    mutate(selected_ = selected) %>%
+    mutate(selected_ = selected_) %>%
     ggplot(aes_string(var1, var2)) +
     geom_point(aes(alpha = as.numeric(selected_), col = species)) +
     scale_alpha(range = c(0.1, 1))

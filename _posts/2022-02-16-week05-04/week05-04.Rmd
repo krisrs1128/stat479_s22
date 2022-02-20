@@ -12,7 +12,7 @@ output:
 
 ```{r, echo = FALSE}
 library(knitr)
-knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
+knitr::opts_chunk$set(cache = FALSE, message = FALSE, warning = FALSE, echo = TRUE, fig.height = 5, retina = 4)
 ```
 
 _[Reading](https://emilyriederer.netlify.app/post/crosstalk/), [Recording](),  [Rmarkdown]()_
@@ -88,7 +88,7 @@ that were mostly used during the weekdays. This makes sense, considering many of
 the office workers in Chicago started working from home in 2020.
     
     ```{r}
-    p1 <- ggplotly(p1) %>%
+    p1 <- ggplotly(p1, tooltip = "station_name") %>%
       layout(dragmode = "select") %>%
       highlight(on = "plotly_selected")
     

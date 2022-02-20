@@ -141,7 +141,6 @@ clicked.
     
     ```{r, echo = FALSE}
     appshot(app = "apps/app1.R", file = "app1.png", vheight = 400, delay=5)
-    include_graphics("app1.png")
     ```
 
 1. The `reset_dist` function uses `nearPoints` to compute the distance between
@@ -158,5 +157,4 @@ distance each time the plot is clicked.
     
     ```{r, echo = FALSE}
     appshot(app = "apps/app2.R", file = "app2.png", vheight = 400, delay=5)
-    include_graphics("app2.png")
     ```
