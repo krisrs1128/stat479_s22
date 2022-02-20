@@ -48,10 +48,9 @@ create an interactive version of the histogram below,
       )
     
     movies %>% 
-      count(year)
+      count(year) %>%
       ggplot(aes(year, n)) +
-      geom_bar(stat = "identity", fill = "#d3d3d3", width = 1) +
-      geom_bar(data = sub_counts, stat = "identity", width = 1) +
+      geom_bar(stat = "identity", width = 1) +
       scale_y_continuous(expand = c(0, 0))
     ```
 
@@ -63,8 +62,14 @@ create an interactive version of the histogram below,
     ggplot() +
       geom_point(aes(Rotten_Tomatoes_Rating, IMDB_Rating))
     ```
+    
+1. Viewed more abstractly, we are going to use a brush to linking the histogram
+and the scatterplot views. We will be able to evaluate the change in a
+visualization (the scatterplot) after "conditioning" on a subset defined by a
+complementary view (the histogram). This is analogous to the penguins dataset
+example -- only the form of the base plots has changed.
 
-1. The main logic needed to accomplish this is given in the block below. The
+1. The main logic needed to link these views is given in the block below. The
 histogram `plotOutput` in the UI is given a brush which will be used to select
 years^[Note that we restrict brush motion to the $x$-direction. This is because
 the $x$ direction alone encodes year information, which we want to select.]. We
@@ -98,10 +103,82 @@ regenerated, highlighting those movies that appear in the `selected()` list.
     
 1. We haven't included the full code for `histogram`, `scatterplot`, and
 `data_table`, since they in and of themselves don't require any logic for
-interactivity. We've included the full code here, screenshot of the initial
-interface is given below.
+interactivity. You can try out the full code
+[here](https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-16-week05-03/apps/app1.R),
+and a screenshot of the initial interface is below.
     
     ```{r, echo = FALSE}
-    appshot(app = "apps/app4.R", file = "app4.png", vheight = 400, delay=5)
-    include_graphics("app4.png")
+    appshot(app = "apps/app1.R", file = "app1.png", vheight = 400, delay=5)
+    include_graphics("app1.png")
     ```
+    
+1. A natural extension of the previous app is to allow brushing on both the
+histogram and the scatterplot. Brushing over the scatterplot would show the
+years during which the selected movies were released -- this can be used to find
+out if very poorly or highly rated movies are associated with specific time
+ranges, for example.
+
+1. The updated application is below. The main differences are that,
+
+    * The scatterplot `plotOutput` now includes a brush.
+    * We are passing in the reactive value of the `selected()` movies into the
+    histogram as well.
+    
+    ```{r}
+    ui <- fluidPage(
+      fluidRow(
+        column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
+        column(6, plotOutput("scatterplot", brush = "plot_brush"))
+      ),
+      dataTableOutput("table")
+    )
+    
+    server <- function(input, output) {
+      selected <- reactiveVal(rep(TRUE, nrow(movies)))
+      
+      observeEvent(
+        input$plot_brush,
+        selected(reset_selection(movies, input$plot_brush))
+      )
+      
+      output$histogram <- renderPlot(histogram(movies, selected()))
+      output$scatterplot <- renderPlot(scatterplot(movies, selected()))
+      output$table <- renderDataTable(data_table(movies, selected()))
+    }
+    
+    shinyApp(ui, server)
+    ```
+  
+  
+1. For the scatterplot, we simply reduced the transparency for the movies that
+weren't selected. We cannot do this for the histogram, though, because the
+movies are not directly represented in this plot, only their counts over time.
+Instead, our idea will be to draw two overlapping histograms. A static one in
+the background will represent the year distribution before any selection. A
+changing one in the foreground will be redrawn whenever the selected movies are
+changed. For example, the code below overlays two `geom_bar` layers, with one
+corresponding only to the first 500 movies in the dataset.
+    
+    ```{r}
+      sub_counts <- movies[1:500, ] %>%
+        count(year)
+      
+      movies %>%
+        count(year) %>%
+        ggplot(aes(year, n)) +
+        geom_bar(stat = "identity", fill = "#d3d3d3", width = 1) +
+        geom_bar(data = sub_counts, stat = "identity", width = 1) +
+        scale_y_continuous(expand = c(0, 0))
+    ```
+    
+ 1. Combining these ideas leads to the app
+ [here](https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-16-week05-03/apps/app2.R).
+ A screenshot of the initial view is given below. Try running the code and
+ brushing on both the scatterplot and the histogram. The especially interesting
+ thing about this approach is that, without introducing any new screen elements,
+ we've widened the class of questions of that can be answered. In a sense, we've
+ increased the information density of the display -- we can present more
+ information without having to introduce any peripheral UI components or
+ graphical marks.
+ 
+ 1. 

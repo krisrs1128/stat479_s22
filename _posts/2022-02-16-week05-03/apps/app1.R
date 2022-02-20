@@ -1,6 +1,4 @@
-library(plotly)
 library(DT)
-library(crosstalk)
 library(shiny)
 library(tidyverse)
 library(lubridate)

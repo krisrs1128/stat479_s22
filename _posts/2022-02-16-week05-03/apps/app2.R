@@ -1,6 +1,4 @@
-library(plotly)
 library(DT)
-library(crosstalk)
 library(shiny)
 library(tidyverse)
 library(lubridate)
@@ -17,6 +15,34 @@ reset_selection <- function(x, brush) {
   brushedPoints(x, brush, allRows = TRUE)$selected_
 }
 
+histogram <- function(movies, selected_) {
+  sub_counts <- movies %>%
+    filter(selected_) %>%
+    count(year)
+  
+  movies %>%
+    count(year) %>%
+    ggplot(aes(year, n)) +
+    geom_bar(stat = "identity", fill = "#d3d3d3", width = 1) +
+    geom_bar(data = sub_counts, stat = "identity", width = 1) +
+    scale_y_continuous(expand = c(0, 0))
+}
+
+scatterplot <- function(movies, selected_) {
+    movies %>%
+      mutate(selected_ = selected_) %>%
+      ggplot() +
+      geom_point(aes(Rotten_Tomatoes_Rating, IMDB_Rating, alpha = as.numeric(selected_))) +
+      scale_alpha(range = c(0.05, 0.6))
+}
+
+data_table <- function(movies, selected_) {
+  movies %>%
+    filter(selected_) %>%
+    select(Title, Major_Genre, Worldwide_Gross, Director, Release_Date)
+}
+
+
 ui <- fluidPage(
   fluidRow(
     column(6, plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"))),
@@ -26,41 +52,16 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  selected <- reactiveVal(rep(T, nrow(movies)))
+  selected <- reactiveVal(rep(TRUE, nrow(movies)))
   
   observeEvent(
     input$plot_brush,
     selected(reset_selection(movies, input$plot_brush))
   )
   
-  output$histogram <- renderPlot({
-    counts <- movies %>% count(year)
-    sub_counts <- movies %>%
-      filter(selected()) %>%
-      count(year)
-    
-    ggplot(counts, aes(year, n)) +
-      geom_bar(stat = "identity", fill = "#d3d3d3", width = 1) +
-      geom_bar(data = sub_counts, stat = "identity", width = 1) +
-      scale_y_continuous(expand = c(0, 0))
-    })
-  
-  output$scatterplot <- renderPlot({
-    movies %>%
-      mutate(selected_ = selected()) %>%
-      ggplot() +
-      geom_point(aes(
-        Rotten_Tomatoes_Rating, IMDB_Rating, 
-        col = selected_
-      )) +
-      scale_color_manual(values = c("#d3d3d3", "black"), guide = "none")
-  })
-  
-  output$table <- renderDataTable({
-    movies %>%
-      filter(selected()) %>%
-      select(Title, Major_Genre, Worldwide_Gross, Director, Release_Date)
-  })
+  output$histogram <- renderPlot(histogram(movies, selected()))
+  output$scatterplot <- renderPlot(scatterplot(movies, selected()))
+  output$table <- renderDataTable(data_table(movies, selected()))
 }
 
 shinyApp(ui, server)
