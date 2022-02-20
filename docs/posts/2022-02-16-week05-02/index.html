@@ -86,9 +86,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-<title>Statistical Data Visualization - Spring 2022: Introduction to Reactivity</title>
+<title>Statistical Data Visualization - Spring 2022: Graphical Queries: Brush Events</title>
 
-<meta property="description" itemprop="description" content="Viewing shiny code execution as a graph."/>
+<meta property="description" itemprop="description" content="An introduction to brush events in Shiny."/>
 
 
 <!--  https://schema.org/Article -->
@@ -97,27 +97,27 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta name="article:author" content="Kris Sankaran"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="Statistical Data Visualization - Spring 2022: Introduction to Reactivity"/>
+<meta property="og:title" content="Statistical Data Visualization - Spring 2022: Graphical Queries: Brush Events"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="Viewing shiny code execution as a graph."/>
+<meta property="og:description" content="An introduction to brush events in Shiny."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Statistical Data Visualization - Spring 2022"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="Statistical Data Visualization - Spring 2022: Introduction to Reactivity"/>
-<meta property="twitter:description" content="Viewing shiny code execution as a graph."/>
+<meta property="twitter:title" content="Statistical Data Visualization - Spring 2022: Graphical Queries: Brush Events"/>
+<meta property="twitter:description" content="An introduction to brush events in Shiny."/>
 
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Introduction to Reactivity"]},{"type":"character","attributes":{},"value":["Viewing shiny code execution as a graph."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Kris Sankaran"]}]}]},{"type":"character","attributes":{},"value":["02-15-2022"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Graphical Queries: Brush Events"]},{"type":"character","attributes":{},"value":["An introduction to brush events in Shiny."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Kris Sankaran"]}]}]},{"type":"character","attributes":{},"value":["02-15-2022"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["app1.png","app2.png","app3.png","app4.png","apps/app1.R","apps/app2.R","apps/app3.R","apps/app4.R","figures/names.png","figures/nonreactive_histo.png","figures/reactive_histo.png","week04-02_files/anchor-4.2.2/anchor.min.js","week04-02_files/bowser-1.9.3/bowser.min.js","week04-02_files/distill-2.2.21/template.v2.js","week04-02_files/header-attrs-2.11/header-attrs.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.min.js","week04-02_files/jquery-3.6.0/jquery-3.6.0.min.map","week04-02_files/popper-2.6.0/popper.min.js","week04-02_files/tippy-6.2.7/tippy-bundle.umd.min.js","week04-02_files/tippy-6.2.7/tippy-light-border.css","week04-02_files/tippy-6.2.7/tippy.css","week04-02_files/tippy-6.2.7/tippy.umd.min.js","week04-02_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["app3.png","app4.png","apps/app1.R","apps/app2.R","apps/app3.R","apps/app4.R","apps/app5.R","apps-pre/app1.R","apps-pre/app2.R","apps-pre/app3.R","apps-pre/app4.R","apps-pre/app5.R","apps-pre/app6.R","apps-pre/app7.r","week05-02_files/anchor-4.2.2/anchor.min.js","week05-02_files/bowser-1.9.3/bowser.min.js","week05-02_files/distill-2.2.21/template.v2.js","week05-02_files/figure-html5/unnamed-chunk-4-1.png","week05-02_files/figure-html5/unnamed-chunk-6-1.png","week05-02_files/header-attrs-2.11/header-attrs.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.min.js","week05-02_files/jquery-3.6.0/jquery-3.6.0.min.map","week05-02_files/popper-2.6.0/popper.min.js","week05-02_files/tippy-6.2.7/tippy-bundle.umd.min.js","week05-02_files/tippy-6.2.7/tippy-light-border.css","week05-02_files/tippy-6.2.7/tippy.css","week05-02_files/tippy-6.2.7/tippy.umd.min.js","week05-02_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2253,7 +2253,7 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Introduction to Reactivity","description":"Viewing shiny code execution as a graph.","authors":[{"author":"Kris Sankaran","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-02-15T00:00:00.000+00:00","citationText":"Sankaran, 2022"}
+{"title":"Graphical Queries: Brush Events","description":"An introduction to brush events in Shiny.","authors":[{"author":"Kris Sankaran","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-02-15T00:00:00.000+00:00","citationText":"Sankaran, 2022"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2276,10 +2276,10 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Introduction to Reactivity</h1>
+<h1>Graphical Queries: Brush Events</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>Viewing shiny code execution as a graph.</p></p>
+<p><p>An introduction to brush events in Shiny.</p></p>
 </div>
 
 <div class="d-byline">
@@ -2292,218 +2292,136 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
-<p><em><a href="https://mastering-shiny.org/basic-reactivity.html">Reading</a>, <a href="https://mediaspace.wisc.edu/media/Week%204%20%5B2%5D%20Introduction%20to%20Reactivity/1_2k4w97vg">Recording</a>, <a href="https://github.com/krisrs1128/stat479_s22/blob/main/_posts/2022-02-10-week04-02/week04-02.Rmd">Rmarkdown</a></em></p>
+<p><em><a href="https://mastering-shiny.org/action-graphics.html">Reading</a>, <a href="">Recording</a>, <a href="">Rmarkdown</a></em></p>
 <ol type="1">
-<li><p>These notes will explore the idea of reactivity in more depth. Recall that reactivity refers to the fact that Shiny app code is not run from top to bottom, like an ordinary R script. Instead, it runs reactively, depending on inputs that the user has provided. This can make writing Shiny code a bit unintuitive at first, but there are a few higher-level concepts that can help when writing reactive code.</p></li>
-<li><p>The most important of these concepts is that reactive code can be viewed as a graph. The <code>ui</code> and <code>server</code> define an explicit dependency structure for how components depend on one another. The <code>input$</code>’s within <code>render*</code> functions in the server specify how UI inputs affect server computations. The IDs within the <code>*Output</code> elements in the <code>ui</code> specify which of the rendered <code>output$</code>’s in the server should be used to populate the visible interface.</p></li>
-<li><p>For example, our first “Hello” app has the following (simple) reactivity graph. Note that I’ve drawn input and output nodes differently, to emphasize the flow of computation. I’ve also copied the code from the original app for reference.</p>
-<div class="layout-chunk" data-layout="l-body">
-<p><img src="figures/names.png" width="846" /></p>
-</div>
+<li><p>Click events are useful for referring to individual samples. However, they are not ideal for referring to groups of samples. In this case, a useful type of plot input is a <code>brush</code>. This is a selection that can be defined by clicking and dragging over a region.</p></li>
+<li><p>In shiny, brush events are treated similarly to click events. For example, to define a new brush input, we can set the <code>brush</code> argument to <code>plotOutput</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"plot"</span>, brush <span class='op'>=</span> <span class='st'>"plot_brush"</span><span class='op'>)</span>
+ <span class='op'>)</span>
+ </code></pre>
+</div>
+</div></li>
+</ol>
+<p>Just like the <code>click</code> argument, the value <code>"plot_brush"</code> is an ID that can be used in the server. Also like in click events, we can setup an observer to change a reactive value every time a brush is drawn<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. The general pattern is similar to what we had before,</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  selected <span class="ot">&lt;-</span> <span class="fu">reactiveVal</span>(initial value)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">observeEvent</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    input<span class="sc">$</span>plot_brush,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ... computation using get new_value ...</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selected</span>(new_value)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>plot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>(... use <span class="fu">scatter</span>() reactive val...)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<ol type="1">
+<li><p>The example below is similar to the <code>plot_click</code> example from the previous notes. Instead of sorting points by proximity to the click, though, prints the subset of rows that have been currently brushed.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+ <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+ <span class='va'>mtcars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/add_rownames.html'>add_rownames</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+
+ <span class='va'>reset_selection</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>brush</span><span class='op'>)</span> <span class='op'>{</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/brushedPoints.html'>brushedPoints</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>brush</span>, allRows <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>$</span><span class='va'>selected_</span>
+ <span class='op'>}</span>
+
+ <span class='va'>make_scatter</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>selected_</span><span class='op'>)</span> <span class='op'>{</span>
+   <span class='va'>x</span><span class='op'>$</span><span class='va'>selected_</span> <span class='op'>&lt;-</span> <span class='va'>selected_</span>
+   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>hp</span>, alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>selected_</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_alpha.html'>scale_alpha</a></span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+ <span class='op'>}</span>
 
  <span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/titlePanel.html'>titlePanel</a></span><span class='op'>(</span><span class='st'>"Hello!"</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textInput.html'>textInput</a></span><span class='op'>(</span><span class='st'>"name"</span>, <span class='st'>"Enter your name"</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>textOutput</a></span><span class='op'>(</span><span class='st'>"printed_name"</span><span class='op'>)</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"plot"</span>, brush <span class='op'>=</span> <span class='st'>"plot_brush"</span><span class='op'>)</span>,
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>dataTableOutput</a></span><span class='op'>(</span><span class='st'>"table"</span><span class='op'>)</span>
  <span class='op'>)</span>
 
  <span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>printed_name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span>
-     <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Welcome to shiny, "</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>name</span>, <span class='st'>"!"</span><span class='op'>)</span>
-   <span class='op'>}</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
- </code></pre>
-</div>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<p><img src="app1.png" width="496" /></p>
-</div></li>
-<li><p>Even though the graph is simple, note that the outputs will be recomputed each time that the input is changed. For more general graphs, all downstream nodes will be re-executed whenever an upstream source is changed (typically by a user input, though it’s possible to trigger changes automatically).</p></li>
-<li><p>Reactive expressions provide a special kind of node that live between inputs and outputs. They depend on inputs, and they feed into outputs, but they are never made directly visible to the user. This is why we’ve drawn them as a kind of special intermediate node. Below, I’ve drawn the graph for our random normal plotter, with the reactive <code>samples()</code> expression.</p>
-<div class="layout-chunk" data-layout="l-body">
-<p><img src="figures/reactive_histo.png" width="758" /></p>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
- <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
-
- <span class='co'>### Functions within app components</span>
- <span class='va'>generate_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sigma</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sigma</span><span class='op'>)</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='va'>histogram_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span>, bins <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='co'>### Defines the app</span>
- <span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/titlePanel.html'>titlePanel</a></span><span class='op'>(</span><span class='st'>"Random Normals"</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/numericInput.html'>numericInput</a></span><span class='op'>(</span><span class='st'>"mean"</span>, <span class='st'>"Enter the mean"</span>, <span class='fl'>0</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"n"</span>, <span class='st'>"Enter the number of samples"</span>, <span class='fl'>500</span>, min<span class='op'>=</span><span class='fl'>1</span>, max<span class='op'>=</span><span class='fl'>2000</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"sigma"</span>, <span class='st'>"Enter the standard deviation"</span>, <span class='fl'>1</span>, min<span class='op'>=</span><span class='fl'>.1</span>, max<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"histogram"</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>dataTableOutput</a></span><span class='op'>(</span><span class='st'>"dt"</span><span class='op'>)</span>
- <span class='op'>)</span>
-
- <span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>samples</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span>
-     <span class='fu'>generate_data</span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>n</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
-   <span class='op'>}</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>histogram</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>histogram_fun</span><span class='op'>(</span><span class='fu'>samples</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>renderDataTable</a></span><span class='op'>(</span><span class='fu'>samples</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
- </code></pre>
-</div>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<p><img src="app2.png" width="496" /></p>
-</div></li>
-<li><p>A useful perspective is to think of reactive expressions as simplifying the overall reactivity graph. Specifically, by adding a reactive node, it’s possible to trim away many edges. For example, our initial implementation of the random normal plotter (which didn’t use the reactive expression) has a much more complicated graph, since many inputs feed directly into outputs.</p>
-<div class="layout-chunk" data-layout="l-body">
-<p><img src="figures/nonreactive_histo.png" width="757" /></p>
-</div></li>
-<li><p>Let’s see these principles in action for a similar, but more complex app. The app below can be used for power analysis. It simulates two groups of samples, both from normal distributions, but with different (user specified) means. We’ve used a reactive expression to generate the samples, so that both the histogram and hypothesis test result outputs can refer to the same intermediate simulated data.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
- <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
- <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span>
-
- <span class='co'>### Functions within app components</span>
- <span class='va'>generate_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean1</span>, <span class='va'>mean2</span>, <span class='va'>sigma</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-     values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean1</span>, <span class='va'>sigma</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean2</span>, <span class='va'>sigma</span><span class='op'>)</span><span class='op'>)</span>,
-     group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
+   <span class='va'>selected</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactiveVal.html'>reactiveVal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span>
+     <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_brush</span>,
+     <span class='fu'>selected</span><span class='op'>(</span><span class='fu'>reset_selection</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_brush</span><span class='op'>)</span><span class='op'>)</span>
    <span class='op'>)</span>
+
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>plot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>make_scatter</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>table</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>renderDataTable</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
  <span class='op'>}</span>
 
- <span class='va'>histogram_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>
-       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>values</span>, fill <span class='op'>=</span> <span class='va'>group</span><span class='op'>)</span>, 
-       bins <span class='op'>=</span> <span class='fl'>100</span>, position <span class='op'>=</span> <span class='st'>"identity"</span>,
-       alpha <span class='op'>=</span> <span class='fl'>0.8</span>
-     <span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='va'>test_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>values</span> <span class='op'>~</span> <span class='va'>group</span>, data <span class='op'>=</span> <span class='va'>df</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>p.value</span>, <span class='va'>conf.low</span>, <span class='va'>conf.high</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='co'>### Defines the app</span>
- <span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>sidebarLayout</a></span><span class='op'>(</span>
-     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>sidebarPanel</a></span><span class='op'>(</span>
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"mean1"</span>, <span class='st'>"Mean (Group 1)"</span>, <span class='fl'>0</span>, min <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.0</span>, max <span class='op'>=</span> <span class='fl'>10.0</span>, step <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"mean2"</span>, <span class='st'>"Mean (Group 2)"</span>, <span class='fl'>0</span>, min <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10</span>, max <span class='op'>=</span> <span class='fl'>10</span>, step <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"sigma"</span>, <span class='st'>"Enter the standard deviation"</span>, <span class='fl'>1</span>, min<span class='op'>=</span><span class='fl'>.1</span>, max<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"n"</span>, <span class='st'>"Enter the number of samples"</span>, <span class='fl'>500</span>, min<span class='op'>=</span><span class='fl'>1</span>, max<span class='op'>=</span><span class='fl'>2000</span><span class='op'>)</span>,
-     <span class='op'>)</span>,
-     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>mainPanel</a></span><span class='op'>(</span>
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"histogram"</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>dataTableOutput</a></span><span class='op'>(</span><span class='st'>"test_result"</span><span class='op'>)</span>
-     <span class='op'>)</span>
-   <span class='op'>)</span>
- <span class='op'>)</span>
-
- <span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>samples</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span>
-     <span class='fu'>generate_data</span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>n</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean1</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean2</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
-   <span class='op'>}</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>histogram</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>histogram_fun</span><span class='op'>(</span><span class='fu'>generate_data</span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>n</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean1</span>, <span class='va'>...</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>test_result</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>test_fun</span><span class='op'>(</span><span class='fu'>generate_data</span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>n</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean1</span>, <span class='va'>...</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
  </code></pre>
 </div>
+<p><img src="week05-02_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="app3.png" width="496" /></p>
-</div>
-<p>Other than that, the only difference is that I’ve saved output from the <code>t.test</code> using <code>test_result</code>. Notice the use of the <code>broom</code> package, which helps format the test output into a <code>data.frame</code>.</p></li>
-<li><p>So far, all of our reactive code has lived within the <code>render*</code> or <code>reactive()</code> sets of functions. However, there is a another kind that is often useful, especially in more advanced applications: <code>observers</code>. An observer is a computation that is done every time certain inputs are changed, but which don’t affect downstream UI outputs through a <code>render*</code> function. For example, below, we’ve added a block (under <code>observeEvent</code>) that prints to the console every time either of the means are changed. I realize it is a bit of a mystery why these functions would ever be useful, but we will see them in more realistic contexts next week.</p>
+</div></li>
+<li><p>It is often useful to combine multi-view composition (<em>i.e.</em>, faceting or compound figures) with dynamic queries. The basic idea is to (a) show different aspects of a dataset using different views, and then (b) link the views using dynamic queries. This strategy is sometimes called dynamic linking.</p></li>
+<li><p>The example below implements dynamic linking with the penguins dataset. Brushing over either scatterplot highlights the corresponding points in the adjacent plot (it also updates the data table). This is a way of understanding structure beyond two dimensions. The implementation is similar to the brushing above, except that the reactive value <code>selected()</code> is called in two <code>renderPlot</code> contexts, leading to changes in both plots every time the brush is moved.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
- <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
- <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+ <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+ <span class='va'>penguins</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"https://uwmadison.box.com/shared/static/ijh7iipc9ect1jf0z8qa2n3j7dgem1gh.csv"</span><span class='op'>)</span>
 
- <span class='co'>### Functions within app components</span>
- <span class='va'>generate_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean1</span>, <span class='va'>mean2</span>, <span class='va'>sigma</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-     values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean1</span>, <span class='va'>sigma</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean2</span>, <span class='va'>sigma</span><span class='op'>)</span><span class='op'>)</span>,
-     group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
-   <span class='op'>)</span>
+ <span class='va'>reset_selection</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>brush</span><span class='op'>)</span> <span class='op'>{</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/brushedPoints.html'>brushedPoints</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>brush</span>, allRows <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>$</span><span class='va'>selected_</span>
  <span class='op'>}</span>
 
- <span class='va'>histogram_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>
-       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>values</span>, fill <span class='op'>=</span> <span class='va'>group</span><span class='op'>)</span>, 
-       bins <span class='op'>=</span> <span class='fl'>100</span>, position <span class='op'>=</span> <span class='st'>"identity"</span>,
-       alpha <span class='op'>=</span> <span class='fl'>0.8</span>
-     <span class='op'>)</span> <span class='op'>+</span>
-     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>
+ <span class='va'>scatter</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>selected_</span>, <span class='va'>var1</span>, <span class='va'>var2</span><span class='op'>)</span> <span class='op'>{</span>
+   <span class='va'>x</span> <span class='op'>%&gt;%</span>
+     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>selected_ <span class='op'>=</span> <span class='va'>selected</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_string</a></span><span class='op'>(</span><span class='va'>var1</span>, <span class='va'>var2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>selected_</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='va'>species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_alpha.html'>scale_alpha</a></span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
  <span class='op'>}</span>
 
- <span class='va'>test_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>values</span> <span class='op'>~</span> <span class='va'>group</span>, data <span class='op'>=</span> <span class='va'>df</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-     <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>p.value</span>, <span class='va'>conf.low</span>, <span class='va'>conf.high</span><span class='op'>)</span>
- <span class='op'>}</span>
-
- <span class='co'>### Defines the app</span>
  <span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>sidebarLayout</a></span><span class='op'>(</span>
-     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>sidebarPanel</a></span><span class='op'>(</span>
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"mean1"</span>, <span class='st'>"Mean (Group 1)"</span>, <span class='fl'>0</span>, min <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.0</span>, max <span class='op'>=</span> <span class='fl'>10.0</span>, step <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"mean2"</span>, <span class='st'>"Mean (Group 2)"</span>, <span class='fl'>0</span>, min <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10</span>, max <span class='op'>=</span> <span class='fl'>10</span>, step <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"sigma"</span>, <span class='st'>"Enter the standard deviation"</span>, <span class='fl'>1</span>, min<span class='op'>=</span><span class='fl'>.1</span>, max<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"n"</span>, <span class='st'>"Enter the number of samples"</span>, <span class='fl'>500</span>, min<span class='op'>=</span><span class='fl'>1</span>, max<span class='op'>=</span><span class='fl'>2000</span><span class='op'>)</span>,
-     <span class='op'>)</span>,
-     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>mainPanel</a></span><span class='op'>(</span>
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"histogram"</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>dataTableOutput</a></span><span class='op'>(</span><span class='st'>"test_result"</span><span class='op'>)</span>
-     <span class='op'>)</span>
-   <span class='op'>)</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidRow</a></span><span class='op'>(</span>
+     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/column.html'>column</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"scatter1"</span>, brush <span class='op'>=</span> <span class='st'>"plot_brush"</span><span class='op'>)</span><span class='op'>)</span>,
+     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/column.html'>column</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"scatter2"</span>, brush <span class='op'>=</span> <span class='st'>"plot_brush"</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='op'>)</span>,
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>dataTableOutput</a></span><span class='op'>(</span><span class='st'>"table"</span><span class='op'>)</span>
  <span class='op'>)</span>
 
  <span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>samples</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span>
-     <span class='fu'>generate_data</span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>n</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean1</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean2</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
+   <span class='va'>selected</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactiveVal.html'>reactiveVal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>penguins</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span>
+     <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_brush</span>,
+     <span class='fu'>selected</span><span class='op'>(</span><span class='fu'>reset_selection</span><span class='op'>(</span><span class='va'>penguins</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_brush</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='op'>)</span>
+
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>scatter1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='op'>{</span>
+     <span class='fu'>scatter</span><span class='op'>(</span><span class='va'>penguins</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"bill_length_mm"</span>, <span class='st'>"bill_depth_mm"</span><span class='op'>)</span>
    <span class='op'>}</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>histogram</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='fu'>histogram_fun</span><span class='op'>(</span><span class='fu'>samples</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>test_result</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>renderDataTable</a></span><span class='op'>(</span><span class='fu'>test_fun</span><span class='op'>(</span><span class='fu'>samples</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>mean1</span> <span class='op'>|</span> <span class='va'>input</span><span class='op'>$</span><span class='va'>mean2</span>, <span class='op'>{</span>
-     <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='st'>"group 1 mean is now: "</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean1</span><span class='op'>)</span>
-     <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='st'>"group 2 mean is now: "</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>mean2</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>scatter2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='op'>{</span>
+     <span class='fu'>scatter</span><span class='op'>(</span><span class='va'>penguins</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"flipper_length_mm"</span>, <span class='st'>"body_mass_g"</span><span class='op'>)</span>
    <span class='op'>}</span><span class='op'>)</span>
+
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>table</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderDataTable.html'>renderDataTable</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>penguins</span>, <span class='fu'>selected</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
  <span class='op'>}</span>
 
- <span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
  </code></pre>
 </div>
+<p><img src="week05-02_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="app4.png" width="496" /></p>
 </div></li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>Technically, the code only executes when the mouse lifts off the brush selection. Some visualizations will be able to call the updating code every time the mouse is moved with the brush selected. This creates a smoother experience.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

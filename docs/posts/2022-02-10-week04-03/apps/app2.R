@@ -30,7 +30,7 @@ scatterplot <- function(df) {
 ### definition of app
 ui <- fluidPage(
   titlePanel("IMDB Analysis"),
-  selectInput("genres", "Genre", genres),
+  selectInput("genres", "Genre", genres, multiple = TRUE),
   checkboxGroupInput("mpaa", "MPAA Rating", ratings, ratings),
   sliderInput("year", "Year", min = min(movies$year), max = max(movies$year), c(1928, 2020), sep = ""),
   plotOutput("ratings_scatter")
