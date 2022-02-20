@@ -95,8 +95,7 @@ logic is captured by the block below,
       )
       
       output$plot <- renderPlot({
-        mtcars$dist <- dist()
-        make_scatter(x)
+        scatter(x, dist())
       })
     }
     ```

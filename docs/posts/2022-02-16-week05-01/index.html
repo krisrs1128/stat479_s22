@@ -2333,15 +2333,14 @@ d-article ul > li { /*to add back in space between bullet items that I took away
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactiveVal.html'>reactiveVal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span>
+   <span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>reactiveVal</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='fu'>observeEvent</span><span class='op'>(</span>
      <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_click</span>,
      <span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>dist</a></span><span class='op'>(</span><span class='fu'>reset_dist</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>plot_click</span><span class='op'>)</span><span class='op'>)</span>
    <span class='op'>)</span>
 
-   <span class='va'>output</span><span class='op'>$</span><span class='va'>plot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='op'>{</span>
-     <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>dist</a></span><span class='op'>(</span><span class='op'>)</span>
-     <span class='fu'>make_scatter</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+   <span class='va'>output</span><span class='op'>$</span><span class='va'>plot</span> <span class='op'>&lt;-</span> <span class='fu'>renderPlot</span><span class='op'>(</span><span class='op'>{</span>
+     <span class='fu'>scatter</span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>dist</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
    <span class='op'>}</span><span class='op'>)</span>
  <span class='op'>}</span>
  </code></pre>
