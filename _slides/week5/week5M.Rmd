@@ -1,0 +1,176 @@
+---
+author: "Kris Sankaran"
+title: "week5M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(webshot)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Introduction to Graphical Queries
+
+.pull-left[
+February 21, 2022
+]
+ 
+---
+
+### Announcements
+
+* Practice midterm posted
+  - Exam in-class next Monday (February 28)
+* Portfolio peer reviews description posted (February 27)
+* Project Milestone 2 is posted, and the deadline is extended (March 13)
+  
+---
+
+### Today
+
+* Exercise review
+  - Different types of plot outputs
+  - Example reactivity graphs
+* Setup a click-based graphical query
+* Explaining use cases for dynamic queries
+* Review for the midterm exam
+
+---
+
+## Exercise 4.3 Discussion
+
+* Many creative linked outputs
+* Effective code externalization 
+  - Clear boundaries between component relations and reaction logic
+  - For most submissions, `ui` and `server` was shorter than 30 lines
+* Overall, very nice work!
+
+---
+
+### Examples
+
+* Complementing with data.frame or summaries
+* Complementing with histograms or scatterplots
+  - Can you imagine dynamically linked versions?
+* Allowing selection by fire or counties
+  - Implements details-on-demand
+
+---
+
+### Debugging Shiny Apps
+
+* `Cmd/Ctrl + Shift + Enter` to quickly relaunch after small changes
+* `browser()` to interactively evaluate
+  - `n` for next line, `c` to next `browser()`, and `Q` to exit
+* `message` and `glue` for checking order of execution
+* Prune away until we have a minimal failing app
+
+---
+
+
+```{r, eval = FALSE}
+library(shiny)
+
+ui <- fluidPage(
+  sliderInput("x", "x", value = 1, min = 0, max = 10),
+  sliderInput("y", "y", value = 2, min = 0, max = 10),
+  sliderInput("z", "z", value = 3, min = 0, max = 10),
+  textOutput("total")
+)
+server <- function(input, output, session) {
+  observeEvent(input$x, {
+    updateSliderInput(session, "y", value = input$x * 2)
+  })
+  
+  total <- reactive({
+    browser()
+    tmp <- input$x + input$y
+    tmp + input$z
+  })
+  output$total <- renderText(total())
+}
+
+shinyApp(ui, server)
+```
+
+
+---
+
+```{r, eval = FALSE}
+library(shiny)
+library(glue)
+
+ui <- fluidPage(
+  sliderInput("x", "x", value = 1, min = 0, max = 10),
+  sliderInput("y", "y", value = 2, min = 0, max = 10),
+  sliderInput("z", "z", value = 3, min = 0, max = 10),
+  textOutput("total")
+)
+server <- function(input, output, session) {
+  observeEvent(input$x, {
+    message(glue("Updating y from {input$y} to {input$x * 2}"))
+    updateSliderInput(session, "y", value = input$x * 2)
+  })
+  
+  total <- reactive({
+    total <- input$x + input$y + input$z
+    message(glue("New total is {total}"))
+    total
+  })
+  output$total <- renderText(total())
+}
+
+shinyApp(ui, server)
+```
+
+
+---
+
+### Notes review
+
+(go to [link](https://drive.google.com/file/d/19-LUE7kNBCIZLxpXoF69xyEq32PAZBw6/view?usp=sharing))
+
+---
+
+## Exercise
+
+* In this exercise, you will work with your team to prepare two slides
+summarizing a topic that may appear on the midterm exam.
+* Your slides should cover at least two of the following,
+  - Important vocabulary
+  - Potential pitfalls or bugs
+  - A code example (either from class, or your own)
+  - Pointers to relevant readings, notes, or other resources
+* Slides [link](https://docs.google.com/presentation/d/12quG_sPmG3qQjLLH2UJ4aP2CcWaWhVf-cw8Xq-1mYPg/edit?usp=sharing)
+
+---
+
+### Exercise
+
+* Exercise 5.1 on Canvas
+  - Edit slides [here](https://docs.google.com/presentation/d/12quG_sPmG3qQjLLH2UJ4aP2CcWaWhVf-cw8Xq-1mYPg/edit?usp=sharing)
+  - Also upload your two slides to Canvas
+* Until 2pm, then share with neighboring team
+* Submit solutions as a team
+

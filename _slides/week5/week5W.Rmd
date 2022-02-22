@@ -1,0 +1,222 @@
+---
+author: "Kris Sankaran"
+title: "week5W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(webshot)
+library(tidyverse)
+library(shiny)
+library(bslib)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Linked Brushing
+
+.pull-left[
+February 23, 2022
+]
+ 
+---
+
+### Announcements
+
+* Portfolio peer reviews description posted (February 27)
+* Midterm Exam in-class next Monday (February 28)
+  
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Explain situations where brushed-based graphical queries may be useful
+* Implement brushed-based graphical queries
+* Apply the `bslib` or shinyThemes libraries to customize app appearance
+
+---
+
+```{r, eval = FALSE}
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Old Faithful Geyser Data"),
+  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  plotOutput("distPlot")
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+      ggplot(faithful) + geom_histogram(aes(waiting))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+---
+
+```{r, echo = FALSE}
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Old Faithful Geyser Data"),
+  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  plotOutput("distPlot")
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+      ggplot(faithful) + geom_histogram(aes(waiting))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+---
+
+```{r, eval = FALSE}
+library(shiny)
+library(bslib)
+
+ui <- fluidPage(
+  titlePanel("Old Faithful Geyser Data"),
+  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  plotOutput("distPlot"),
+  theme = bs_theme(bootswatch = "minty")
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+      ggplot(faithful) + geom_histogram(aes(waiting))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+---
+
+```{r, echo = FALSE}
+library(shiny)
+library(bslib)
+
+ui <- fluidPage(
+  titlePanel("Old Faithful Geyser Data"),
+  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  plotOutput("distPlot"),
+  theme = bs_theme(bootswatch = "minty")
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+      ggplot(faithful) + geom_histogram(aes(waiting))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+---
+
+
+```{r, eval = FALSE}
+library(shiny)
+library(bslib)
+
+my_theme <- bs_theme(
+  bg = "#ffe6dc", fg = "#ff682c",
+  base_font = font_google("Shizuru")
+)
+
+ui <- fluidPage(
+  titlePanel("Old Faithful Geyser Data"),
+  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  plotOutput("distPlot"),
+  theme = my_theme
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+      ggplot(faithful) + geom_histogram(aes(waiting))
+  }, bg = "transparent")
+}
+
+shinyApp(ui, server)
+```
+
+---
+
+```{r, echo = FALSE}
+library(shiny)
+library(bslib)
+
+my_theme <- bs_theme(
+  bg = "#ffe6dc", fg = "#ff682c",
+  base_font = font_google("Shizuru")
+)
+
+ui <- fluidPage(
+  titlePanel("Old Faithful Geyser Data"),
+  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  plotOutput("distPlot"),
+  theme = my_theme
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+      ggplot(faithful) + geom_histogram(aes(waiting))
+  }, bg = "transparent")
+}
+
+shinyApp(ui, server)
+```
+
+---
+
+### Notes review
+
+(go to [link](https://drive.google.com/file/d/19-LUE7kNBCIZLxpXoF69xyEq32PAZBw6/view?usp=sharing))
+
+---
+
+### Exercise
+
+* You will develop an application to graphically query Airbnb rental prices in NYC
+in 2019.
+* Example. Some other potentially interesting queries,
+  - Clicking on barchart of number of full apartments, single, and shared rooms
+  - Brushing histograms or scatterplots with numbers of reviews and square footage
+  - Clicking or brushing bar charts of number of apartments by neighborhood
+
+---
+
+### Exercise
+
+* Exercise 5.2 on Canvas
+  - Hint sets up the code skeleton
+* Until 2pm
+* Submit solutions individually
+
