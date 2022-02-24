@@ -223,7 +223,7 @@ potential?
     the structure of interaction, and how would the display update when the user
     provides a cue?
     
-1. Consider the plot of missingness in the Melbourne Homes dataset in Figure 4. Select all the true conclusions.
+1. [Melbourne Missingness] Consider the plot of missingness in the Melbourne Homes dataset in Figure 4. Select all the true conclusions.
 
     * The `Landsize` variable is always missing.
     * The variable with the highest number of missing values is `BuildingArea`. 
@@ -234,7 +234,7 @@ potential?
     include_graphics("figure/melbourne_missigness.png")
     ```
     
-1.  In this problem, we'll create a visualization to dynamically query a
+1. [NYC Rentals] In this problem, we'll create a visualization to dynamically query a
 [dataset](https://uwmadison.box.com/shared/static/zi72ugnpku714rbqo2og9tv2yib5xped.csv)
 of Airbnb rentals in Manhattan in 2019. The steps below guide you through the
 process of building this visualization.
@@ -242,15 +242,15 @@ process of building this visualization.
     a. Make a scatterplot of locations (Longitude vs. Latitude) for all the rentals,
     colored in by `room_type`.
     
-    b. Make a histogram of the log-prices^[We've applied a log-transform to the
-    original rental prices because otherwise the prices are highly skewed.], with
-    stacked colors to distinguish between room types. Vertically concatenate this
-    histogram with the scatterplot from (a).
+    b. Design a plot and a dynamic query so that clicking or brushing on the
+    plot updates the points that are highlighted in the scatterplot in (a). For
+    example, you may query a histogram of prices to focus on neighborhoods that
+    are more or less affordable.
     
-    c. Implement a dynamic query so that brushing over price ranges highlights the
-    associated rentals on the map.
+    c. Implement the reverse graphical query. That is, allow the user to update
+    the plot in (b) by brushing over the scatterplot in (a).
     
-    d. Comment on the resulting visualization. If you had a friend who was
+    d. Comment on the resulting visualization(s). If you had a friend who was
     interested in renting an Airbnb in NYC, what would you tell them?
     
 1. Study the visualization at [this link](https://observablehq.com/@d3/collapsible-tree). Its design reflects which of the following visualization techniques? (select all that apply).

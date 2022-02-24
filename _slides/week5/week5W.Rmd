@@ -17,7 +17,7 @@ library(webshot)
 library(tidyverse)
 library(shiny)
 library(bslib)
-opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
 th <- theme_minimal() + 
   theme(
     panel.grid.minor = element_blank(),
@@ -35,7 +35,7 @@ class: bottom
 # Linked Brushing
 
 .pull-left[
-February 23, 2022
+  February 23, 2022
 ]
  
 ---
@@ -68,7 +68,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$distPlot <- renderPlot({
-      ggplot(faithful) + geom_histogram(aes(waiting))
+      ggplot(faithful) + geom_histogram(aes(waiting), bins = input$bins)
   })
 }
 
@@ -88,7 +88,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$distPlot <- renderPlot({
-      ggplot(faithful) + geom_histogram(aes(waiting))
+      ggplot(faithful) + geom_histogram(aes(waiting), bins = input$bins)
   })
 }
 
@@ -110,7 +110,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$distPlot <- renderPlot({
-      ggplot(faithful) + geom_histogram(aes(waiting))
+      ggplot(faithful) + geom_histogram(aes(waiting), bins = input$bins)
   })
 }
 
@@ -140,7 +140,6 @@ shinyApp(ui, server)
 ```
 
 ---
-
 
 ```{r, eval = FALSE}
 library(shiny)
@@ -198,7 +197,7 @@ shinyApp(ui, server)
 
 ### Notes review
 
-(go to [link](https://drive.google.com/file/d/19-LUE7kNBCIZLxpXoF69xyEq32PAZBw6/view?usp=sharing))
+(go to [link](https://drive.google.com/file/d/1ipjCsQ7zRqS_-2W968bXDJ2ogAN91cMb/view?usp=sharing))
 
 ---
 
@@ -206,8 +205,9 @@ shinyApp(ui, server)
 
 * You will develop an application to graphically query Airbnb rental prices in NYC
 in 2019.
-* Example. Some other potentially interesting queries,
-  - Clicking on barchart of number of full apartments, single, and shared rooms
+* Some other potentially interesting queries,
+  - Clicking on barchart of number of full apartment, private room, and shared
+  room rentals
   - Brushing histograms or scatterplots with numbers of reviews and square footage
   - Clicking or brushing bar charts of number of apartments by neighborhood
 
@@ -219,4 +219,3 @@ in 2019.
   - Hint sets up the code skeleton
 * Until 2pm
 * Submit solutions individually
-

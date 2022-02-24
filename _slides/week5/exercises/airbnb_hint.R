@@ -19,6 +19,7 @@ scatterplot <- function(df, selected_) {
     ) +
     scale_alpha(range = c(0.1, .5), guide = FALSE) +
     scale_size(range = c(0.1, .9), guide = FALSE) +
+    scale_color_brewer(palette = "Set2") +
     coord_fixed() +
     theme_void()
 }
@@ -26,10 +27,11 @@ scatterplot <- function(df, selected_) {
 # Makes overlaid histograms, one filtered by T/F vector of selected_ values
 overlay_histogram <- function(df, selected_) {
   sub_df <- filter(df, selected_)
-  ggplot(df) +
-    geom_histogram(aes(trunc_price), fill = "#d3d3d3", binwidth = 10) +
-    geom_histogram(data = sub_df, aes(trunc_price), binwidth = 10) +
-    scale_y_continuous(expand = c(0, 0, 0.1, 0))
+  ggplot(df, aes(trunc_price, fill = room_type)) +
+    geom_histogram(alpha = 0.3, binwidth = 25) +
+    geom_histogram(data = sub_df, binwidth = 25) +
+    scale_y_continuous(expand = c(0, 0, 0.1, 0)) +
+    scale_fill_brewer(palette = "Set2", guide = "none")
 }
 
 ui <- fluidPage(
