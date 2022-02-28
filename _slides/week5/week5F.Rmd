@@ -146,7 +146,7 @@ include_graphics("figures/ui2.png")
 
 ### Notes review
 
-(go to [link](https://drive.google.com/file/d/1ipjCsQ7zRqS_-2W968bXDJ2ogAN91cMb/view?usp=sharing))
+(go to [link](https://drive.google.com/file/d/1MUDi7VVqHsXCg7TAqEu2uY6hOifGPVuk/view?usp=sharing))
 
 ---
 
