@@ -1,0 +1,140 @@
+---
+author: "Kris Sankaran"
+title: "Week6W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+```{r}
+library(tidyverse)
+library(tsibble)
+library(lubridate)
+```
+
+```{r}
+carbon <- read_csv("data/cleaned.csv")
+carbon
+```
+
+It will be easier to visualize these data if they are made tidy.
+```{r}
+carbon <- carbon %>%
+  pivot_longer(-c("country", "Country Code"), names_to = "year")
+```
+
+This doesn't work, because year is a string.
+```{r, eval = FALSE}
+as_tsibble(carbon, index = "year", key = "country")
+```
+
+This still doesn't work -- there are duplicates!
+```{r}
+carbon %>%
+  mutate(year = as.integer(year)) %>%
+  as_tsibble(index = year, key = country)
+```
+
+For some reason, there are duplicated entries for Switzerland. This is one of
+the reasons for using something like `tsibble`.
+```{r}
+carbon %>%
+  mutate(year = as.integer(year)) %>%
+  duplicates(key = country, index = year) %>%
+  arrange(year)
+```
+
+This code finally makes the tsibble.
+```{r}
+carbon_ts <- carbon %>%
+  filter(country != "Switzerland") %>%
+  mutate(year = as.integer(year)) %>%
+  as_tsibble(index = year, key = country)
+```
+
+This is an example of the sort of plot we can automatically make with tsibble.
+If we had used `carbon` instead of `carbon_ts` as the input, the plot would not
+have worked.
+```{r}
+library(feasts)
+carbon_ts %>%
+  filter(country == "United States") %>%
+  gg_lag()
+```
+
+Here are some basic kinds of time series plots.
+```{r}
+ggplot(carbon_ts) +
+  geom_line(aes(year, value, group = country))
+ggplot(carbon_ts) +
+  geom_tile(aes(year, reorder(country, value), fill = log(1 + value)))
+```
+
+What if we filter down the countries that are shown?
+
+```{r}
+keep_countries <- carbon_ts %>%
+  group_by(country) %>%
+  filter(mean(value) > 1) %>%
+  pull(country)
+
+carbon_ts %>%
+  filter(country %in% keep_countries) %>%
+  ggplot() +
+  geom_tile(aes(year, reorder(country, value), fill = log(1 + value)))
+```
+
+I was surprised, but it seems that the Bahamas really does have a spike in
+carbon emissions during the 1970s
+([source](https://www.google.com/search?q=bahamas+carbon+emissions&rlz=1C5CHFA_enUS955US955&oq=bahamas&aqs=chrome.0.69i59l2j69i57j0i67l4j0i20i263i512j0i512j46i199i465i512.1468j0j7&sourceid=chrome&ie=UTF-8)).
+
+
+What if we want a smoothed version of the plot? This is a more complicated
+operation (I don't expect you to remember this), but sometimes it comes in
+handy.
+
+```{r}
+library(slider)
+smoothed_carbon <- carbon_ts %>%
+  split(.$country) %>%
+  map_dfr(
+    ~ mutate(
+        ., 
+        smoothed = slide_dbl(value, ~ mean(.), .before = 5, .after = 5)
+      )
+  ) 
+
+ggplot(smoothed_carbon) +
+  geom_line(aes(year, smoothed, group = country))
+```
+
+What if we want to be able to hover and get the country names?
+
+```{r}
+library(plotly)
+p <- ggplot(smoothed_carbon) +
+  geom_line(aes(year, smoothed, group = country))
+ggplotly(p)
+```
+

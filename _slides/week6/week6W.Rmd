@@ -1,0 +1,236 @@
+---
+author: "Kris Sankaran"
+title: "Week6W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Time Series Visualization (Part 1)
+
+.pull-left[
+  March 2, 2022
+]
+ 
+---
+
+### Announcements
+
+* Portfolio 2 posted (March 13)
+* Can pick up exam after class or at office hours
+  
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Construct and visualize a `tsibble` time series object
+* Discuss the presence of trend, seasonal, or cyclic structure in a time series
+
+---
+
+### Midterm 1 Review
+
+* Quartiles:
+* For grades / curve, see syllabus 
+  - Best of absolute scores and class ranking
+* Q4b and Q7 were most challenging (by design)
+  - We were generous with partial credit
+
+---
+
+### Q4b
+    
+Provide code to compute the proportion of each quarter's sales that came from
+each region.
+
+```{r}
+sales <- data.frame(
+  region =  c('A', 'A', 'A', 'A', 'B', 'B', 'B', 'B'),
+  quarter = c('Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2', 'Q3', 'Q4'),
+  sales = c(6, 5, 3, 2, 4, 8, 2, 6)
+)
+sales
+```
+
+---
+
+### Q4b
+
+This is tricky because the data we need to get group totals before we can
+compute the proportions.
+
+```{r}
+sales %>%
+  group_by(quarter) %>%
+  mutate(total = sum(sales))
+```
+
+---
+
+### Q4b
+
+```{r}
+sales %>%
+  group_by(quarter) %>%
+  mutate(
+    total = sum(sales),
+    prop = sales / total
+  ) %>%
+  select(region, quarter, prop)
+```
+
+---
+
+### Q7
+
+The code below sets up a Shiny app for interactively visualizing athlete weight
+and heights in the 2012 London Olympics. We would like to have an interactive
+scatterplot of `Weight` vs. `Height, cm` that updates which points (athletes)
+are highlighted depending on sports have been selected by a dropdown menu. Code
+for generating the scatterplot is provided in the function `scatterplot`.
+
+```{r}
+scatterplot <- function(df) {
+  ggplot(df) +
+    geom_point(
+      aes(Weight, `Height, cm`, 
+          alpha = as.numeric(selected),
+          size = as.numeric(selected))
+      ) +
+    scale_alpha(range = c(0.05, .8)) +
+    scale_size(range = c(0.1, 1))
+}
+```
+
+---
+
+Provide server code which would allow the scatterplot to update the highlighted
+athletes depending on the currently selected sports.
+
+```{r, echo = TRUE}
+ui <- fluidPage(
+  selectInput("dropdown", "Select a Sport", choices = unique(olympics$Sport), multiple = TRUE),
+  plotOutput("scatterplot")
+)
+
+server <- function(input, output) {
+  ### fill this in...
+}
+```
+
+---
+
+* There is one output (`scatterplot`), and it needs a `renderPlot`
+* We can update the `selected` column depending on the input
+
+```{r, eval = FALSE}
+output$scatterplot <- renderPlot({
+  olympics %>%
+    mutate(selected = Sport %in% input$dropdown) %>%
+    scatterplot()
+})
+```
+
+---
+
+We have been asked to also print a table of the selected athletes. Assume the UI
+has the form,
+    
+```{r}
+ui <- fluidPage(
+  selectInput("dropdown", "Select a Sport", choices = unique(olympics$Sport), multiple = TRUE),
+  plotOutput("scatterplot"),
+  dataTableOutput("table") 
+)
+```
+  
+Describe changes to your solution to (a) to meet the new requirements. How
+would you minimize code duplication? Be as specific as possible.
+
+---
+
+* We need a new output for the table
+* We can use a reactive to minimize code duplication
+
+```{r, eval = FALSE}
+current_athletes <- reactive({
+  olympics %>%
+    mutate(selected = Sport %in% input$dropdown)
+})
+
+output$scatterplot <- renderPlot(scatterplot(current_athletes()))
+output$table <- renderDataTable({
+  current_athletes() %>% filter(selected)
+})
+```
+
+---
+
+## Live Coding Example
+
+---
+
+### Ground Rules
+
+* Take out your laptops, follow-along, and ask questions 
+* I will ask for your input for the visualization strategy
+* You and I will both run into bugs -- this is a normal part of the process
+* For today, see the `week6W-code-starter.Rmd` file
+
+---
+
+### Carbon Dataset
+
+This is a dataset explored by one of the project
+[groups](https://observablehq.com/@wang2274/milestone-4-team-4) last year. It is
+a dataset carbon emissions at country-by-year granularity, compiled by the World
+Bank.
+
+We will,
+
+  * Make a `tsibble` object from these data
+  * Try answering some time-series related questions visually
+
+What are some of the sorts of questions we might want to answer?
+
+---
+
+Here are the data.
+
+```{r}
+carbon <- read_csv("data/cleaned.csv")
+carbon
+```
+
+---
+
+### Exercise
+
+* Exercise 6.1 on Canvas
+* Can discuss, but submit individually
+* Only have to do parts a - b! Try other parts if you have time.
