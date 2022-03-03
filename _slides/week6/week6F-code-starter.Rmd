@@ -1,0 +1,82 @@
+---
+author: "Kris Sankaran"
+title: "Week6W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+```{r}
+library(tidyverse)
+library(tsibble)
+library(feasts)
+
+carbon_ts <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week6/data/cleaned.csv") %>%
+  pivot_longer(-c("country", "Country Code"), names_to = "year") %>%
+  mutate(year = as.integer(year)) %>%
+  filter(country != "Switzerland") %>%
+  as_tsibble(index = year, key = country)
+```
+
+```{r}
+summaries <- carbon_ts %>%
+  # features(value, features = # ...???)
+```
+
+Q1: Can you give an intuitive interpretation of the following features that are
+computed by this package?
+
+  * trend_strength
+  * curvature
+
+Hint: You can look either in the
+[documentation](https://feasts.tidyverts.org/reference/index.html) for the
+package or an associated [book chapter](https://otexts.com/fpp3/stlfeatures.html).
+
+Q2: Can you design a graphical query that lets us look up time series based on
+their features?
+
+---
+
+If we try a Shiny example, ...
+
+```{r}
+library(shiny)
+trends <- carbon_ts %>%
+  features(value, features = feature_set(tags = "stl"))
+carbon_trends <- left_join(carbon_ts, trends)
+
+ui <- fluidPage(
+  plotOutput("histogram", brush = brushOpts("brush", direction = "x")),
+  plotOutput("trends")
+)
+
+server <- function(input, output) {
+  selected <- reactiveVal(rep(TRUE, nrow(carbon_trends)))
+  output$histogram <- renderPlot({})
+  output$trends <- renderPlot({})
+  observeEvent()
+}
+
+shinyApp(ui, server)
+```

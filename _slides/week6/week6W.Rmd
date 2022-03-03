@@ -14,6 +14,7 @@ output:
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(knitr)
 library(tidyverse)
+library(shiny)
 opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
 th <- theme_minimal() + 
   theme(
@@ -39,7 +40,8 @@ class: bottom
 
 ### Announcements
 
-* Portfolio 2 posted (March 13)
+* Portfolio 2 - March 13
+* Project Milestone 2 - March 13
 * Can pick up exam after class or at office hours
   
 ---
@@ -55,11 +57,16 @@ By the end of the class, you should be able to...
 
 ### Midterm 1 Review
 
-* Quartiles:
-* For grades / curve, see syllabus 
-  - Best of absolute scores and class ranking
-* Q4b and Q7 were most challenging (by design)
-  - We were generous with partial credit
+* For course grades / curve, see syllabus 
+* Q4b and Q7 were most challenging
+
+```{r, fig.width = 6, fig.height = 3, out.width = 500}
+read_csv("~/Desktop/midterm.csv") %>%
+  ggplot() +
+  geom_dotplot(aes(Midterm1), binwidth = .5) +
+  coord_fixed(ratio = 5)
+```
+  
 
 ---
 
@@ -133,6 +140,8 @@ Provide server code which would allow the scatterplot to update the highlighted
 athletes depending on the currently selected sports.
 
 ```{r, echo = TRUE}
+olympics <- read_csv("https://uwmadison.box.com/shared/static/rzw8h2x6dp5693gdbpgxaf2koqijo12l.csv")
+
 ui <- fluidPage(
   selectInput("dropdown", "Select a Sport", choices = unique(olympics$Sport), multiple = TRUE),
   plotOutput("scatterplot")
@@ -201,6 +210,7 @@ output$table <- renderDataTable({
 * I will ask for your input for the visualization strategy
 * You and I will both run into bugs -- this is a normal part of the process
 * For today, see the `week6W-code-starter.Rmd` file
+* We will try to balance conceptual sketches with practical implementation
 
 ---
 
@@ -218,12 +228,14 @@ We will,
 
 What are some of the sorts of questions we might want to answer?
 
+  * Discuss for 3 minutes in small groups, I will ask for volunteers
+
 ---
 
 Here are the data.
 
 ```{r}
-carbon <- read_csv("data/cleaned.csv")
+carbon <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week6/data/cleaned.csv")
 carbon
 ```
 

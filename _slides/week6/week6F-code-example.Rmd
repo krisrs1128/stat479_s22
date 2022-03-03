@@ -1,0 +1,105 @@
+---
+author: "Kris Sankaran"
+title: "Week6W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+```{r}
+library(tidyverse)
+library(tsibble)
+library(lubridate)
+
+carbon_ts <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week6/data/cleaned.csv") %>%
+  pivot_longer(-c("country", "Country Code"), names_to = "year") %>%
+  mutate(year = as.integer(year)) %>%
+  filter(country != "Switzerland") %>%
+  as_tsibble(index = year, key = country)
+```
+
+```{r}
+library(feasts)
+summaries <- carbon_ts %>%
+  features(value, features = list(mean = mean, sd = sd)) %>%
+  arrange(-mean)
+
+summaries %>%
+  mutate(group = cut_number(mean, 6)) %>%
+  right_join(carbon_ts) %>%
+  ggplot() +
+  geom_line(aes(year, value, group = country)) +
+  facet_wrap(~ group, scales = "free_y")
+```
+
+
+```{r}
+trends <- carbon_ts %>%
+  features(value, features = feature_set(tags = "trend")) %>%
+  mutate(trend_group = cut_number(trend_strength, 6))
+
+carbon_ts %>%
+  left_join(trends) %>%
+  ggplot() +
+  geom_line(aes(year, value, group = country)) +
+  facet_wrap(~ trend_group)
+```
+
+```{r}
+library(shiny)
+
+trends <- carbon_ts %>%
+  features(value, features = feature_set(tags = "trend"))
+carbon_trends <- carbon_ts %>%
+  left_join(trends)
+
+ui <- fluidPage(
+  fluidRow(
+    column(6, plotOutput("histogram", brush = brushOpts("brush", direction = "x"))),
+    column(6, plotOutput("trends"))
+  )
+)
+
+server <- function(input, output) {
+  selected <- reactiveVal(rep(TRUE, nrow(carbon_trends)))
+  output$histogram <- renderPlot({
+    ggplot(carbon_trends) +
+      geom_histogram(aes(spikiness))
+  })
+  output$trends <- renderPlot({
+    carbon_trends %>%
+      mutate(selected = selected()) %>%
+      ggplot() +
+      geom_line(aes(year, value, col = selected, alpha = as.numeric(selected), group = country)) +
+      scale_alpha(range = c(0.1, 1)) +
+      theme(legend.position = "none")
+  })
+  observeEvent(
+    input$brush, {
+      selected(brushedPoints(carbon_trends, input$brush, allRows = TRUE)$selected_)
+    })
+}
+
+shinyApp(ui, server)
+```
+

@@ -31,6 +31,47 @@ library(tidyverse)
 library(tsibble)
 library(lubridate)
 
-carbon <- read_csv("data/cleaned.csv")
+carbon <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week6/data/cleaned.csv")
 carbon
 ```
+
+* we should tidy the data
+  - pivot to put years on rows
+* convert to a tsibble object
+  - as_tsibble function. Requires index by year 
+  - Make sure to provide key by country
+* then make a trend plot
+  - geom_line, group by country
+  - maybe some other custom time series plot
+
+```{r}
+carbon_ts <- carbon %>%
+  pivot_longer(-c("country", "Country Code"), names_to = "year") %>%
+  mutate(year = as.integer(year)) %>%
+  filter(country != "Switzerland") %>%
+  as_tsibble(index = year, key = country)
+  
+  #duplicates(index = "year", key = "country") %>%
+  #arrange(year)
+```
+
+```{r}
+library(feasts)
+carbon_ts %>%
+  filter(country == "United States") %>%
+  gg_lag()
+```
+
+
+```{r}
+ggplot(carbon_ts) +
+  geom_line(aes(year, value, group = country))
+```
+
+1. Convert to a date object. ymd, as_date, both in lubridate package
+2. gg_season function (also in feasts)
+
+```{r}
+
+```
+

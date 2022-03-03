@@ -1,0 +1,143 @@
+---
+author: "Kris Sankaran"
+title: "Week6W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(shiny)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Time Series Visualization (Part 2)
+
+.pull-left[
+  March 4, 2022
+]
+ 
+---
+
+### Announcements
+
+* Portfolio 2 - March 13
+* Project Milestone 2 - March 13
+* Can pick up exam after class or at office hours
+  
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Extract features from a tsibble object
+* Navigate a collection of time series based on their features
+
+---
+
+### Exercise 6.1a-b review
+
+In this problem, we will study music streaming on Spotify in 2017. We'll start
+by looking at some characteristics of the most streamed song, and then will
+practice how to extract features from across the collection of most streamed
+songs.
+    
+a. Let's look at the most streamed song of 2017, which was "Shape of You." The
+dataset
+[here](https://uwmadison.box.com/shared/static/hvplyr3jy6vbt7s80lqgfx81ai4hdl0q.csv)
+contains the number of streams for this song across regions, for each day in
+which it was in the Spotify 100 most streamed songs for that region. Create a
+`tsibble` object from this dataset, keying by `region` and indexing by `date`.
+
+b. Filter to `region == "global"`, and make a `gg_season` plot by month. Comment
+on the what you see.
+
+---
+
+`index` gives the time index, and `key` says that we should expect a different
+time series for each region.
+
+```{r}
+library(tidyverse)
+library(tsibble)
+songs <- read_csv("https://uwmadison.box.com/shared/static/hvplyr3jy6vbt7s80lqgfx81ai4hdl0q.csv") %>%
+  as_tsibble(index = date, key = region)
+
+head(songs)
+```
+
+---
+
+```{r, fig.height= 4, fig.width = 6, out.width = 500}
+library(feasts)
+songs %>%
+  filter(region == "global") %>%
+  gg_season(period = "month")
+```
+
+---
+
+```{r, fig.height= 4, fig.width = 6, out.width = 500}
+library(scales)
+cols <- viridis_pal()(10)
+songs %>%
+  filter(region == "global") %>%
+  gg_season(period = "month", pal = cols, size = 1, alpha = 0.8) +
+  scale_y_continuous(labels = label_number_si()) +
+  scale_x_date(expand = c(0, 0), labels = label_date("%d"))
+```
+
+---
+
+### Live Coding
+
+Continuing the carbon emissions example.
+
+```{r}
+carbon_ts <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week6/data/cleaned.csv") %>%
+  pivot_longer(-c("country", "Country Code"), names_to = "year") %>%
+  mutate(year = as.integer(year)) %>%
+  filter(country != "Switzerland") %>%
+  as_tsibble(index = year, key = country)
+
+head(carbon_ts)
+```
+
+---
+
+### Carbon Example
+
+This dataset is a collection of time series. To help navigate them, it helps to
+extract summary features about them,
+
+  * The amount of seasonal or cyclic structure
+  * The presence of trends
+  * The degree of short and long-run autocorrelation
+
+---
+
+### Exercise
+
+* Exercise 6.2 on Canvas
+* Can discuss, but submit individually
+* Only have to do parts d - e! Try other parts if you have time.
