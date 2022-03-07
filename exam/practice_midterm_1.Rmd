@@ -1,0 +1,216 @@
+---
+title: "STAT 479: PRACTICE MIDTERM 1"
+author: "STAT 479"
+date: "February 21, 2022"
+output:
+  pdf_document:
+    keep_tex: true
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = TRUE, include = TRUE)
+options(width = 200)
+```
+
+* This exam lasts from 1:20 - 2:10pm on February 28, 2022. There are 8
+questions.
+* This exam is closed note and closed computer.
+* You may use a 1-page cheat sheet (8.5 x 11in or A4 size). You may use both
+sides, but the cheat sheet must be handwritten.
+* If you need extra space, you may write on the back of the page. Please
+indicate somewhere that your answer continues.
+* The instructors will only be able to answer clarifying questions during the
+exam. They will be sitting at the back of the room.
+
+| Question | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Total |
+| ---- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+| Score |  |  |  |  |  |  |  |  | |
+| Possible | 2 | 2 | 3 | 3 | 5 | 3 | 6 | 6 | 30 |
+
+
+### Q1 [2 points]
+
+Circle all the statements below that are true about small-multiple and compound
+figures. Assume that the `ggplot2`, `ggridges`, and `patchwork` packages have
+been loaded.
+
+  a. Each panel in a plot using `+ facet_grid(x ~ y)` will show a
+  different subset of the data.
+  
+  b. The number of vertical panels in a plot using `facet_wrap(~ x)` depends
+  on the number of levels of `x`.
+  
+  c. If `p1`, `p2`, and `p3` are each `ggplot2` objects, then using `p1 + p2 + p3` 
+  will combine those plots horizontally.
+  
+  d. The ridge heights across `x` in a plot using `+ geom_ridge_density(aes(x, y))` encodes the variable `y`.
+
+### Q2 [2 points]
+
+1. On the line, enter the letter that best matches the following definitions. A
+term may be used more than once or not at all.
+
+    * __ The use of the same visual encoding to several partitions of the
+    dataset, shown together across adjacent panels.
+    * __ A detail view that appears when one or more items are selected in the main
+    view.
+    * __ The use of different visual encodings to represent the same data, shown
+    together across adjacent panels.
+    * __ A practice where items interactively selected in one overview are
+    highlighted in all other views.
+
+    A. Ridgeline plot
+    B. Multiform display
+    C. Details-on-demand
+    D. Small multiples
+    E. Linked brushing
+    F. Tidy data
+    
+\newpage
+
+### Q3 [3 points]
+
+Discuss two common pitfalls in compound figures. What can be done to avoid them?
+
+$$\\[3in]$$
+    
+### Q4 [3 points] 
+    
+Sketch the code needed to transform `medals`,
+
+```{r, echo = FALSE}
+medals <- data.frame(
+  "country" = c("USA", "Canada"),
+  "gold" = c(10, 20),
+  "silver" = c(7, 26)
+)
+medals
+```
+
+into the form given below,
+
+```{r, echo = FALSE}
+library(tidyverse)
+medals %>%
+  pivot_longer(gold:silver, "medal", "count")
+```
+
+
+\newpage
+
+### Q5 [5 points]
+
+The questions below refer to the two figures below.
+
+```{r, out.width = "50%", fig.show = "hold", echo = FALSE}
+library(EBImage)
+display(readImage("https://krisrs1128.github.io/stat479/posts/2021-01-12-week1-2/week1-2_files/figure-html5/unnamed-chunk-8-1.png"))
+display(readImage("https://krisrs1128.github.io/stat479/posts/2021-01-12-week1-2/week1-2_files/figure-html5/unnamed-chunk-16-1.png"))
+```
+
+a. [2 points] Describe three distinct customizations used to transform the plot
+on the left into the plot on the right.
+$$\\[2in]$$
+    
+
+b. [3 points] Provide the `ggplot2` commands that were used for each
+transformation. Be as specific as possible.
+$$\\[3in]$$
+    
+\newpage
+
+### Q6 [3 points]
+    
+This problem asks you to compare and contrast the `geom_ridge_density()` and
+`geom_rideline()` layers available in the `ggridges` package.
+
+a. [3 points] Describe the differences in the visual encodings provided by these
+two layers. What kind of data do they assume, and how are they represented
+graphically?
+
+$$\\[2in]$$
+
+
+b. [2 points] For each type of layer, provide one situation where one could be
+applied, but not the other.
+
+$$\\[2.5in]$$
+
+### Q7 [6 points]
+
+Provide the reactivity graph associated with the shiny app below, which prints
+the summary and first few rows of one of three datasets, depending on the user's
+selection.
+    
+```{r}
+library(shiny)
+ui <- fluidPage(
+    textInput("caption", "Caption:", value = "Data Summary"),
+    selectInput("dataset", "Dataset:", choices = c("rock", "pressure", "cars")),
+    numericInput("obs", "Number of observations:", value = 10),
+    verbatimTextOutput("summary"),
+    dataTableOutput("view")
+)
+
+server <- function(input, output) {
+  datasetInput <- reactive({
+    if (input$dataset == "rock") {
+      return (rock)
+    } else if (input$dataset == "pressure") {
+      return (pressure)
+    }
+    cars
+  })
+
+  output$caption <- renderText({ input$caption })
+  output$summary <- renderPrint({
+    dataset <- datasetInput()
+    summary(dataset)
+  })
+
+  output$view <- renderDataTable({ head(datasetInput(), n = input$obs)})
+}
+```
+
+\newpage
+
+### Q8 [6 points]
+
+Consider the dataset below, which contains the average `Asymmetry` across
+several groups of birds. Note that only the first few rows are shown,
+    
+```{r}
+  birds <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/birds.csv") %>%
+  filter(!is.na(Order))
+  
+  birds
+```
+    
+a. [3 points] Provide code to convert the `Order` variable to lower case and
+to compute the mean `Asymmetry` within each `Order`.
+    
+$$\\[2in]$$
+    
+```{r, echo = FALSE}
+birds <- birds %>%
+  group_by(Order) %>%
+  summarise(mean_asymmetry = mean(Asymmetry)) %>%
+  mutate(Order = tolower(Order))
+```
+
+
+b. [3 points] Provide code needed to generate the plot below. Be as specific as
+possible.
+    
+```{r, echo = FALSE, fig.height = 4, fig.width = 8}
+birds %>%
+  ggplot() +
+  geom_bar(aes(mean_asymmetry, reorder(Order, mean_asymmetry)), width = 1, stat = "identity") +
+  labs(x = "Mean Asymmetry", y = "Order") +
+  scale_x_continuous(expand = c(0, 0, 0.1, 0)) +
+  theme(axis.ticks = element_blank(), panel.grid = element_blank())
+```
+
+$$\\[3in]$$
