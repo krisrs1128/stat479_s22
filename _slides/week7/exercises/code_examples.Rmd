@@ -1,0 +1,34 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+1. For each of the datasets below, specify whether it is in a vector or raster
+data format. If it is in a vector data format, explain which types of geometries
+it contains (e.g., a point or linestring). Explain your reasoning.
+  
+  a. [NYC Building Footprints](https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson)
+  
+  b. [Africa Population 2020]()
+  
+  c. [Himalayan Glacial Lakes]()
+  
+  d. [US EV Charging ]()
+
+  e. [Zion Elevation]()
+  
+1. 
+
+```{r}
+library(sf)
+ev <- read_sf("data/ev/Alternative_Fueling_Stations.shp")
+```
+
+```{r}
+write_sf(ev[ev$STATE == "WI", ], dsn = "~/Desktop/ev.geojson")
+```
+
