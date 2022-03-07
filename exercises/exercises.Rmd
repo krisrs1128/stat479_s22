@@ -862,7 +862,7 @@ collection of most streamed songs.
     [here](https://uwmadison.box.com/shared/static/xj4vupjbicw6c8tbhuynw0pll6yh1w0d.csv)
     contains similar data, but for all songs that appeared in the Spotify 100 for at
     least 200 days in 2017. We have filtered to only the global totals. Read these
-    data into a tsibble, keyed by `artist:track` and extract features of the
+    data into a tsibble, keyed by `artist:track_name` and extract features of the
     `streams` time series using the `features` function in the feasts library. It is
     normal to see a few errors reported by this function, it just means that some of
     the statistics could not be calculated.
@@ -976,6 +976,100 @@ California.
     of dynamic queries. What questions would the visualization answer? What would be
     the structure of interaction, and how would the display update when the user
     provides a cue?
+
+1. For each of the datasets below, specify whether it is in a vector or raster
+data format. If it is in a vector data format, explain which types of geometries
+it contains (e.g., a point or linestring). Explain your reasoning.
+  
+    a. [NYC Building Footprints](https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson)
+    
+    b. [Africa Population 2020](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/afripop2020.tif?raw=true)
+    
+    c. [Himalayan Glacial Lakes](https://github.com/krisrs1128/stat479_s22/tree/main/_slides/week7/exercises/data/glacial_lakes)
+    
+    d. [US EV Charging ](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week7/exercises/data/ev.geojson)
+  
+    e. [Zion Elevation](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/landsat.tif?raw=true)
+    
+1. For each of the commands below, explain (i) whether it can be applied to
+vector data, raster data, or both and (ii) discuss a typical use case for the
+function.
+
+    a. `read_sf`
+    
+    b. `raster`
+    
+    c. `as.data.frame(img, xy = TRUE)`
+    
+    d. `geom_sf`
+    
+    e. `coord_sf`
+
+1. [Glacial Lakes]. The data at this [link](https://github.com/krisrs1128/stat479_s22/tree/main/_slides/week7/exercises/data/glacial_lakes) contain labels of glacial lakes the
+Hindu Kush Himalaya, created during an ecological survey in 2015 by the
+International Centre for Integrated Mountain Development.
+
+    a. How many lakes are in this dataset? What are the latitude / longitude
+    coordinates of the largest lakes in each Sub-basin?
+    
+    b. Plot the polygons associated with each of the lakes identified in step (a).
+    _Hint: To make the polygons legible, use `wrap_plots` in the `patchwork` package to combine separate plots for each lake._
+    
+    c. Visualize the lakes with latitude between 28.2 and 28.4 and with longitude
+    between 85.8 and 86. Optionally, add a basemap associated with each lake.
+    
+1. The problem below visualizes [population
+data](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/afripop2020.tif?raw=true)
+from the `afrilearndata` package.
+
+    a. What are the dimensions (in pixels) of the population dataset? What is
+    its coordinate reference system?
+    
+    b. Convert the raster data to a `data.frame`. Omit rows without any
+    population data.
+    
+    c. Visualize the data. What are some regions with the lowest and highest
+    population densities?
+ 
+1. This problem will visualize the temperature data downloaded from [this
+site](http://www.bom.gov.au/jsp/awap/temp/index.jsp?colour=colour&time=latest&step=0&map=maxave&period=month&area=nat)
+from the Australian Bureau of Meteorology. It presents some new ideas related to
+raster masking.
+
+    a. Read in the raster data, directly convert it to a data.frame, and use a
+    `geom_raster` layer to visualize raw temperature data.
+    
+    b. The data includes temperature over the ocean! We really only want to
+    visualize the temperatures over land. Using the `mask` function from the
+    `raster` package, clip the original raster data to a polygon containing the
+    Australia country boundaries. These boundaries are read in the code block
+    below,
+        
+    ```{r}
+    library(rnaturalearth)
+    australia <- ne_countries(country = "australia")
+    # mask(... fill this in...)
+    ```
+  
+    c. Regenerate the plot from (a), but using the masked raster from (b). Ensure
+    that the masked NA values are left out of the visualization. Bonus: Use a
+    binned color scale (e.g., `scale_fill_viridis_b`) to make the temperature
+    variations even clearer.
+
+1. [Interactive NYC Trees] This problem walks through the creation of an
+interactive map of the [NYC Trees Dataset](https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv).
+
+    a. Filter down to only those trees whose diameter at breast height
+      (`tree_dbh`) is larger than 10. This will help reduce overplotting.
+      
+    b. Use `leaflet` and the `addCircles` command to create a map with the trees
+      kept in part (a). Have the size of the circles reflect the `tree_dbh` value.
+      
+    c. Add a basemap that highlights features of the city without being too
+      busy. For example, you can use
+      `addProviderTiles(providers$CartoDB.Positron)`.
+      
+    d. Color each tree's circle according to its species group. _Hint: Create a mapping from species groups to colors using the `colorFactor` function in Leaflet. For example, `pal <- colorFactor(brewer, filtered_trees$species_group)` creates an objet `pal` that can be called in the `color` argument to `addCircles`._
     
 1. [Political Book Recommendations] In this problem, we'll study a network
 dataset of Amazon bestselling US Politics books. Books are linked by an edge if
