@@ -1,0 +1,43 @@
+---
+author: "Kris Sankaran"
+title: "Week6W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+First, download and unzip this
+[file](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/glacial_lakes.tar.gz).
+For example, on mac / linux, run these lines in a terminal,
+
+```{bash}
+curl -L https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/glacial_lakes.tar.gz?raw=true > glacial_lakes.tar.gz
+tar -zcvf glacial_lakes.tar.gz
+```
+
+```{r}
+library(tidyverse)
+library(sf)
+lakes <- read_sf("glacial_lakes/GL_3basins_2015.shp")
+```
+
