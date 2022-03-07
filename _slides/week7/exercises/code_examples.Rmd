@@ -21,7 +21,183 @@ it contains (e.g., a point or linestring). Explain your reasoning.
 
   e. [Zion Elevation]()
   
-1. 
+1. For each of the commands below, explain (i) whether it can be applied to
+vector data, raster data, or both and (ii) discuss a typical use case for the
+function.
+
+    a. `read_sf`
+    
+    b. `raster`
+    
+    c. `as.data.frame(img, xy = TRUE)
+    
+    d. `geom_sf`
+    
+    e. `coord_sf`
+
+1. [Glacial Lakes]. The data at this link contain labels of glacial lakes the
+Hindu Kush Himalaya, created during an ecological survey in 2015 by the
+International Centre for Integrated Mountain Development.
+
+  a. How many lakes are in this dataset? What are the latitude / longitude
+  coordinates of the largest lakes in each Sub-basin?
+  
+  b. Plot the polygons associated with each of the lakes identified in step (a).
+  _Hint: To make the polygons legible, use `wrap_plots` in the `patchwork` package to combine separate plots for each lake._
+  
+  c. Visualize the lakes with latitude between 28.2 and 28.4 and with longitude
+  between 85.8 and 86. Optionally, add a basemap associated with each lake.
+  
+1. The problem below visualizes landcover and population data from the
+`afrilearndata` package.
+
+    a. What are the dimensions (in pixels) of the population dataset? What is
+    its coordinate reference system?
+    
+    b. Convert the raster data to a `data.frame`. Omit rows without any
+    population data.
+    
+    c. Visualize the data. What are some regions with the lowest and highest
+    population densities?
+ 
+1. This problem will visualize the temperature data downloaded from [this
+site](http://www.bom.gov.au/jsp/awap/temp/index.jsp?colour=colour&time=latest&step=0&map=maxave&period=month&area=nat)
+from the Australian Bureau of Meteorology. It presents some new ideas related to
+raster masking.
+
+  a. Read in the raster data, directly convert it to a data.frame, and use a
+  `geom_raster` layer to visualize raw temperature data.
+  
+  b. The data includes temperature over the ocean! We really only want to
+  visualize the temperatures over land. Using the `mask` function from the
+  `raster` package, clip the original raster data to a polygon containing the
+  Australia country boundaries. These boundaries are read in the code block
+  below,
+      
+    ```{r}
+    library(rnaturalearth)
+    australia <- ne_countries(country = "australia")
+    # mask(... fill this in...)
+    ```
+  
+  c. Regenerate the plot from (a), but using the masked raster from (b). Ensure
+  that the masked NA values are left out of the visualization. Bonus: Use a
+  binned color scale (e.g., `scale_fill_viridis_b`) to make the temperature
+  variations even clearer.
+
+1. [Interactive NYC Trees] This problem walks through the creation of an
+interactive map of the [NYC Trees Dataset](https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv).
+
+  a. Filter down to only those trees whose diameter at breast height
+    (`tree_dbh`) is larger than 10. This will help reduce overplotting.
+    
+  b. Use `leaflet` and the `addCircles` command to create a map with the trees
+    kept in part (a). Have the size of the circles reflect the `tree_dbh` value.
+    
+  c. Add a basemap that highlights features of the city without being too
+    busy. For example, you can use
+    `addProviderTiles(providers$CartoDB.Positron)`.
+    
+  d. Color each tree's circle according to its species group. __Hint: Create a mapping from species groups to colors using the `colorFactor` function in Leaflet. For example, `pal <- colorFactor(brewer, filtered_trees$species_group)` creates an objet `pal` that can be called in the `color` argument to `addCircles`.__
+  
+```{r}
+trees <- read_csv("https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv")
+roads <- read_sf("https://uwmadison.box.com/shared/static/28y5003s1d0w9nqjnk9xme2n86xazuuj.geojson")
+```
+
+
+```{r}
+large_trees <- trees %>%
+  filter(tree_dbh > 10)
+
+library(leaflet)
+brewer <- RColorBrewer::brewer.pal(8, "Set2")
+factpal <- colorFactor(brewer, large_trees$species_group)
+
+leaflet(large_trees) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircles(~ longitude, ~ latitude, radius = ~ tree_dbh, col = ~factpal(species_group))
+```
+
+```{r}
+ggplot(trees) +
+  geom_sf(data = roads, fill = "#0C0C0C") +
+  geom_point(
+    aes(longitude, latitude, col = species_group), 
+    size = 0.6, alpha = 0.6
+  ) +
+  theme_void()
+```
+ 
+
+```{r}
+pop <- raster("data/afripop2020.tif") %>%
+  as.data.frame(xy = TRUE) %>%
+  filter(!is.na(afripop2020))
+ggplot(pop) +
+  geom_raster(aes(x, y, fill = log(1 + afripop2020))) +
+  coord_sf() +
+  theme(
+    panel.background = element_rect(fill = "transparent"),
+    axis.ticks = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    legend.position = "bottom"
+    )
+```
+  
+  
+```{r}
+lakes <- read_sf("data/glacial_lakes/GL_3basins_2015.shp")
+lakes %>%
+  group_by(Sub_Basin) %>%
+  filter(Area == max(Area)) %>%
+  select(Latitude, Longitude, Sub_Basin, Area) %>%
+  arrange(-Area)
+```
+```{r}
+lakes %>%
+  filter(
+    Latitude < 28.4, Latitude > 28.2,
+    Longitude < 86, Longitude > 85.8
+    ) %>%
+  ggplot() +
+    geom_sf(fill = "black", size = 0) +
+    theme_void()
+```
+```{r}
+basemap <- get_stamenmap(bbox = c(85.8, 28.2, 86, 28.4))
+lakes_zoom <- lakes %>%
+  filter(
+    Latitude < 28.4, Latitude > 28.2,
+    Longitude < 86, Longitude > 85.8
+    ) %>%
+  rename(lon = Longitude, lat = Latitude)
+
+ggmap(basemap) +
+  geom_sf(data = lakes_zoom, fill = "black", size = 0) +
+  theme_void()
+```
+    
+```{r, fig.height = 10, fig.width = 10}
+top_lakes <- lakes %>%
+  group_by(Sub_Basin) %>%
+  filter(Area == max(Area)) %>%
+  arrange(-Area)
+
+library(patchwork)
+p <- list()
+for (i in seq_along(top_lakes)) {
+  p[[i]] <- ggplot(top_lakes[i, ]) +
+    geom_sf(col = "white", fill = "black") +
+    theme_void() +
+    ggtitle(top_lakes[i, "Sub_Basin"])
+}
+
+wrap_plots(p)
+```
+  
+  c. 
 
 ```{r}
 library(sf)
@@ -30,5 +206,31 @@ ev <- read_sf("data/ev/Alternative_Fueling_Stations.shp")
 
 ```{r}
 write_sf(ev[ev$STATE == "WI", ], dsn = "~/Desktop/ev.geojson")
+```
+
+```{r}
+library(rnaturalearth)
+library(scico)
+
+temp <- raster("~/Downloads/latest.grid")
+australia <- ne_countries(country = "australia")
+temp <- mask(temp, australia) %>%
+  as.data.frame(xy = TRUE) %>%
+  filter(!is.na(latest))
+
+ggplot(temp) +
+  geom_raster(aes(x, y, fill = latest)) +
+  scale_fill_viridis_b(option = "magma") +
+  theme_void()
+```
+
+```{r}
+rainfall <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-07/rainfall.csv') %>%
+  group_by(lat, long) %>%
+  summarise(max = max(rainfall, na.rm = TRUE))
+
+ggplot(rainfall) +
+  geom_tile(aes(long, lat, fill = max))
+
 ```
 
