@@ -14,6 +14,8 @@ output:
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(knitr)
 library(tidyverse)
+library(tsibble)
+library(feasts)
 th <- theme_minimal() + 
   theme(
     panel.grid.minor = element_blank(),
@@ -40,8 +42,19 @@ carbon_ts <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/
 
 ```{r}
 summaries <- carbon_ts %>%
-  # features(value, features = # ...???)
+   features(value, features = list(mean = mean, sd = sd))
+summaries %>%
+  arrange(-mean)
 ```
+
+```{r}
+summaries <- carbon_ts %>%
+   features(value, feature_set(tag = "trend"))
+summaries
+```
+
+y[t] = trend[t] + seasonal[t] + remainder[t]
+
 
 Q1: Can you give an intuitive interpretation of the following features that are
 computed by this package?
@@ -60,6 +73,13 @@ their features?
 
 If we try a Shiny example, ...
 
+update the server,
+
+1. Write the observe event to change the selected reactiveValue
+2. ggplot2 for the histogram
+3. ggplot2 for the time series
+4. customize the appearance
+
 ```{r}
 library(shiny)
 trends <- carbon_ts %>%
@@ -73,9 +93,22 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   selected <- reactiveVal(rep(TRUE, nrow(carbon_trends)))
-  output$histogram <- renderPlot({})
-  output$trends <- renderPlot({})
-  observeEvent()
+  output$histogram <- renderPlot({
+    ggplot(carbon_trends) +
+      geom_histogram(aes(spikiness))
+  })
+  output$trends <- renderPlot({
+    carbon_trends %>%
+      mutate(selected = selected()) %>%
+      ggplot() +
+      geom_line(aes(year, value, group = country, col = as.numeric(selected), alpha = as.numeric(selected))) +
+      scale_alpha(range = c(0.1, 1))
+  })
+  observeEvent(
+    input$brush, {
+      selected(brushedPoints(carbon_trends, input$brush, allRows = TRUE)$selected_)
+    }
+  )
 }
 
 shinyApp(ui, server)

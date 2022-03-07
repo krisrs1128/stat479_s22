@@ -862,7 +862,7 @@ collection of most streamed songs.
     [here](https://uwmadison.box.com/shared/static/xj4vupjbicw6c8tbhuynw0pll6yh1w0d.csv)
     contains similar data, but for all songs that appeared in the Spotify 100 for at
     least 200 days in 2017. We have filtered to only the global totals. Read these
-    data into a tibble, keyed by `artist:region` and extract features of the
+    data into a tsibble, keyed by `artist:track` and extract features of the
     `streams` time series using the `features` function in the feasts library. It is
     normal to see a few errors reported by this function, it just means that some of
     the statistics could not be calculated.

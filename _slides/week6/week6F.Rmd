@@ -140,4 +140,4 @@ extract summary features about them,
 
 * Exercise 6.2 on Canvas
 * Can discuss, but submit individually
-* Only have to do parts d - e! Try other parts if you have time.
+* Only have to do parts d - f! Try other parts if you have time.
