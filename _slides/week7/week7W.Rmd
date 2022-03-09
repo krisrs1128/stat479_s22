@@ -1,0 +1,168 @@
+---
+author: "Kris Sankaran"
+title: "Week7W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(shiny)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Geospatial Visualization (Part 2)
+
+.pull-left[
+  March 9, 2022
+]
+ 
+---
+
+### Announcements
+
+* Portfolio 2 - March 13
+  - Separate pdf for discussion and zip file for app
+  - Share both on piazza
+  - Only unzipped directory needs to be runnable using `runApp`
+* Project Milestone 2 - March 13
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+  * Read in and explain the summaries in a `raster` object
+  * Create a polished, static visualization of a `raster` object using either
+  `geom_raster` or `ggRGB`
+
+---
+
+### Exercise 7.1 Review
+
+[Geospatial Commands] For each of the commands below, explain (i) whether it can
+be applied to vector data, raster data, or both and (ii) discuss a typical use
+case for the function.
+
+a. `read_sf`
+
+b. `raster`
+
+c. `as.data.frame(img, xy = TRUE)`
+
+d. `geom_sf`
+
+e. `coord_sf`
+
+---
+
+a. `read_sf`
+
+  (i) This applies to vector data only. 
+  
+  (ii) The command can be used to read vector data formats, like `.shp`, `.geojson`, into spatial `sf` objects.
+
+[NYC Building Footprints](https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson)
+
+```{r}
+library(sf)
+buildings <- read_sf("https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson")
+str(buildings)
+```
+
+---
+
+b. `raster`
+
+(i) This applies to raster data only
+
+(ii) This is the analogous reading function for raster data. The `extent` below
+gives the latitude / longitude extent. `values` gives the population per pixel.
+
+```{r}
+library(raster)
+pop <- raster("https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/afripop2020.tif?raw=true")
+pop
+```
+
+---
+
+c. `as.data.frame(img, xy = TRUE)`
+
+(i) This applies to raster data only.
+
+(ii) It is often used to convert a raster dataset to a data.frame for use in a
+ggplot visualization.
+```{r}
+as.data.frame(pop, xy = TRUE) %>%
+  drop_na() %>%
+  head()
+```
+
+---
+
+d. `geom_sf`
+
+(i) This applies to vector data only
+
+(ii) This is often used to add an `sf` layer to a ggplot visualization
+
+```{r, out.width = 1200}
+ggplot(buildings) +
+  geom_sf(fill = "darkgray", size = 0)
+```
+
+---
+
+e. `coord_sf`
+
+(i) This applies to vector data only
+
+(ii) This is often used to change the geographic limits of a ggplot
+visualization or modify the coordinate reference system used
+
+```{r}
+ggplot(buildings) +
+  geom_sf(fill = "darkgray", size = 0) +
+  coord_sf(ylim = c(40.71, 40.72))
+
+```
+
+---
+
+## Live Coding Example
+
+We will work through Exercise 12 in Module 2
+
+
+---
+
+### Exercise
+
+* Exercise 7.2 on Canvas
+* Can discuss, but submit individually
+* Hints:
+  - Problem 5 requires the `sf` package. 
+  - For problem 11, population density is highly skewed. Consider taking a
+  $\log\left(1 + x\right)$ transformation of
+  population
