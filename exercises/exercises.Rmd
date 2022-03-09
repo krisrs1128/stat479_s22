@@ -977,7 +977,7 @@ California.
     the structure of interaction, and how would the display update when the user
     provides a cue?
 
-1. For each of the datasets below, specify whether it is in a vector or raster
+1. [Geospatial Datasets] For each of the datasets below, specify whether it is in a vector or raster
 data format. If it is in a vector data format, explain which types of geometries
 it contains (e.g., a point or linestring). Explain your reasoning.
   
@@ -991,9 +991,9 @@ it contains (e.g., a point or linestring). Explain your reasoning.
   
     e. [Zion Elevation](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/landsat.tif?raw=true)
     
-1. For each of the commands below, explain (i) whether it can be applied to
-vector data, raster data, or both and (ii) discuss a typical use case for the
-function.
+1. [Geospatial Commands] For each of the commands below, explain (i) whether it
+can be applied to vector data, raster data, or both and (ii) discuss a typical
+use case for the function.
 
     a. `read_sf`
     
@@ -1018,7 +1018,7 @@ International Centre for Integrated Mountain Development.
     c. Visualize the lakes with latitude between 28.2 and 28.4 and with longitude
     between 85.8 and 86. Optionally, add a basemap associated with each lake.
     
-1. The problem below visualizes [population
+1. [Population Density] The problem below visualizes [population
 data](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/afripop2020.tif?raw=true)
 from the `afrilearndata` package.
 
@@ -1031,7 +1031,7 @@ from the `afrilearndata` package.
     c. Visualize the data. What are some regions with the lowest and highest
     population densities?
  
-1. This problem will visualize the temperature data downloaded from [this
+1. [Masking Temperature Data] This problem will visualize the temperature data downloaded from [this
 site](http://www.bom.gov.au/jsp/awap/temp/index.jsp?colour=colour&time=latest&step=0&map=maxave&period=month&area=nat)
 from the Australian Bureau of Meteorology. It presents some new ideas related to
 raster masking.

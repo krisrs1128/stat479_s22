@@ -154,6 +154,6 @@ include_graphics("figures/lake_headline.png")
 
 ### Exercise
 
-* Exercise 7.1 on Canvas
+* Exercise 7.1 [Geospatial Commands] on Canvas
 * Can discuss, but submit individually
 * If you haven't installed the `sf` and `raster` packages, do that today! 
