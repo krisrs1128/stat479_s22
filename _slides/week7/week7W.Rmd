@@ -162,7 +162,8 @@ We will work through Exercise 12 in Module 2
 * Exercise 7.2 on Canvas
 * Can discuss, but submit individually
 * Hints:
-  - Problem 5 requires the `sf` package. 
-  - For problem 11, population density is highly skewed. Consider taking a
+  - Problem 5 requires the `sf` package
+  - Problem 11 requires the `raster` package
+  - For Problem 11, population density is highly skewed. Consider taking a
   $\log\left(1 + x\right)$ transformation of
   population

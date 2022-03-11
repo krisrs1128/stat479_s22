@@ -15,7 +15,7 @@ output:
 library(knitr)
 library(tidyverse)
 library(shiny)
-opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
 th <- theme_minimal() + 
   theme(
     panel.grid.minor = element_blank(),
@@ -30,7 +30,7 @@ options(width = 100)
 ```
 class: bottom
 
-# Geospatial Visualization (Part 1)
+# Geospatial Visualization (Part 3)
 
 .pull-left[
   March 7, 2022
@@ -49,111 +49,236 @@ class: bottom
 
 By the end of the class, you should be able to...
 
-  * Read in and explain the geometries contained in an `sf` class object
-  * Create a polished, static visualization of an `sf` object
+  * Create a leaflet-based interactive map
+  * Customize the styling for a leaflet-based map
 
 ---
 
-### Exercise 6.3 Review
-
-d. The dataset
-[here](https://uwmadison.box.com/shared/static/xj4vupjbicw6c8tbhuynw0pll6yh1w0d.csv)
-contains similar data, but for all songs that appeared in the Spotify 100 for at
-least 200 days in 2017. We have filtered to only the global totals. Read these
-data into a tsibble, keyed by `artist:track_name` and extract features of the
-`streams` time series using the `features` function in the feasts library. It is
-normal to see a few errors reported by this function, it just means that some of
-the statistics could not be calculated.
-
----
-
-We use `as_tsibble` to convert the ordinary data.frame into a time-series aware
-`tsibble`.
+### Exercise 7.2 Review - Option A
+    
+1. [Population Density] The problem below visualizes [population
+data](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/afripop2020.tif?raw=true)
+from the `afrilearndata` package.
 
 ```{r}
-library(tidyverse)
-library(tsibble)
-tracks <- read_csv("https://uwmadison.box.com/shared/static/xj4vupjbicw6c8tbhuynw0pll6yh1w0d.csv") %>%
-  as_tsibble(index = date, key = artist:track_name)
-head(tracks)
+library(raster)
+population <- raster("https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/afripop2020.tif?raw=true")
 ```
+
+---
+
+a. What are the dimensions (in pixels) of the population dataset? What is its
+coordinate reference system?
+
+Dimensions: 434 x 413 pixels
+CRS: WGS84
+
+```{r}
+population
+```
+
+---
+    
+b. Convert the raster data to a `data.frame`. Omit rows without any
+population data.
+
+```{r}
+population %>%
+  as.data.frame(xy = TRUE)
+```
+
+---
+    
+b. Convert the raster data to a `data.frame`. Omit rows without any population
+data.
+
+```{r}
+population %>%
+  as.data.frame(xy = TRUE) %>%
+  drop_na()
+```
+
   
 ---
+    
+c. Visualize the data. What are some regions with the lowest and highest
+population densities?
+ 
 
-We can compute features associated with each track using `features`.
+```{r, fig.width = 8, fig.height = 8, out.width = 290}
+pop_df <- population %>%
+  as.data.frame(xy = TRUE) %>%
+  drop_na() %>%
+  rename(population = afripop2020.tif.raw.true)
+ggplot(pop_df) +
+  geom_raster(aes(x, y, fill = population)) +
+  coord_sf()
+```
 
-```{r}
-library(feasts)
-track_features <- tracks %>%
-  features(streams, feature_set(tag = "trend")) %>%
-  arrange(trend_strength)
-head(track_features)
+---
+    
+c. Visualize the data. What are some regions with the lowest and highest
+population densities?
+ 
+
+```{r, fig.width = 8, fig.height = 8, out.width = 390}
+ggplot(pop_df) +
+  geom_raster(aes(x, y, fill = log(1 + population))) +
+  coord_sf()
 ```
 
 ---
 
-e. Which tracks had the highest and lowest `trend_strength`'s? Visualize their
-streams over the course of the year.
-
-```{r}
-tracks %>%
-  filter(track_name %in% c("Starboy", "Lose Yourself - Soundtrack Version")) %>%
-  ggplot() +
-  geom_line(aes(date, streams, group = track_name, col = track_name))
+```{r, fig.width = 8, fig.height = 8, out.width = 450}
+ggplot(pop_df) +
+  geom_raster(aes(x, y, fill = log(1 + population))) +
+  coord_sf() +
+  scale_fill_distiller(palette = 3, direction = 1) +
+  theme_void()
 ```
 
 ---
 
-e. Which tracks had the highest and lowest `trend_strength`'s? Visualize their
-streams over the course of the year.
-
+.pull-left[
 ```{r}
-tracks %>%
-  filter(track_name %in% c("Starboy", "Lose Yourself - Soundtrack Version")) %>%
-  ggplot() +
-  geom_line(aes(date, streams, group = track_name, col = track_name), size = 1) +
-  scale_color_manual(values = c("#5743D9", "#03A66A")) +
-  scale_y_continuous(label = scales::label_number_si())
+ggplot(pop_df) +
+  geom_histogram(aes(population))
+```
+]
+
+.pull-right[
+```{r}
+ggplot(pop_df) +
+  geom_histogram(aes(log(1 + population)))
+```
+]
+
+
+---
+
+### Exercise 7.2 Review - Option B
+
+```{r, fig.width = 10, fig.height = 4, out.width = 900}
+trees <- read_csv("https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv")
+ggplot(trees) +
+  geom_point(aes(longitude, latitude, col = species_group)) +
+  coord_fixed() +
+  facet_wrap(~ health)
 ```
 
 
 ---
 
+```{r, out.width = 1100, fig.height = 4, fig.width = 10, echo = FALSE}
+trees <- trees %>%
+  mutate(health = factor(health, levels = c("Good", "Fair", "Poor")))
+ggplot(trees) +
+  geom_point(
+    aes(longitude, latitude, col = species_group, size = tree_dbh),
+    alpha = 0.5
+    ) +
+  scale_color_brewer(palette = "Set3") +
+  scale_size(range = c(0.01, 2)) +
+  facet_wrap(~ health) +
+  coord_fixed() +
+  guides(col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 3)) +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_text(size = 10)
+  )
+```
 
-f. Discuss one other feature that would be interesting to extract from these
-time series. Provide a non-technical explanation about what songs with high
-values of this feature would potentially look like.
+---
 
-This was very open ended. Some interesting answers are,
-  - Are there songs that were extremely popular, but only briefly?
-  - Are there songs whose popularity increased over time?
-  - Are there songs that are popular on a seasonal time scale (e.g., Christmas?)
-  - What are the songs with the largest range?
-  
+```{r, eval = FALSE}
+trees <- trees %>%
+  mutate(health = factor(health, levels = c("Good", "Fair", "Poor")))
+ggplot(trees) +
+  geom_point(
+    aes(longitude, latitude, col = species_group, size = tree_dbh),
+    alpha = 0.5
+    ) +
+  scale_color_brewer(palette = "Set3") +
+  scale_size(range = c(0.01, 2)) +
+  facet_wrap(~ health) +
+  guides(col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 3)) +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_text(size = 10)
+  )
+```
+
+---
+
+c. Generate a version of the plot in (a) that has the roads and buildings in the
+    background.
+    
+```{r, out.width = 620, fig.width = 10, fig.height = 4}
+library(sf)
+roads <- read_sf("https://uwmadison.box.com/shared/static/28y5003s1d0w9nqjnk9xme2n86xazuuj.geojson")
+buildings <- read_sf("https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson")
+
+ggplot(trees) +
+  geom_sf(data = roads) +
+  geom_sf(data = buildings) +
+  geom_point(aes(longitude, latitude, col = species_group)) +
+  facet_wrap(~ health)
+```
+
+---
+
+```{r, out.width = 1100, fig.height = 4, fig.width = 10, echo = FALSE}
+ggplot(trees) +
+  geom_sf(data = roads, size = .1) +
+  geom_sf(data = buildings, size = 0) +
+  geom_point(
+    aes(longitude, latitude, col = species_group, size = tree_dbh),
+    alpha = 0.5
+  ) +
+  scale_color_brewer(palette = "Set3") +
+  scale_size(range = c(0.01, 2)) +
+  scale_y_continuous(expand = c(0, 0), breaks = c(40.71, 40.725, 40.74)) +
+  scale_x_continuous(expand = c(0, 0), breaks = c(-73.995, -73.975)) +
+  facet_wrap(~ health) +
+  guides(col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 3)) +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_text(size = 10)
+  )
+```
+
+---
+
+```{r, eval = FALSE}
+ggplot(trees) +
+  geom_sf(data = roads, size = .1) +
+  geom_sf(data = buildings, size = 0) +
+  geom_point(
+    aes(longitude, latitude, col = species_group, size = tree_dbh),
+    alpha = 0.5
+  ) +
+  scale_color_brewer(palette = "Set3") +
+  scale_size(range = c(0.01, 2)) +
+  scale_y_continuous(expand = c(0, 0), breaks = c(40.71, 40.725, 40.74)) +
+  scale_x_continuous(expand = c(0, 0), breaks = c(-73.995, -73.975)) +
+  facet_wrap(~ health) +
+  guides(col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 3)) +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_text(size = 10)
+  )
+```
+
 ---
 
 ## Live Coding Example
 
-We will work through Exercise 10 in Module 2 (parts a and c).
+We will work through Exercise 13 in Module 2.
 
-.pull-left[
-First, take 2 minutes to discuss 
-
- * Who is the audience who would potentially be interested in this dataset?
- * What sorts of questions would they like answered?
- ]
- 
- .pull-right[
-```{r, echo = FALSE}
-include_graphics("figures/lake_headline.png")
-```
- 
- ]
 
 ---
 
 ### Exercise
 
-* Exercise 7.1 on Canvas
-* Can discuss, but submit individually
-* If you haven't installed the `sf` and `raster` packages, do that today! 
+
+---
