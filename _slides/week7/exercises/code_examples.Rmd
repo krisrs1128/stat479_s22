@@ -111,7 +111,7 @@ large_trees <- trees %>%
   filter(tree_dbh > 10)
 
 library(leaflet)
-brewer <- RColorBrewer::brewer.pal(8, "Set2")
+brewer <- RColorBrewer::brewer.pal(8, "Set3")
 factpal <- colorFactor(brewer, large_trees$species_group)
 
 leaflet(large_trees) %>%
@@ -231,6 +231,14 @@ rainfall <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 
 ggplot(rainfall) +
   geom_tile(aes(long, lat, fill = max))
+
+```
+
+```{r}
+leaflet(large_trees) %>%
+  addProviderTiles(providers$Esri.WorldPhysical) %>%
+  addPolylines(data = roads, color = "#0C0C0C", weight = 0.5) %>%
+  addCircles(~ longitude, ~ latitude, radius = ~ tree_dbh, col = ~factpal(species_group))
 
 ```
 

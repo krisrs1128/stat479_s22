@@ -33,7 +33,7 @@ class: bottom
 # Geospatial Visualization (Part 3)
 
 .pull-left[
-  March 7, 2022
+  March 11, 2022
 ]
  
 ---
@@ -49,14 +49,14 @@ class: bottom
 
 By the end of the class, you should be able to...
 
+  * Recognize opportunities for refinement in geospatial visualization
   * Create a leaflet-based interactive map
-  * Customize the styling for a leaflet-based map
 
 ---
 
 ### Exercise 7.2 Review - Option A
     
-1. [Population Density] The problem below visualizes [population
+[Population Density] The problem below visualizes [population
 data](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week7/exercises/data/afripop2020.tif?raw=true)
 from the `afrilearndata` package.
 
@@ -105,14 +105,13 @@ c. Visualize the data. What are some regions with the lowest and highest
 population densities?
  
 
-```{r, fig.width = 8, fig.height = 8, out.width = 290}
+```{r, fig.width = 10, fig.height = 8, out.width = 310}
 pop_df <- population %>%
   as.data.frame(xy = TRUE) %>%
   drop_na() %>%
   rename(population = afripop2020.tif.raw.true)
 ggplot(pop_df) +
-  geom_raster(aes(x, y, fill = population)) +
-  coord_sf()
+  geom_raster(aes(x, y, fill = population))
 ```
 
 ---
@@ -157,15 +156,34 @@ ggplot(pop_df) +
 ---
 
 ### Exercise 7.2 Review - Option B
+[NYC Trees] In this problem, we'll use vector data to enrich a visualization
+of trees in New York City. In the process, we'll practice reading in and
+generating summaries of geospatial data.
+    
+a. The data at this
+[link](https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv)
+include a subset of data from the New York City Tree Census. Make a scatterplot
+of the locations of all trees in the data, coloring in by tree species group and
+faceting by health.
 
 ```{r, fig.width = 10, fig.height = 4, out.width = 900}
 trees <- read_csv("https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv")
+```
+
+---
+
+a. The data at this
+[link](https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv)
+include a subset of data from the New York City Tree Census. Make a scatterplot
+of the locations of all trees in the data, coloring in by tree species group and
+faceting by health.
+
+```{r, fig.width = 10, fig.height = 4, out.width = 850}
 ggplot(trees) +
   geom_point(aes(longitude, latitude, col = species_group)) +
   coord_fixed() +
   facet_wrap(~ health)
 ```
-
 
 ---
 
@@ -209,15 +227,44 @@ ggplot(trees) +
 ```
 
 ---
+b. Suppose we wanted to relate these data to characteristics of the built
+environment. We have curated public data on
+[roads](https://uwmadison.box.com/shared/static/28y5003s1d0w9nqjnk9xme2n86xazuuj.geojson)
+and
+[buildings](https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson)
+within the same neighborhood. Read these data into `sf` objects using `read_sf`.
+For both datasets, report (i) the associated CRS and (ii) the geometry type
+(i.e., one of point, linestring, polygon, multipoint, multilinestring,
+multipolygon, geometry collection).
+
+```{r}
+library(sf)
+roads <- read_sf("https://uwmadison.box.com/shared/static/28y5003s1d0w9nqjnk9xme2n86xazuuj.geojson")
+buildings <- read_sf("https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson")
+```
+
+---
+
+`roads` includes MULTILINESTRINGs in WGS 84 coordinate reference system.
+
+```{r}
+roads
+```
+
+---
+
+`buildings` includes MULTIPOLYGONs, also in WGS 84 CRS.
+
+```{r}
+buildings
+```
+
+---
 
 c. Generate a version of the plot in (a) that has the roads and buildings in the
     background.
     
-```{r, out.width = 620, fig.width = 10, fig.height = 4}
-library(sf)
-roads <- read_sf("https://uwmadison.box.com/shared/static/28y5003s1d0w9nqjnk9xme2n86xazuuj.geojson")
-buildings <- read_sf("https://uwmadison.box.com/shared/static/qfmrp9srsoq0a7oj0e7xmgu5spojr33e.geojson")
-
+```{r, out.width = 790, fig.width = 10, fig.height = 4}
 ggplot(trees) +
   geom_sf(data = roads) +
   geom_sf(data = buildings) +
@@ -227,20 +274,23 @@ ggplot(trees) +
 
 ---
 
-```{r, out.width = 1100, fig.height = 4, fig.width = 10, echo = FALSE}
+```{r, out.width = 1300, fig.height = 6, fig.width = 10, echo = FALSE}
 ggplot(trees) +
   geom_sf(data = roads, size = .1) +
   geom_sf(data = buildings, size = 0) +
   geom_point(
     aes(longitude, latitude, col = species_group, size = tree_dbh),
-    alpha = 0.5
+    alpha = 0.8
   ) +
   scale_color_brewer(palette = "Set3") +
   scale_size(range = c(0.01, 2)) +
   scale_y_continuous(expand = c(0, 0), breaks = c(40.71, 40.725, 40.74)) +
   scale_x_continuous(expand = c(0, 0), breaks = c(-73.995, -73.975)) +
   facet_wrap(~ health) +
-  guides(col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 3)) +
+  guides(
+    col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 2),
+    size = guide_legend(override.aes = list(alpha = 1), ncol = 2)
+    ) +
   theme(
     legend.position = "bottom",
     axis.text = element_text(size = 10)
@@ -255,14 +305,17 @@ ggplot(trees) +
   geom_sf(data = buildings, size = 0) +
   geom_point(
     aes(longitude, latitude, col = species_group, size = tree_dbh),
-    alpha = 0.5
+    alpha = 0.8
   ) +
   scale_color_brewer(palette = "Set3") +
   scale_size(range = c(0.01, 2)) +
   scale_y_continuous(expand = c(0, 0), breaks = c(40.71, 40.725, 40.74)) +
   scale_x_continuous(expand = c(0, 0), breaks = c(-73.995, -73.975)) +
   facet_wrap(~ health) +
-  guides(col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 3)) +
+  guides(
+    col = guide_legend(override.aes = list(alpha = 1, size = 2), ncol = 2),
+    size = guide_legend(override.aes = list(alpha = 1), ncol = 2)
+    ) +
   theme(
     legend.position = "bottom",
     axis.text = element_text(size = 10)
@@ -275,10 +328,15 @@ ggplot(trees) +
 
 We will work through Exercise 13 in Module 2.
 
-
 ---
 
 ### Exercise
 
+Mid-Project Reflection
 
----
+With your teammates, prepare a response to the following prompts,
+
+  * What is one challenge that your team is proud of having resolved?
+  * Which elements of your team's workflow can be potentially improved?
+  * What can the teaching staff do to support your team's efforts over the
+  remainder of the semester?

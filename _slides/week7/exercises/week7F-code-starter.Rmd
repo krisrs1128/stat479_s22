@@ -1,0 +1,59 @@
+---
+author: "Kris Sankaran"
+title: "Week7F Starter"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+```{r}
+library(leaflet)
+
+trees <- read_csv("https://uwmadison.box.com/shared/static/t1mk6i4u5ks5bjxaw2c7soe2z8i75m2o.csv")
+```
+
+```{r}
+large_trees <- trees %>%
+  filter(tree_dbh > 15)
+
+large_trees
+```
+
+```{r}
+library(RColorBrewer)
+
+brewer <- brewer.pal(9, "Set3")
+pal <- colorFactor(brewer, large_trees$species_group)
+
+
+library(leaflet)
+leaflet(large_trees) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircles(~ longitude, ~ latitude, radius = ~ tree_dbh, col = ~ pal(species_group))
+```
+
+
+
+
+
+
