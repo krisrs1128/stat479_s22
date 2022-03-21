@@ -1,0 +1,125 @@
+---
+author: "Kris Sankaran"
+title: "Week8M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(shiny)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Networks and Trees (Part 1)
+
+.pull-left[
+  March 21, 2022
+]
+ 
+---
+
+### Announcements
+
+* Portfolio 3 Peer Review - March 28
+* Portfolio 3 - April 10
+* Project Milestone 3 - April 10
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+  * Use the `ggraph` package to generate a network visualization
+  * Use the `tidygraph` package to read in and manipulate a network dataset
+
+---
+
+### Common Issue in Portfolios
+
+Q: How to use a brush along with other input widgets?
+
+---
+
+### Common Issue in Portfolios
+
+Q: How to use a brush along with other input widgets?
+
+* Be deliberate about how the user inputs should interact with one another.
+Should one over-rule the other? Do you want to show the intersection or union of
+rows satisfying the queries?
+* Assuming we want an intersection or union, the simplest strategy is to observe
+changes to any inputs, and update reactive values accordingly.
+
+---
+
+This is from a modified version of the Airbnb brushing example,
+
+```{r, eval = FALSE}
+server <- function(input, output) {
+  selected <- reactiveVal(rep(TRUE, nrow(rentals)))
+  observe({
+    current <- update_selection(rentals, input$plot_brush, input$room_type)
+    selected(current)
+  })
+  
+  output$histogram <- renderPlot(overlay_histogram(rentals, selected()))
+  output$map <- renderPlot(scatterplot(rentals, selected()))
+}
+```
+
+---
+
+This is from a modified version of the Airbnb brushing example,
+
+```{r}
+update_selection <- function(df, plot_brush, room_input) {
+  sel1 <- brushedPoints(df, plot_brush, allRows = TRUE)$selected_
+  sel2 <- df %>%
+    mutate(selected_room = room_type %in% room_input) %>%
+    pull(selected_room)
+  
+  sel1 & sel2
+}
+```
+
+---
+
+## Live Coding Example
+
+We will work through Exercise 17 in Module 2.
+
+First, take 2 minutes to discuss one of the questions below,
+
+ * What is your current understanding of COVID-19's evolutionary history? What
+ is one gap of your knowledge that this dataset might help fill?
+ * What are some limitations of the available phylogenetic data? What attributes
+ would you have liked to have been collected? Should our visualization come with
+ any caveats?
+ 
+---
+
+### Exercise
+
+* Exercise 8.1 [Movie Genres] on Canvas
+* Can discuss, but submit individually
