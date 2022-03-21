@@ -45,15 +45,8 @@ library(RColorBrewer)
 brewer <- brewer.pal(9, "Set3")
 pal <- colorFactor(brewer, large_trees$species_group)
 
-
 library(leaflet)
 leaflet(large_trees) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   addCircles(~ longitude, ~ latitude, radius = ~ tree_dbh, col = ~ pal(species_group))
 ```
-
-
-
-
-
-

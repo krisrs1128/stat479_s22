@@ -1103,7 +1103,130 @@ also bought these other books").
     * For tasks related to local topology, node-link diagrams are preferable to adjacency matrix visualizations.
     * It is possible to visually encode edge weight in either node-link or adjacency matrix visualizations.
     * It is possible to visually encode node category in either node-link or adjacency matrix visualizations.
+    
+1. [Movie Genres] How do movie genres relate to one another? Is romance + comedy
+a more common combination than fantasy + adventure? We will use the dataset
+[here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/movie_links.csv)
+to answer these questions, using a node-link diagram inspired by (but much
+simpler than) the [film
+flowers](https://observablehq.com/@sxywu/introduction-to-svg-and-d3-js) project
+by Shirley Wu.
+
+    a. Build a `tbl_graph` containing the movies and their links.
+    
+    b. Create a node-link diagram to represent the connections between movies and
+    their genres.
+    
+    c. A list of all the genres in this network is available
+    [here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/genres.csv).
+    Design a strategy to distinguish between genres and movies, and justify your
+    choice of visual encodings. _Hint: Mutate the nodes in the `tbl_graph`._
   
+1. [COVID-19 Phylogeny] We will visualize a phylogenetic tree of [SARS-CoV-2 genetic sequences](https://observablehq.com/@mbostock/sars-cov-2-phylogenetic-tree).
+Each sequence has been annotated with the date and location it was found, and we
+will try to see how genetic variation covaries with these measurements.
+
+    a. Build a `tbl_graph` using the
+    [links](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/covid-edges.csv)
+    and
+    [nodes](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/covid-nodes.csv)
+    associated with the phylogenetic tree. Note that many nodes do not have
+    variables associated with them. This is because annotations are only
+    available for the leaves of the
+    tree, and nodes are unobserved common ancestor viruses.
+    
+    b. Visualize the phylogenetic tree using the data from (a).
+    
+    c. Visually encode the date or location at which each sequence was found (for
+    a challenge, try encoding both). Justify your choice of encodings -- what are
+    some advantages / downsides of the approach you decided on?
+    
+    d. Discuss the resulting visualization. For example, how much genetic
+    diversity do different countries have? Where are different waves located
+    genetically?
+  
+1. [Climate Crisis Youtube recommendations] We will study a
+[dataset](https://observablehq.com/@emma-ba/youtube-recommendation-network-on-the-climate-crisis)
+giving links between Youtube videos related to the climate crisis.  The data
+were gathered by simulating a user's browsing through recommendations, after
+having initially searched using a set of climate-related seed terms. Each node
+is a video, which includes features like the number of views and the channel it
+belongs to. Each edge provides an algorithmically generated recommendation.
+
+    a. Build a `tbl_graph` from the provided [node](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/climate-nodes.csv) and [edge](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/climate-edges.csv) data.
+    
+    b. Visualize the connections between videos as a node-link diagram. Color nodes in by the simulated browser session.
+    
+    c. Visualize the connections between videos as an adjacency matrix.
+    
+    d. Compare and contrast the visualizations in parts (b) and (c). What are
+    some of the trade-offs associated with using one view vs. the other?
+    
+    e. Select a small number of channels of interest (e.g., "The Daily Show with
+    Trevor Noah") For either parts (b) or (c), find a way to visually
+    distinguish nodes belonging to these channels from the rest.
+
+1. [UK Energy Flow] We will visualize how energy is produced and consumed in the
+United States, using a [dataset](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/energy.csv) from the UK's Department of Energy and Climate
+Change. Nodes and edges are used to classify types of activity that produce or
+consume energy. For example, the edge
+
+    ```
+    Wind    Electricity grid    289 
+    ```
+
+    means that 289 KwH produced by wind power was sent to the country's electricity grid.
+    
+    a. Build a `tbl_graph` from the provided edges. Ensure that the resulting
+    graph object has directed edges.
+    
+    b. Use `ggraph` to visualize the flow of energy across nodes in this
+    network. Ensure nodes are annotated.
+    
+    c. Experiment with several layouts. Which do you find most useful? Is there
+    an alternative layout you would prefer? Explain your reasoning.
+    
+1. [Stack Overflow Tag Network] Questions on Stack Overflow are given tags. This
+makes it easy to search through all the questions on a certain topic. The
+co-occurrence of tags appearing on certain questions also makes it natural to
+build a network between these tags -- we draw a weighted edge between
+co-occurring tag, with weights representing the number of questions within which
+the pair appears. We will look at only a small subset of tags, originally
+presented in [this
+post](https://observablehq.com/@philipp-ulm/network-of-stack-overflow-tags). In
+the process, we will practice creating network visualizations and encoding detected cluster memberships.
+
+    a. Build a `tbl_graph` object based on [node](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/stack_overflow-nodes.csv) and [link](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/stack_overflow-edges.csv) data that were
+    generated using a web scraper.
+    
+    b. Create a node-link visualization associated with the network.
+    
+    c. Cluster nodes and encode modify your visualization from (b) to encode
+    cluster membership. _Hint: Mutate the graph using the `group_louvain()` or
+    `group_infomap()` functions from `tidygraph`._
+    
+    d. Comment on the visualization from (c). What do the clusters seem to
+    correspond to?
+
+1. [Coltrane Network] We will visualize the network of musicians who share a
+recording with John Coltrane, obtained from this
+[source](https://observablehq.com/@arnauqc/john-coltranes-co-authorship-network).
+Two musicians are linked with one another if they appeared on an album together,
+at least as recorded in the MusicBrainz database. To visualize these data, we
+will practice creating network visualizations and encoding detected cluster
+memberships.
+
+    a. Build a `tbl_graph` object based on the [node](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/coltraine-nodes.csv) and [link](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/coltraine-edges.csv) data.
+
+    b. Create a node-link visualization associated with the network.
+    
+    c. Cluster nodes and encode modify your visualization from (b) to encode
+    cluster membership. _Hint: Mutate the graph using the `group_louvain()` or
+    `group_infomap()` functions from `tidygraph`._
+    
+    d. Comment on the visualization from (c). What do the clusters seem to
+    correspond to?
+
 # Module 3: Visualizing Models
 
 1. [Polio incidence] In this problem, we will use a heatmap to visualize a large
