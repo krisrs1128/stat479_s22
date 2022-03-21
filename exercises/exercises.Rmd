@@ -1076,27 +1076,24 @@ dataset of Amazon bestselling US Politics books. Books are linked by an edge if
 they appeared together in the recommendations ("customers who bought this book
 also bought these other books").
     
-    a. The code below reads in the edges and nodes associated with the network. The
-    edges dataset only contains IDs of co-recommended books, while the nodes data
-    includes attributes associated with each book. Use the edges dataset to create
-    an igraph graph object, and use the `ggnetwork` function to construct a
-    data.frame summarizing the layout of the network. Use a `layout_with_fr` layout,
-    as in the reading.
+    a. The code below reads in the edges and nodes associated with the network.
+    The edges dataset only contains IDs of co-recommended books, while the nodes
+    data includes attributes associated with each book. Build a `tbl_graph`
+    object to store the graph.
     
     ```{r}
     edges <- read_csv("https://uwmadison.box.com/shared/static/54i59bfc5jhymnn3hsw8fyolujesalut.csv")
     nodes <- read_csv("https://uwmadison.box.com/shared/static/u2x392i79jycubo5rhzryxjsvd1jjrdy.csv", col_types = "ccc")
     ```
     
-    b. The output from (a) does not include any attributes about the books, since
-    this is only available in the `nodes` dataset, and we built the graph layout
-    using only `edges`. Join in the node attribute data. **Hint**: Use `left_join`, but
-    using the `by` argument to ensure that `name` in the output of `ggnetwork` and
-    `Id` in the original `nodes` dataset are associated with one another.
+    b. Use the result from part (a) to visualize the network as a node-link
+    diagram. Include the book's title in the node label, and shade in the node
+    according to political ideology.
     
-    c. Use the result from part (b) to visualize the network using. Include the
-    book's title in the node label, and shade in the node according to political
-    ideology.
+    c. Create the analogous adjacency matrix visualization. Provide examples of
+    visual queries that are easy to answer using one encoding but not the other
+    (i.e., what is easy to see in the node-link view vs. what is easy to see in
+    the adjacency matrix).
     
 1. [Network Vis T/F] Select all the true statements about network visualization.
     * For large, dense networks, node-link diagrams are preferable to adjacency matrix visualizations.
@@ -1148,7 +1145,7 @@ will try to see how genetic variation covaries with these measurements.
 1. [Climate Crisis Youtube recommendations] We will study a
 [dataset](https://observablehq.com/@emma-ba/youtube-recommendation-network-on-the-climate-crisis)
 giving links between Youtube videos related to the climate crisis.  The data
-were gathered by simulating a user's browsing through recommendations, after
+were gathered by simulating a user browsing through recommendations, after
 having initially searched using a set of climate-related seed terms. Each node
 is a video, which includes features like the number of views and the channel it
 belongs to. Each edge provides an algorithmically generated recommendation.
@@ -1175,7 +1172,7 @@ consume energy. For example, the edge
     Wind    Electricity grid    289 
     ```
 
-    means that 289 KwH produced by wind power was sent to the country's electricity grid.
+    means that 289 KwH produced by wind power were sent to the country's electricity grid.
     
     a. Build a `tbl_graph` from the provided edges. Ensure that the resulting
     graph object has directed edges.
@@ -1220,12 +1217,11 @@ memberships.
 
     b. Create a node-link visualization associated with the network.
     
-    c. Cluster nodes and encode modify your visualization from (b) to encode
-    cluster membership. _Hint: Mutate the graph using the `group_louvain()` or
+    c. Cluster nodes and modify your visualization from (b) to encode cluster
+    membership. _Hint: Mutate the graph using the `group_louvain()` or
     `group_infomap()` functions from `tidygraph`._
     
-    d. Comment on the visualization from (c). What do the clusters seem to
-    correspond to?
+    d. Comment on the visualization from (c). How would you interpret the resulting clustering?
 
 # Module 3: Visualizing Models
 
