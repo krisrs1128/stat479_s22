@@ -1,0 +1,69 @@
+---
+author: "Kris Sankaran"
+title: "Week8M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+```{r}
+library(tidygraph)
+library(ggraph)
+edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/covid-edges.csv")
+nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/covid-nodes.csv")
+
+### tbl_graph(...?)
+```
+
+```{r}
+G <- tbl_graph(nodes, edges)
+ggraph(G) +
+  geom_edge_diagonal(width = 1, colour = "#d3d3d3") +
+  geom_node_point(aes(col = date)) +
+  theme_void()
+```
+
+```{r}
+ G %>%
+  activate(nodes) %>%
+  as_tibble() %>%
+  count(country)
+
+G <- G %>%
+  activate(nodes) %>%
+  mutate(country_group = fct_lump_n(country, n = 8))
+
+ggraph(G) +
+  geom_edge_diagonal(width = 1, colour = "#d3d3d3") +
+  geom_node_point(aes(col = date)) +
+  theme_void() +
+  facet_wrap(~ reorder(country_group, date, min, na.rm = TRUE))
+
+ggraph(G) +
+  geom_edge_diagonal(width = 1, colour = "#d3d3d3") +
+  geom_node_point(aes(col = country_group)) +
+  scale_color_brewer(palette = "Set3") +
+  theme_void() +
+  facet_wrap(~ cut(date, 8))
+```
+
