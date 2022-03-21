@@ -1,0 +1,136 @@
+---
+author: "Kris Sankaran"
+title: "Week8F"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(shiny)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Networks and Trees (Part 3)
+
+.pull-left[
+  March 25, 2022
+]
+ 
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+  * Use the `ggraph` package to generate adjacency matrix visualizations
+  * Discuss the relative merits of adjacency matrix vs. node-link visualizations
+
+---
+
+### Exercise Review
+
+We will visualize the network of musicians who share a recording with John
+Coltrane, obtained from this
+[source](https://observablehq.com/@arnauqc/john-coltranes-co-authorship-network).
+Two musicians are linked with one another if they appeared on an album together,
+at least as recorded in the MusicBrainz database. To visualize these data, we
+will practice creating network visualizations and encoding detected cluster
+memberships.
+
+
+---
+
+a. Build a `tbl_graph` object based on the
+[node](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/coltraine-nodes.csv)
+and
+[link](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/coltraine-edges.csv)
+data.
+
+```{r}
+library(tidygraph)
+nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/coltraine-nodes.csv")
+edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/coltraine-edges.csv")
+G <- tbl_graph(nodes, edges, directed = FALSE)
+G
+```
+
+---
+
+b. Create a node-link visualization associated with the network.
+
+```{r, fig.width = 10, fig.height = 6}
+library(ggraph)
+ggraph(G, "fr") +
+  geom_edge_link(colour = "#d3d3d3", width = 1, alpha = 0.8) +
+  geom_node_label(aes(label = id), fill = "#f7f7f7") +
+  theme_void()
+```
+
+---
+
+c. Cluster nodes and encode modify your visualization from (b) to encode
+cluster membership. _Hint: Mutate the graph using the `group_louvain()` or
+`group_infomap()` functions from `tidygraph`._
+
+```{r, fig.width = 10, fig.height = 6, out.width = 425}
+G <- G %>%
+  mutate(cluster = as.factor(group_louvain()))
+ggraph(G) +
+  geom_edge_link(colour = "#d3d3d3", width = 1, alpha = 0.8) +
+  geom_node_label(aes(label = id, fill = cluster)) +
+  scale_fill_brewer(palette = "Set2") +
+  theme_void()
+```
+
+
+---
+
+d. Comment on the visualization from (c). How would you interpret the resulting clustering?
+
+* Two of the clusters seem relatively well-defined (blue and orange, though blue
+has more within-cluster links).
+* People who only collaborate with John Coltrane are assigned to the blue-green cluster.
+* A bit surprisingly, Miles Davis, the Miles Davis Quintet, the Miles Davis
+Sextet, and the Miles Davis All Stars do not all appear in the same cluster. The
+same is true for Paul Chambers. But on some reflection, it makes sense -- two
+groups including Miles Davis cannot possibly have had a collaboration together.
+
+---
+
+## Live Coding Example
+
+We will work through (parts of) Exercise 18 in Module 2.
+
+First, take 2 minutes to discuss the questions below,
+
+  * What is your intuition about how this network is structured? If we had a few
+  different sessions browsing videos, would we see several long chains? A few hubs and spokes? Tightly connected clusters?
+  * What characteristics do you think result in links between videos? Similarity
+  in topics? Being part of the same channels? The target having many more views?
+ 
+---
+
+### Exercise
+
+* Exercise 8.3 [Political Book Recommendations] on Canvas
+* Can discuss, but submit individually

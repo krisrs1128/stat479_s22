@@ -1,0 +1,146 @@
+---
+author: "Kris Sankaran"
+title: "Week8M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(shiny)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 4, fig.width = 6)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Networks and Trees (Part 2)
+
+.pull-left[
+  March 23, 2022
+]
+ 
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+  * Use the `ggraph` package to customize a network visualization
+  * Use the `tidygraph` package to generate and visualize clusters in a network
+
+---
+
+### Exercise Review
+
+How do movie genres relate to one another? Is romance + comedy a more common
+combination than fantasy + adventure? We will use the dataset
+[here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/movie_links.csv)
+to answer these questions, using a node-link diagram inspired by (but much
+simpler than) the [film
+flowers](https://observablehq.com/@sxywu/introduction-to-svg-and-d3-js) project
+by Shirley Wu.
+
+---
+
+Build a `tbl_graph` containing the movies and their links.
+
+```{r}
+library(tidygraph)
+edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/movie_links.csv")
+G <- tbl_graph(edges = edges)
+G
+```
+
+---
+
+b. Create a node-link diagram to represent the connections between movies and their genres.
+
+```{r, fig.width = 10, fig.height = 5}
+library(ggraph)
+ggraph(G) +
+  geom_edge_link() +
+  geom_node_text(aes(label = name))
+```
+
+---
+
+b. Create a node-link diagram to represent the connections between movies and their genres.
+
+```{r, fig.width = 11, fig.height = 6, out.width = 690}
+ggraph(G, "kk") +
+  geom_edge_link() +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+```
+
+---
+
+b. Create a node-link diagram to represent the connections between movies and their genres.
+
+```{r, fig.width = 11, fig.height = 6, out.width = 690}
+ggraph(G, "kk") +
+  geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.6) +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+```
+
+---
+
+```{r}
+genres <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/genres.csv")
+G <- G %>%
+  activate(nodes) %>%
+  mutate(type = name %in% genres$genre)
+G
+```
+
+---
+
+```{r, fig.width = 11, fig.height = 6, out.width = 750}
+ggraph(G, "kk") +
+  geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.6) +
+  geom_node_text(aes(label = name, size = type, col = type)) +
+  scale_color_manual(values = c("#BF4545", "#225C73")) +
+  scale_size_discrete(range = c(2.5, 5)) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+---
+
+## Live Coding Example
+
+We will work through Exercise 20 in Module 2.
+
+First, take 2 minutes to discuss one of the questions below,
+
+  * What is your intuition about how the overall stack overflow tag network is
+  structured? Do you expect to see hubs and spokes? Tightly connected clusters?
+  Long trees or chains?
+  * Imagine you were an engineer at Stack Overflow. What is one potential application of the tag network?
+  * Imagine you are an academic studying how software engineers debug programs.
+  What is one potential application of the tag network?
+ 
+---
+
+### Exercise
+
+* Exercise 8.2 [Coltrane Network] on Canvas
+* Can discuss, but submit individually
