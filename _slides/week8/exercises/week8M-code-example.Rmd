@@ -34,6 +34,9 @@ nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main
 
 ### tbl_graph(...?)
 ```
+```{r}
+G <- tbl_graph(edges = edges)
+```
 
 ```{r}
 G <- tbl_graph(nodes, edges)
@@ -66,4 +69,24 @@ ggraph(G) +
   theme_void() +
   facet_wrap(~ cut(date, 8))
 ```
+
+* Only need to pass in edges to build tbl_graph
+* How to show text?
+    - geom_node_point - > geom_node_text, geom_node_label
+  
+* Changing layout of the nodes
+
+ggraph(G, "fr")
+ggraph(G, "kk")
+
+* Size of the graph / text
+
+```{r, fig.width = 8, fig.height = 8}
+
+```
+
+
+
+
+
 

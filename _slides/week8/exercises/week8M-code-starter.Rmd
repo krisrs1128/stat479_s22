@@ -34,3 +34,32 @@ nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main
 
 ### tbl_graph(...?)
 ```
+```{r}
+library(tidygraph)
+G <- tbl_graph(nodes, edges)
+
+library(ggraph)
+
+G <- G %>%
+  activate(nodes) %>%
+  mutate(country_group = fct_lump_n(country, 8))
+
+
+
+ggraph(G) +
+  geom_edge_diagonal() +
+  geom_node_point(aes(color = country_group, size = date)) +
+  facet_wrap(~ cut(date, 5))
+
+ggraph(G) +
+  geom_edge_diagonal(alpha = 0.8, colour = "#d3d3d3") +
+  geom_node_label(aes(label = name)) +
+  theme_void()
+
+
+```
+
+
+
+
+

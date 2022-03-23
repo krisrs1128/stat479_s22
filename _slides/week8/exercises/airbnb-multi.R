@@ -22,6 +22,7 @@ theme_set(th)
 
 rentals <- read_csv("https://uwmadison.box.com/shared/static/zi72ugnpku714rbqo2og9tv2yib5xped.csv") %>%
   mutate(trunc_price = pmin(price, 1e3))
+rooms <- unique(rentals$room_type)
 
 scatterplot <- function(df, selected_) {
   df %>%
@@ -50,32 +51,34 @@ overlay_histogram <- function(df, selected_) {
     scale_fill_brewer(palette = "Set2", guide = "none")
 }
 
-filter_df <- function(df, selected_) {
-  filter(df, selected_) %>%
-    select(name, price, neighbourhood, number_of_reviews)
-}
-
 ui <- fluidPage(
   h3("NYC Airbnb Rentals"),
   fluidRow(
     column(6,
+      selectInput("room_type", "Room Types", choices = rooms, selected = rooms, multiple = TRUE),
       plotOutput("histogram", brush = brushOpts("plot_brush", direction = "x"), height = 200),
-      dataTableOutput("table")
     ),
     column(6, plotOutput("map", brush = "plot_brush", height = 600)),
   ),
   theme = bs_theme(bootswatch = "minty")
 )
 
+update_selection <- function(df, plot_brush, room_input) {
+  sel1 <- brushedPoints(df, plot_brush, allRows = TRUE)$selected_
+  sel2 <- df %>%
+    mutate(selected_room = room_type %in% room_input) %>%
+    pull(selected_room)
+  sel1 & sel2
+}
+
 server <- function(input, output) {
   selected <- reactiveVal(rep(TRUE, nrow(rentals)))
-  observeEvent(input$plot_brush, {
-    selected(brushedPoints(rentals, input$plot_brush, allRows = TRUE)$selected_)
+  observe({
+    current <- update_selection(rentals, input$plot_brush, input$room_type)
+    selected(current)
   })
-  
   output$histogram <- renderPlot(overlay_histogram(rentals, selected()))
   output$map <- renderPlot(scatterplot(rentals, selected()))
-  output$table <- renderDataTable(filter_df(rentals, selected()))
 }
 
 shinyApp(ui, server)

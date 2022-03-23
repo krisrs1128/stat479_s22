@@ -113,7 +113,7 @@ G
 
 ---
 
-```{r, fig.width = 11, fig.height = 6, out.width = 750}
+```{r, fig.width = 11, fig.height = 6, out.width = 730}
 ggraph(G, "kk") +
   geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.6) +
   geom_node_text(aes(label = name, size = type, col = type)) +
