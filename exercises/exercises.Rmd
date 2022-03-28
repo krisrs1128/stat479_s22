@@ -1302,7 +1302,49 @@ point as the three clusters are made to gradually overlap.
     
     c. Visualize the silhouette statistics from part (b) overlaid onto the simulated
     data. Discuss the results.
+    
+1. [Colony Collapse] In this problem, we will study a dataset describing factors
+that might be leading to colony collapse disorder among bees. Since there are
+multiple stressors for each state $\times$ timepoint combination, we will use
+clustering to create a summarized "ecological stress" profile.
 
+    a. The code below reads in data from its original Tidy Tuesday source and
+    replaces NAs with 0's. We will summarize each state $\times$ timepoint
+    combination by its profile of `stress_pct` across each stressor. Reshape the
+    data so that `stressor` appears along columns, with the associated
+    percentage contained within the table. Each row is therefore a profile of
+    the amount of different stressors at a particular location and time.
+    
+    ```{r}
+    stressor <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-11/stressor.csv') %>%
+      mutate(stress_pct = replace_na(stress_pct, 0))
+    ```
+    
+    b. Apply $K$-means to the profiles constructed in part (a). You may choose
+    $K$. Visualize and briefly interpret the resulting centroids.
+    
+    c. Design and implement a visualization to show the change in cluster
+    memberships over time. Briefly interpret your results in context.
+    
+    d. [Bonus] The code below reads in spatial data associated with each state.
+    Design and implement a visualization that encodes spatial variation across
+    clusters, either at a single timepoint or over all time. An example result is shown in Figure \ref{fig:}
+    
+    ```{r}
+    library(rnaturalearth)
+    library(sf)
+    states <- ne_states("United States of America") %>%
+      st_as_sf() %>%
+      rmapshaper::ms_simplify() %>% # reduce size for easy plotting
+      filter(!(name %in% c("Alaska", "Hawaii"))) %>%
+      select(name, geometry) %>%
+      rename(state = name)
+    ```
+    
+    ```{r, fig.cap="\\label{fig:ccd_states} Spatial distribution of colony collapse clusters over time.", echo = FALSE}
+    EBImage::display(EBImage::readImage("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/ccd_variation.png"))
+    ```
+    
 1. [Hierarchical Clustering T/F] Figure \@ref(fig-hclusttf) shows a subset of a large hierarchical clustering tree. Select all the true statements below.
     * Samples C and D are more similar to one another than A and B.
     * If this subtree were cut to form K = 5 clusters, then C and D would belong to the same cluster.
