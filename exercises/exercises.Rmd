@@ -1082,7 +1082,7 @@ also bought these other books").
     object to store the graph.
     
     ```{r}
-    edges <- read_csv("https://uwmadison.box.com/shared/static/54i59bfc5jhymnn3hsw8fyolujesalut.csv")
+    edges <- read_csv("https://uwmadison.box.com/shared/static/54i59bfc5jhymnn3hsw8fyolujesalut.csv", col_types = "cci")
     nodes <- read_csv("https://uwmadison.box.com/shared/static/u2x392i79jycubo5rhzryxjsvd1jjrdy.csv", col_types = "ccc")
     ```
     

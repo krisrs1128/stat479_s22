@@ -31,6 +31,29 @@ library(tidygraph)
 library(ggraph)
 edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/stack_overflow-edges.csv")
 nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/stack_overflow-nodes.csv")
-
-### tbl_graph(...?)
 ```
+
+
+```{r, fig.width = 8, fig.height = 5}
+G <- tbl_graph(nodes, edges, directed = FALSE)
+ggraph(G, "nicely") +
+  geom_edge_link(alpha = 0.6, colour = "#d3d3d3", size = 0.6) +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+```
+```{r, fig.width = 8, fig.height = 5}
+G <- G %>%
+  mutate(cluster = as.factor(group_louvain()))
+
+ggraph(G, "nicely") +
+  geom_edge_link(
+    aes(width = value),
+    alpha = 0.6, colour = "#d3d3d3", size = 0.6
+    ) +
+  geom_node_text(aes(label = name, col = cluster)) +
+  scale_edge_width(range = c(0.5, 5)) +
+  theme_void() +
+  theme(legend.position = "none") +
+  facet_wrap(~ cluster)
+```
+

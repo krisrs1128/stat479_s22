@@ -34,3 +34,26 @@ nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main
 edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week8/exercises/data/climate-edges.csv")
 ### tbl_graph(...?)
 ```
+```{r, fig.width = 3, fig.height = 3}
+library(tidygraph)
+library(ggraph)
+G <- tbl_graph(nodes, edges) %>%
+  mutate(genre_group = fct_lump_n(genre, n = 8))
+
+G_ <- G %>%
+  filter(row_number() < 200)
+
+ggraph(G, "kk") +
+  geom_edge_link() +
+  geom_node_point(aes(color = genre_group, size = views))
+
+ggraph(G, "matrix") +
+  geom_edge_tile()
+```
+
+
+
+
+
+
+
