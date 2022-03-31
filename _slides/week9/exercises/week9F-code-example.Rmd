@@ -1,0 +1,82 @@
+---
+author: ""
+title: "Week9W Code Starter"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+[Chicago Traffic Accidents] The dataset [here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/chicago_crashes.csv) is a preprocessed version of a
+dataset downloaded from Chicago's official traffic accidents
+[database](https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if/data).
+In this problem, we will use a heatmap to understand what times during the week
+and over the year are associated with the highest number of traffic accidents.
+
+
+    a. Use a heatmap to visualize the accident counts over time. Specifically,
+    one dimension of the heatmap should index the 168 hours in the week, and the
+    other should index every week from 2013-03-03 to 2022-03-27.
+    
+```{r}
+library(tidyverse)
+crashes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/chicago_crashes.csv") %>%
+  pivot_wider(names_from = c("day_of_week", "hour"), values_from = "n", values_fill = 0)
+```
+
+```{r}
+crashes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/chicago_crashes.csv")
+crashes$hour %>% unique()
+```
+
+
+
+
+```{r, fig.height = 10}
+library(superheat)
+crashes_mat <- crashes %>%
+  pivot_wider(names_from = c("day_of_week", "hour"), values_from = "n", values_fill = 0) %>%
+  select(-week)
+superheat(
+  t(crashes_mat),
+  pretty.order.cols = TRUE
+)
+```
+    
+    b. Enrich your visualization with information about the total number of
+    accidents in each of the 168 hours in the week. _Hint: Use the `yt` or `yr`
+    arguments to `superheat`._
+  
+```{r, fig.width = 6, fig.height = 4}
+superheat(
+  t(crashes_mat),
+  pretty.order.cols = TRUE,
+  yr = colSums(crashes_mat),
+  yr.plot.type = "bar",
+  yr.bar.col = "#d3d3d3",
+  yr.obs.col = rep("#d3d3d3", ncol(crashes_mat))
+)
+```
+  
+  
+    c. Provide a brief interpretion of your final visualization.
+    

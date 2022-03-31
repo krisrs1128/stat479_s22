@@ -1,0 +1,138 @@
+---
+author: ""
+title: "Week9W Code Starter"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+1. [Beijing Air Pollution] This problem studies daily air pollution and weather
+patterns in Beijing from 2010 to 2014. Each row in this dataset gives
+measurements for three variables, `pollution`, `temp`, and `wndspd` over time
+for a single day, indexed by `date`. For example the `temp_13` column gives the
+temperature at 1pm. Note that both `pollution` and `wndspd` have been
+$\log\left(1 + x\right)$ transformed.
+
+    a. Cluster all the days using a hierarchical clustering. Be sure to scale
+    the columns in advance, so that no single variable has undue influence on
+    the result. Cut the tree so that we are left with 10 clusters, and provide a
+    ribbon plot to visualize several quantiles associated with each cluster's
+    typical pollution, temperature, and windspeed trajectories. visualization to
+    understand the centroids of each cluster. Briefly interpret the main
+    patterns you observe.
+    
+```{r}
+pollution <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/pollution_wide.csv")
+
+fit <- pollution %>%
+  select(-date) %>%
+  scale() %>%
+  dist() %>%
+  hclust()
+```
+ 
+```{r}
+ribbon_data <- pollution %>%
+  mutate(cluster = cutree(fit, k = 10)) %>%
+  pivot_longer(contains("_")) %>%
+  separate(name, c("variable", "hour"), convert = TRUE) %>%
+  group_by(cluster, variable, hour) %>%
+  summarise(
+    q1 = quantile(value, 0.25),
+    median = median(value),
+    q3 = quantile(value, 0.75)
+  )
+
+cluster_order <- ribbon_data %>%
+  filter(variable == "pollution") %>%
+  group_by(cluster) %>%
+  summarise(m = mean(median)) %>%
+  arrange(-m) %>%
+  pull(cluster)
+
+ribbon_data <- ribbon_data %>%
+  mutate(cluster = factor(cluster, levels = cluster_order))
+
+ggplot(ribbon_data) +
+  geom_ribbon(aes(hour, ymin = q1, ymax = q3)) +
+  geom_line(aes(hour, median)) +
+  facet_grid(variable ~ cluster, scale = "free_y")
+```
+    
+    b. Visualize the hierarchical clustering tree associated with your
+    clustering from part (a). Bonus: For a single time of day, encode the
+    average pollution level for all descendant nodes within your tree
+    representation. To summarize a the pollution level of all descendants leaves
+    in a tree, you may use the `map_local_dbl` function from `tidygraph`.
+    
+    
+```{r}
+library(tidygraph)
+library(ggraph)
+G <- as_tbl_graph(fit)
+ggraph(G) +
+  geom_edge_diagonal() +
+  geom_node_point()
+```
+```{r}
+pollution_labeled <- pollution %>%
+  mutate(label = as.factor(row_number()))
+
+node_data <- G %>%
+  activate(nodes) %>%
+  as.data.frame() %>%
+  left_join(pollution_labeled)
+```
+    
+    
+```{r, eval = FALSE}
+mean_fun <- function(neighborhood, cur_var = "pollution_10", ...) {
+  cur_pollution <- neighborhood %>%
+    filter(leaf) %>%
+    pull(cur_var)
+  mean(cur_pollution, na.rm = TRUE)
+}
+
+G2 <- tbl_graph(node_data, G %>% activate(edges) %>% as.data.frame()) %>%
+  mutate(
+    avg_pollution = map_local_dbl(order = graph_order(), mode = "out", .f = mean_fun),
+    avg_date = map_local_dbl(order = graph_order(), mode = "out", .f = mean_fun, cur_var = "date")
+    )
+```
+
+```{r, fig.height = 6, fig.width = 6}
+G2 %>%
+  ggraph(circular = TRUE) +
+  geom_edge_diagonal(colour = "#d3d3d3", alpha = 0.7, size = 0.8) +
+  geom_node_point(aes(col = avg_pollution)) +
+  scale_color_viridis_c() +
+  coord_fixed()
+
+G2 %>%
+  ggraph(circular = TRUE) +
+  geom_edge_diagonal(colour = "#d3d3d3", alpha = 0.7, size = 0.8) +
+  geom_node_point(aes(col = avg_date)) +
+  scale_color_viridis_c() +
+  coord_fixed()
+```
+

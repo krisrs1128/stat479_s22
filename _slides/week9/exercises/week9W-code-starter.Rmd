@@ -1,0 +1,123 @@
+---
+author: ""
+title: "Week9W Code Starter"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+1. [Beijing Air Pollution] This problem studies daily air pollution and weather
+patterns in Beijing from 2010 to 2014. Each row in this dataset gives
+measurements for three variables, `pollution`, `temp`, and `wndspd` over time
+for a single day, indexed by `date`. For example the `temp_13` column gives the
+temperature at 1pm. Note that both `pollution` and `wndspd` have been
+$\log\left(1 + x\right)$ transformed.
+
+    a. Cluster all the days using a hierarchical clustering. Be sure to scale
+    the columns in advance, so that no single variable has undue influence on
+    the result. Cut the tree so that we are left with 10 clusters, and provide a
+    ribbon plot to visualize several quantiles associated with each cluster's
+    typical pollution, temperature, and windspeed trajectories. visualization to
+    understand the centroids of each cluster. Briefly interpret the main
+    patterns you observe.
+    
+make the clustering
+1. scale the data before clustering
+2. Run hierarchical clustering
+3. cut the tree to get 10 clusters
+    
+```{r}
+scaled_pollution <- pollution %>%
+  select(-date) %>%
+  scale()
+```
+
+```{r}
+fit <- scaled_pollution %>%
+  dist() %>%
+  hclust()
+```
+
+```{r}
+memberships <- cutree(fit, 10)
+ memberships
+```
+    
+visualize the clustering (ribbon plot)
+1. get quantiles associated with each cluster
+2. visualize the quantiles
+
+```{r}
+pollution_ <- pollution %>%
+  mutate(cluster = factor(memberships))
+pollution_$cluster
+```
+
+```{r}
+pollution_ <- pollution_ %>%
+  pivot_longer(contains("_")) %>%
+  separate(name, c("variable", "hour"), convert = TRUE)
+```
+    
+```{r}
+quantiles <- pollution_ %>%
+  group_by(cluster, variable, hour) %>%
+  summarise(
+    q1 = quantile(value, 0.25),
+    median = median(value),
+    q3 = quantile(value, 0.75),
+  )
+
+quantiles
+```
+```{r}
+ggplot(quantiles) +
+  geom_ribbon(aes(hour, ymin = q1, ymax = q3), alpha = 0.3) +
+  geom_line(aes(hour, median)) +
+  facet_grid(variable ~ cluster, scale = "free_y")
+```
+    
+```{r}
+pollution <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/pollution_wide.csv")
+pollution
+```
+    
+    b. Visualize the hierarchical clustering tree associated with your
+    clustering from part (a). Bonus: For a single time of day, encode the
+    average pollution level for all descendant nodes within your tree
+    representation. To summarize a the pollution level of all descendants leaves
+    in a tree, you may use the `map_local_dbl` function from `tidygraph`.
+    
+```{r, eval = FALSE}
+mean_fun <- function(neighborhood, cur_var = "pollution_10", ...) {
+  cur_pollution <- neighborhood %>%
+    filter(leaf) %>%
+    pull(cur_var)
+  mean(cur_pollution, na.rm = TRUE)
+}
+
+G %>%
+  mutate(
+    avg_pollution = map_local_dbl(order = graph_order(), mode = "out", .f = mean_fun)
+    )
+```
