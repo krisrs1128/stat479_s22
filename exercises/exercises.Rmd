@@ -1454,9 +1454,9 @@ not statistical methodology.
     what each centroid represents.
     
     b. At another point, you applied hierarchical clustering to the same
-    dataset. You include tree visualization of the clustering output in your
-    report. Provide a brief, non-technical explanation of how to interpret the
-    tree.
+    dataset. You include a visualization of the hierarchical clustering tree in
+    your report. Provide a brief, non-technical explanation of how to interpret
+    the tree.
     
     c. Your audience finds the hierarchical clustering tree, but wonders why you
     needed a new algorithm to produce it. They think that you would have gotten
@@ -1464,7 +1464,7 @@ not statistical methodology.
     $K$. Respond to their observations.
     
 1. [Beijing Air Pollution] This problem studies daily air pollution and weather
-patterns in Beijing from 2010 to 2014. Each row in this dataset gives
+patterns in Beijing from 2010 to 2014. Each row in this [dataset](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/pollution_wide.csv) gives
 measurements for three variables, `pollution`, `temp`, and `wndspd` over time
 for a single day, indexed by `date`. For example the `temp_13` column gives the
 temperature at 1pm. Note that both `pollution` and `wndspd` have been
@@ -1472,10 +1472,11 @@ $\log\left(1 + x\right)$ transformed.
 
     a. Cluster all the days using a hierarchical clustering. Be sure to scale
     the columns in advance, so that no single variable has undue influence on
-    the result. Provide a ribbon plot to visualize several quantiles associated
-    with each cluster's typical pollution, temperature, and windspeed
-    trajectories. visualization to understand the centroids of each cluster.
-    Briefly interpret the main patterns you observe.
+    the result. Cut the tree so that we are left with 10 clusters, and provide a
+    ribbon plot to visualize several quantiles associated with each cluster's
+    typical pollution, temperature, and windspeed trajectories. visualization to
+    understand the centroids of each cluster. Briefly interpret the main
+    patterns you observe.
     
     b. Visualize the hierarchical clustering tree associated with your
     clustering from part (a). Bonus: For a single time of day, encode the
