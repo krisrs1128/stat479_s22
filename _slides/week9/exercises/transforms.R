@@ -24,7 +24,7 @@ crashes <- read_csv("Traffic_Crashes_-_Crashes.csv")
 crashes %>%
   mutate(
     CRASH_DATE = as_datetime(CRASH_DATE, format = "%m/%d/%Y %H:%M:%S %p"),
-    hour = str_pad(hour(CRASH_DATE), 2, pad = "0"),
+    hour = str_pad(crashes$CRASH_HOUR, 2, pad = "0"),
     day_of_week = wday(CRASH_DATE),
     week = round_date(CRASH_DATE, "week")
   ) %>%
