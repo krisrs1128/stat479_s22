@@ -1,0 +1,209 @@
+---
+title: "STAT 479: PRACTICE MIDTERM 2"
+geometry: margin=2cm
+output: 
+  pdf_document:
+    keep_tex: true
+---
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(raster)
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, cache = TRUE)
+```
+\rule[-1mm]{19.3cm}{1mm}
+Name: \rule[0pt]{7cm}{.5pt}\vspace{3mm}
+
+* This exam lasts from 1:20 - 2:10pm on April 18, 2022. There are 6 questions.
+* This exam is closed notes and closed computer.
+* You may use a 1-page cheat sheet (8.5 x 11in or A4 size). You may use both
+sides, but the cheat sheet must be handwritten.
+* If you need extra space, you may write on the back of the page. Please
+indicate somewhere that your answer continues.
+* The instructors will only be able to answer clarifying questions during the
+exam. They will be sitting at the back of the room.
+
+| Question | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | | Total |
+| ---- | -- | -- | -- | -- | -- | -- | -- |
+| Score |  |  |  |  |  |  |  |  | |
+| Possible |  4 | 4 | 4 | 6 | 6 | 6 | 30  |
+
+\rule[1mm]{19.3cm}{1mm}
+
+### Q1 (4 points)
+
+Circle all TRUE or FALSE statements below about network visualization.
+
+  * TRUE or FALSE: For tasks related to local topology, node-link diagrams are preferable to adjacency matrix visualizations.
+  * TRUE or FALSE: For large networks, node-link diagrams are preferable to
+  adjacency matrix visualizations.
+  * TRUE or FALSE: If `G` is a `tbl_graph` defining a network, then an adjacency matrix visualization can be created using
+    
+    ```{r, eval = FALSE}
+    ggraph(G) +
+      geom_adjaceny()
+    ```
+
+  * TRUE or FALSE: The `treemap` and `circlepack` layouts in `ggraph` can be
+  used to visually represent enclosure relationships between nodes in a graph.
+  * TRUE or FALSE: The adjacency matrix visualization of a directed graph will
+  generally be symmetric across the diagonal.
+  
+
+### Q2 (4 points)
+
+The figure below shows a subset of a large hierarchical clustering tree,
+generated using the code
+
+```{r, eval = FALSE}
+d <- dist(x)
+h <- hclust(d)
+plot(h)
+```
+
+```{r, echo = FALSE, fig.align = "center", fig.cap = "Figure for Q2."}
+include_graphics("figures/hclust.png")
+```
+    
+Circle all TRUE or FALSE statements about the resulting clustering below.
+
+* TRUE or FALSE: Samples C and D are more similar to one another than A and B.	
+* TRUE or FALSE If this subtree were cut to form $K = 5$ clusters, then C and D
+would belong to the same cluster.
+* TRUE or FALSE: A and B are more similar to each other than B and C.
+* TRUE or FALSE: If this subtree were cut to form $K = 2$ clusters, then A and B
+would belong to the same cluster.
+
+### Q3 (4 points)
+
+This problem asks you to compare and contrast dimensionality reduction using and
+UMAP and PCA.
+
+  a. [2 points] Provide an example of a dataset for which using PCA would be
+  more appropriate than UMAP. Justify your choice.
+  
+$$\\[1in]$$
+
+  b. [2 points] Provide an example of a dataset for which using UMAP would be
+  more appropriate than PCA. Justify your choice.
+  
+$$\\[1in]$$
+
+
+### Q4 (6 points)
+
+This problem considers visualization of a glaciers dataset.
+
+```{r}
+glaciers <- brick("https://uwmadison.box.com/shared/static/2z3apyg4t7ct5qd4mcwh9rpr63t02jql.tif")
+glaciers
+```
+    
+  a. [2 points] Identify one difference between classes `RasterBrick` and `sf`.
+  Describe a type of dataset that could be stored as an `sf` object, but not a
+  `RasterBrick`.
+  
+$$\\[1in]$$
+  
+  b. [1 points] Assume that the first three channels in the dataset correspond
+  to red, green, and blue color channels. Provide code that could be used to
+  generate the Figure in \ref{fig:rgb}. Make sure that your code loads necessary
+  libraries.
+  
+```{r, echo = FALSE, fig.cap="\\label{fig:rgb} Figure for Q4b.", out.width = "0.3\\textwidth", fig.align = "center"}
+library(RStoolbox)
+ggRGB(glaciers)
+```
+    
+$$\\[1in]$$
+    
+  c. [3 points] The 15th channel of this dataset contains information about the
+  slope at each pixel in the image. Provide code that could be used to visualize
+  the slope at each location in the dataset.
+  
+$$\\[2in]$$
+
+### Q5 (6 points)
+
+The polio dataset contains weekly counts of new polio cases across each state in
+the United States, starting as early as 1912. In this question, our goal is to
+apply $K$-means to group states with similar incidence patterns.
+
+```{r}
+polio <- read_csv("https://uwmadison.box.com/shared/static/nm7yku4y9q7ylvz5kbxya3ouj2njd0x6.csv")
+head(polio)
+```
+  
+  a. [2 points] Is it necessary to reshape the data before it can be used in the
+  `kmeans` function? If so, provide the code. If not, provide a brief
+  explanation.
+  
+$$\\[1in]$$
+  
+  b. [2 points] Let `x` contain the output from part (a). Compare the two
+  approaches to $K$-means in the code block below. Which would you recommend
+  using? Justify your choice.
+  
+  Option 1:
+```{r, eval = FALSE}
+x %>%
+  select(-state) %>%
+  kmeans(centers = 5)
+```
+          
+  Option 2:
+
+```{r, eval = FALSE}
+x %>%
+  select(-state) %>%
+  scale() %>%
+  kmeans(centers = 5)
+```
+    
+$$\\[1in]$$
+    
+  c. [2 points] Provide code needed for extracting and visualizing centroids
+  from the $K$-means fit made in part (b). Draw a rough sketch of the expected
+  result and include annotations that would help a reader understand the output.
+  
+$$\\[1in]$$
+
+### Q6 (6 points)
+
+The PBS dataset contains the number of orders filed every month for different
+classes of pharmaceutical drugs, as tracked by the Australian Pharmaceutical
+Benefits Scheme.
+
+```{r}
+pbs <- read_csv("https://uwmadison.box.com/shared/static/fcy9q1uleqru7gcs287q903y0rcnw2a2.csv") %>%
+  mutate(Month = as.Date(Month))
+head(pbs)
+```
+
+a. [1 points] Provide code that transforms the data into a `tsibble` object.
+Note that there is a separate time series for each drug, identified by the
+`ATC2_desec` key.
+
+$$\\[1in]$$
+
+b. [2 points] Provide code that extracts features for this time series
+collection. How would you find the series with the largest `trend_strength`.
+
+$$\\[1in]$$
+
+c. [1 points] Perform a PCA on the following subset of extracted features (these
+are `trend_strength`, features that start with `seasonal`, or features
+containing the string `acf`),
+    
+    ```{r}
+    features <- c("trend_strength", "seasonal_strength_week", "seasonal_peak_week", "seasonal_trough_week", "stl_e_acf1", "stl_e_acf10", "acf1", "acf10", "diff1_acf1", "diff1_acf10", "diff2_acf1", "diff2_acf10", "season_acf1", "pacf5", "diff1_pacf5", "diff2_pacf5", "season_pacf")
+    ```
+    
+  Make sure to normalize all features first.
+      
+$$\\[1.5in]$$
+
+d. [2 points] Sketch code that could be used to visualize the top two principal
+components. How would you interpret the resulting visualization?
+
+$$\\[2in]$$
