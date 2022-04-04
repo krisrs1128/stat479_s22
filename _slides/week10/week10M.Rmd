@@ -1,0 +1,176 @@
+---
+author: "Kris Sankaran"
+title: "Week10M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Principal Components
+
+.pull-left[
+  April 4, 2022
+]
+ 
+---
+
+### Announcements
+
+* No lecture on Wednesday April 6
+* Portfolio 3 - April 10
+* Project Milestone 3 - April 10
+* Practice Midterm 2 is posted
+* Midterm 2 is April 18 (2 weeks)
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+   * Using PCA, "map" the rows of a high-dimensional, numerical dataset
+   * Design and interpret a visualization of PCA component directions
+
+---
+
+### Exercise Review
+
+[Polio incidence] In this problem, we will use a heatmap to visualize a large
+collection of time series. The
+[data](https://uwmadison.box.com/s/nm7yku4y9q7ylvz5kbxya3ouj2njd0x6), prepared
+by the [Tycho Project](https://www.tycho.pitt.edu/), contain weekly counts of
+new polio cases in the United States, starting as early as 1912 (for some
+states).
+
+```{r}
+polio <- read_csv("https://uwmadison.box.com/shared/static/nm7yku4y9q7ylvz5kbxya3ouj2njd0x6.csv")
+head(polio)
+```
+
+---
+    
+a. Pivot the raw dataset so that states appear along rows and weeks appear along
+columns. Fill weeks that don't have any cases with 0's.
+
+```{r}
+polio_matrix <- polio %>%
+  pivot_wider(state, names_from = period_start_date, values_from = cases, values_fill = 0) %>%
+  column_to_rownames("state")
+polio_matrix[1:10, 1:4]
+```
+
+---
+
+b. Use the `superheat` package to make a heatmap of the data from (a). Have the
+color of each tile represent `log(1 + cases)`, rather than the raw counts.
+Reorder the states using a hierarchical clustering by setting `pretty.order.rows
+= TRUE`.
+
+```{r, fig.width = 12, fig.height = 6, echo = FALSE, out.width = 920}
+library(superheat)
+cols <- c('#f5eff7','#bdc9e1','#67a9cf','#1c9099','#016c59')
+superheat(
+  log(1 + polio_matrix),
+  left.label.text.size = 3, 
+  heat.pal = cols, 
+  heat.lim = c(0, 5),
+  pretty.order.rows = TRUE
+)
+```
+
+---
+
+b. Use the `superheat` package to make a heatmap of the data from (a). Have the
+color of each tile represent `log(1 + cases)`, rather than the raw counts.
+Reorder the states using a hierarchical clustering by setting `pretty.order.rows
+= TRUE`.
+
+```{r, fig.width = 12, fig.height = 6, eval = FALSE}
+library(superheat)
+cols <- c('#f5eff7','#bdc9e1','#67a9cf','#1c9099','#016c59')
+superheat(
+  log(1 + polio_matrix),
+  left.label.text.size = 3, 
+  heat.pal = cols, 
+  heat.lim = c(0, 5),
+  pretty.order.rows = TRUE
+)
+```
+
+---
+
+c. Supplement the view from part (b) with a barchart showing the US total
+incidence during every given week. Interpret the resulting visualization.
+*Hint: use the `yt` argument of superheat.*
+
+```{r, fig.width = 12, fig.height = 6, echo = FALSE, out.width = 950}
+superheat(
+  log(1 + polio_matrix),
+  left.label.text.size = 2.4, 
+  heat.pal = cols, 
+  pretty.order.rows = TRUE,
+  yt = colSums(polio_matrix),
+  yt.bar.col = "#0c0c0c",
+  yt.plot.type = "bar",
+  yt.axis.name.size = 0,
+  row.title.size = 0,
+  legend = FALSE
+)
+```
+
+---
+
+c. Supplement the view from part (b) with a barchart showing the US total
+incidence during every given week. Interpret the resulting visualization.
+*Hint: use the `yt` argument of superheat.*
+
+```{r, fig.width = 12, fig.height = 6, eval = FALSE}
+superheat(
+  log(1 + polio_matrix),
+  left.label.text.size = 2.4, 
+  heat.pal = cols, 
+  pretty.order.rows = TRUE,
+  yt = colSums(polio_matrix),
+  yt.bar.col = "#0c0c0c",
+  yt.plot.type = "bar",
+  yt.axis.name.size = 0,
+  row.title.size = 0,
+  legend = FALSE
+)
+```
+
+---
+
+## Live Coding Example
+
+We will work through Exercise 2 in Module 3.
+
+---
+
+### Exercise
+
+* Exercise 10.1 [Living Wages] on Canvas
+* Can discuss, but submit individually
