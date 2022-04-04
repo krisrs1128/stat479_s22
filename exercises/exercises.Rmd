@@ -1495,7 +1495,28 @@ $\log\left(1 + x\right)$ transformed.
     G %>%
       mutate(avg_pollution = map_local_dbl(order = graph_order(), mode = "out", .f = mean_fun))
     ```
+    
+1. [Living wages] This problem will study a dataset from MIT's [living wage
+calculator](https://livingwage.mit.edu/). Each row in this
+[dataset](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week10/exercises/living_wages.csv)
+gives living wages for state capitals within the continental US. Since living
+wages depend on a personal situation (e.g., number of children), this dataset is
+high-dimensional. The interpretation of each column is given
+[here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week10/exercises/living_wages_lookup.csv).
 
+    a. Define a tidymodels `recipe` that normalizes all nutrient features and
+    specifies that PCA should be performed.
+    
+    b. Visualize the top 4 principal components. Based on the interpretation of
+    each columns, what seems to distinguish capital cities with low vs. high
+    values of PC2?
+    
+    c. Visualize the scores of each capital city with respect to the first two
+    principal components. Make sure to annotate cities with their names. Give an
+    example of a city with a low living wage but high minimum wage (i.e., a state
+    where it is not expensive to live, and where the minimum wage is above
+    average).
+  
 1. [Food nutrients] This problem will use PCA to provide a low-dimensional view
 of a 14-dimensional nutritional facts
 [dataset](https://uwmadison.box.com/shared/static/nmgouzobq5367aex45pnbzgkhm7sur63.csv).
