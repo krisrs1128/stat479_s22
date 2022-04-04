@@ -1,6 +1,6 @@
 ---
 author: ""
-title: "Week9W Code Starter"
+title: "Week9F Code Starter"
 output:
   xaringan::moon_reader:
     css: ["default", "css/xaringan-themer.css"]
@@ -42,40 +42,47 @@ library(tidyverse)
 crashes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/chicago_crashes.csv") %>%
   pivot_wider(names_from = c("day_of_week", "hour"), values_from = "n", values_fill = 0)
 ```
-
 ```{r}
-crashes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/chicago_crashes.csv")
-crashes$hour %>% unique()
-```
-
-
-
-
-```{r, fig.height = 10}
 library(superheat)
 crashes_mat <- crashes %>%
-  pivot_wider(names_from = c("day_of_week", "hour"), values_from = "n", values_fill = 0) %>%
-  select(-week)
-superheat(
-  t(crashes_mat),
-  pretty.order.cols = TRUE
-)
+  column_to_rownames("week")
 ```
-    
+```{r}
+crashes_mat
+```
+
+
+```{r, fig.width = 8, fig.height = 5}
+superheat(t(crashes_mat))
+
+```
+
+
+
     b. Enrich your visualization with information about the total number of
     accidents in each of the 168 hours in the week. _Hint: Use the `yt` or `yr`
     arguments to `superheat`._
   
-```{r, fig.width = 6, fig.height = 4}
+```{r}
+hour_totals <- colSums(crashes_mat)
+```
+
+
+```{r, fig.width = 8, fig.height = 5}
 superheat(
   t(crashes_mat),
+  yr = hour_totals,
+  yt = rowSums(crashes_mat),
   pretty.order.cols = TRUE,
-  yr = colSums(crashes_mat),
   yr.plot.type = "bar",
+  yt.plot.type = "bar",
   yr.bar.col = "#d3d3d3",
-  yr.obs.col = rep("#d3d3d3", ncol(crashes_mat))
+  yt.bar.col = "#d3d3d3",
+  yr.obs.col = rep("#d3d3d3", length(hour_totals)),
+  yt.obs.col = rep("#d3d3d3", nrow(crashes_mat))
 )
 ```
+  
   
   
     c. Provide a brief interpretion of your final visualization.

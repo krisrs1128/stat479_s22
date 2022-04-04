@@ -37,6 +37,14 @@ class: bottom
  
 ---
 
+### Announcements
+
+* No lecture on Wednesday April 6
+* Portfolio 3 - April 10
+* Project Milestone 3 - April 10
+
+---
+
 ### Today
 
 By the end of the class, you should be able to...
@@ -111,5 +119,5 @@ We will work through Exercise 2 in Module 3.
 
 ### Exercise
 
-* Exercise 9.2 [Interpreting Clustering] on Canvas
+* Exercise 9.3a-c [Polio Incidence] on Canvas
 * Can discuss, but submit individually
