@@ -33,13 +33,20 @@ The data were originally curated by the USDA and are regularly used in
 
 ```{r}
 nutrients <- read_csv("https://uwmadison.box.com/shared/static/nmgouzobq5367aex45pnbzgkhm7sur63.csv")
+nutrients
 ```
 
 a. Define a tidymodels `recipe` that normalizes all nutrient features and
 specifies that PCA should be performed.
 
 ```{r}
-pca_recipe <- recipe(~., data = nutrients) #%>%
+library(tidymodels)
+pca_recipe <- recipe(~., data = nutrients) %>%
+ update_role(id:group_lumped, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors())
+
+pca_prep <- prep(pca_recipe)
   # see bullet 10 here: https://krisrs1128.github.io/stat479/posts/2021-03-24-week10-2/
 ```
 
@@ -47,17 +54,48 @@ b. Visualize the top 6 principal components. What types of food do you expect to
 have low or high values for PC1 or PC2?
 
 ```{r}
-tidy(pca_prep, 2)
+components <- tidy(pca_prep, 2) %>%
+  filter(component %in% str_c("PC", 1:6)) %>%
+  mutate(
+    terms = str_remove(terms, " \\(g\\)")
+  )
+```
+
+
+```{r, fig.height = 6, fig.width = 8}
+library(tidytext)
+ggplot(components) +
+  geom_col(aes(value, reorder_within(terms, value, component))) +
+  scale_y_reordered() +
+  facet_wrap(~ component, scales = "free_y")
 ```
 
 c. Compute the average value of PC2 within each category of the `group` column.
 Give the names of the groups sorted by this average.
+
+```{r}
+scores <- juice(pca_prep)
+group_order <- scores %>%
+  group_by(group) %>%
+  summarise(mean_pc = mean(PC2)) %>%
+  arrange(mean_pc) %>%
+  pull(group)
+
+group_order
+```
 
 d. Visualize the scores of each food item with respect to the first two
 principal components. Facet the visualization according to the `group` column,
 and sort the facets according to the results of part (c). How does the result
 compare with your guess from part (b)?
 
-```{r}
-juica(pca_prep)
+```{r, fig.width= 9, fig.height = 6}
+scores <- scores %>%
+  mutate(group = factor(group, levels = as.character(group_order)))
+
+ggplot(scores) +
+  geom_hline(yintercept = 0) +
+  geom_vline(xintercept = 0) +
+  geom_point(aes(PC1, PC2, col = group_lumped), size = 0.6, alpha = 0.5) +
+  facet_wrap(~ group)
 ```

@@ -931,3 +931,14 @@ p[["temperature"]] <- ggplot(weather) +
 
   
   
+```{r}
+scores <- juice(umap_prep)
+ggplot(scores) +
+  geom_vline(xintercept = 0) +
+  geom_hline(yintercept = 0) +
+  geom_point(aes(UMAP1, UMAP2, col = g), size = 0.4, alpha = 0.5) +
+  scale_color_brewer(palette = "Set2") +
+  facet_wrap(~ dialect_region)
+```
+  
+  

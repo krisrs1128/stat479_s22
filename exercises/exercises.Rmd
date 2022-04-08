@@ -1504,7 +1504,7 @@ wages depend on a personal situation (e.g., number of children), this dataset is
 high-dimensional. The interpretation of each column is given
 [here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week10/exercises/living_wages_lookup.csv).
 
-    a. Define a tidymodels `recipe` that normalizes all nutrient features and
+    a. Define a tidymodels `recipe` that normalizes all city features and
     specifies that PCA should be performed.
     
     b. Visualize the top 4 principal components. Based on the interpretation of
@@ -1512,10 +1512,9 @@ high-dimensional. The interpretation of each column is given
     values of PC2?
     
     c. Visualize the scores of each capital city with respect to the first two
-    principal components. Make sure to annotate cities with their names. Give an
-    example of a city with a low living wage but high minimum wage (i.e., a state
-    where it is not expensive to live, and where the minimum wage is above
-    average).
+    principal components. Make sure to annotate cities with their names. Pick a city
+    on the graph and interpret its relative wage profile based on the principal
+    components.
   
 1. [Food nutrients] This problem will use PCA to provide a low-dimensional view
 of a 14-dimensional nutritional facts
@@ -1591,6 +1590,32 @@ molecule often found on the surface of T-cells.
     
     b. Compute the UMAP embeddings across cells. Color points in by their value of
     the GNLY molecule.
+
+1. [Phoneme Identification] The data read in below are a subset of about 4500
+audio signals from the TIMIT speaker database. Each row is a processed version
+of an audio file describing how a single speaker said one of 5 sounds (e.g.,
+"ao" is like the first vowel in "water" and "aa" is like the first vowel in
+"dark"). These 5 classes are stored in the column `g`. This dataset played a
+historically [important
+role](https://catalog.ldc.upenn.edu/docs/LDC93S1/readme.txt) in sparking
+progress in the field of speech recognition.
+
+    ```{r, warning = FALSE, message = FALSE}
+    phoneme <- read_csv("https://hastie.su.domains/ElemStatLearn/datasets/phoneme.data") %>%
+      separate(speaker, c("split", "dialect_region", "speaker_id", "sentence_id"))
+    ```
+    
+    a. Create a plot that shows each speaker's series (colnames `x.1` to
+    `x.256`), faceted by phoneme. What features of these audio signals might you
+    consider using if your goal were to distinguish between phonemes? _Hint: use `pivot_longer(x.1:x.256)` to reshape the data into tidy format._
+    
+    b. Prepare a UMAP recipe that could be used to reduce the 256 sound
+    dimensions to only two. Since all 256 audio features have the same
+    interpretation, there is no need to normalize them. Extract the embeddings
+    from the prepared recipe.
+      
+    c. Create a visualization of your UMAP embeddings from (b). Which phonemes
+    seem the most similar to one another in the high-dimensional audio space?
  
 1. [Political Blogs] In this problem, we will use topic modeling to see how the topics discussed
 across the political blogsphere evolved over course of 2008. We have fitted a

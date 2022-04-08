@@ -89,7 +89,7 @@ color of each tile represent `log(1 + cases)`, rather than the raw counts.
 Reorder the states using a hierarchical clustering by setting `pretty.order.rows
 = TRUE`.
 
-```{r, fig.width = 12, fig.height = 6, echo = FALSE, out.width = 920}
+```{r, fig.width = 12, fig.height = 6, echo = FALSE, out.width = 890}
 library(superheat)
 cols <- c('#f5eff7','#bdc9e1','#67a9cf','#1c9099','#016c59')
 superheat(
