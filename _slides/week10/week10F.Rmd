@@ -1,0 +1,172 @@
+---
+author: "Kris Sankaran"
+title: "Week10F"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Uniform Manifold Approximation and Projection
+
+.pull-left[
+  April 8, 2022
+]
+ 
+---
+
+### Announcements
+
+* Portfolio 3 - April 10
+* Project Milestone 3 - April 10
+* Practice Midterm 2 is posted
+* Midterm 2 is April 18
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+   * Using UMAP, "map" the rows of a high-dimensional, numerical dataset
+   * Interpret a UMAP display
+
+---
+
+### Exercise Review
+
+This problem will study a dataset from MIT's [living wage
+calculator](https://livingwage.mit.edu/). Each row in this
+[dataset](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week10/exercises/living_wages.csv)
+gives living wages for state capitals within the continental US. Since living
+wages depend on a personal situation (e.g., number of children), this dataset is
+high-dimensional. The interpretation of each column is 
+[here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week10/exercises/living_wages_lookup.csv).
+
+```{r}
+living_wages <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week10/exercises/living_wages.csv")
+lookup <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week10/exercises/living_wages_lookup.csv")
+
+head(living_wages, 4)
+```
+
+---
+
+a. Define a tidymodels `recipe` that normalizes all city features and
+specifies that PCA should be performed.
+
+```{r}
+library(tidymodels)
+
+pca_rec <- recipe(~., data = living_wages) %>%
+  update_role(state_territory, city, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors())
+pca_prep <- prep(pca_rec)
+```
+
+---
+    
+b. Visualize the top 4 principal components. Based on the interpretation of each
+columns, what seems to distinguish capital cities with low vs. high values of
+PC2?
+
+.pull-left[
+```{r, echo = FALSE, fig.height = 8.5}
+components <- tidy(pca_prep, 2)
+components %>%
+  filter(component %in% str_c("PC", 1:4)) %>%
+  ggplot() +
+  geom_col(aes(value, terms)) +
+  facet_grid(component ~ .) +
+  theme(axis.text.y = element_text(size = 10))
+```
+]
+
+.pull-right[
+```{r}
+lookup
+```
+]
+
+---
+
+b. Visualize the top 4 principal components. Based on the interpretation of each
+columns, what seems to distinguish capital cities with low vs. high values of
+PC2?
+
+```{r, eval = FALSE}
+components <- tidy(pca_prep, 2)
+components %>%
+  filter(component %in% str_c("PC", 1:4)) %>%
+  ggplot() +
+  geom_col(aes(value, terms)) +
+  facet_wrap(~ component) +
+  facet_grid(component ~ .) +
+  theme(axis.text.y = element_text(size = 10))
+```
+
+---
+    
+c. Visualize the scores of each capital city with respect to the first two
+principal components. Make sure to annotate cities with their names. Give an
+example of a city with a low living wage but high minimum wage (i.e., a state
+where it is not expensive to live, and where the minimum wage is above average).
+
+```{r, echo = FALSE, fig.width = 10, fig.height = 5}
+scores <- juice(pca_prep)
+ggplot(scores) +
+  geom_hline(yintercept = 0, size = 2, col = "#5d5d5d") +
+  geom_vline(xintercept = 0, size = 2, col = "#5d5d5d") +
+  geom_text(aes(PC1, PC2, label = city), size = 5)
+```
+
+---
+    
+c. Visualize the scores of each capital city with respect to the first two
+principal components. Make sure to annotate cities with their names. Pick a city
+on the graph and interpret its relative wage profile based on the principal
+components.
+
+```{r, eval = FALSE, fig.width = 10, fig.height = 5}
+scores <- juice(pca_prep)
+ggplot(scores) +
+  geom_hline(yintercept = 0, size = 2, col = "#5d5d5d") +
+  geom_vline(xintercept = 0, size = 2, col = "#5d5d5d") +
+  geom_text(aes(PC1, PC2, label = city), size = 5)
+```
+
+---
+
+## Live Coding Example
+
+We will work through Exercise 14 in Module 3.
+
+---
+
+### Exercise
+
+* Exercise 10.2 [Phoneme Identification, b-c] on Canvas
+* Can discuss, but submit individually
