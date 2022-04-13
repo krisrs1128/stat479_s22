@@ -112,6 +112,9 @@ lookup
 ]
 
 ---
+```{r}
+renderLeaflet(a)
+```
 
 b. Visualize the top 4 principal components. Based on the interpretation of each
 columns, what seems to distinguish capital cities with low vs. high values of
@@ -123,18 +126,16 @@ components %>%
   filter(component %in% str_c("PC", 1:4)) %>%
   ggplot() +
   geom_col(aes(value, terms)) +
-  facet_wrap(~ component) +
   facet_grid(component ~ .) +
   theme(axis.text.y = element_text(size = 10))
 ```
 
 ---
-    
 c. Visualize the scores of each capital city with respect to the first two
-principal components. Make sure to annotate cities with their names. Give an
-example of a city with a low living wage but high minimum wage (i.e., a state
-where it is not expensive to live, and where the minimum wage is above average).
-
+principal components. Make sure to annotate cities with their names. Pick a city
+on the graph and interpret its relative wage profile based on the principal
+components.
+    
 ```{r, echo = FALSE, fig.width = 10, fig.height = 5}
 scores <- juice(pca_prep)
 ggplot(scores) +

@@ -1390,7 +1390,6 @@ clustering to create a summarized "ecological stress" profile.
     include_graphics("figure/hclust.png")
     ```
     
-    
 1. [Taxi Trips] In this problem, we will use hierarchical clustering to find
 typical taxi trip trajectories in Porto, Portugal. The data are a subset from
 the the [ECML / PKDD 2015
@@ -1539,39 +1538,90 @@ The data were originally curated by the USDA and are regularly used in
     principal components. Facet the visualization according to the `group` column,
     and sort the facets according to the results of part (c). How does the result
     compare with your guess from part (b)?
-    
-1. [Topics in _Pride and Prejudice_] This problem uses LDA to analyze the full
-text of _Pride and Prejudice_. The code below creates two R objects, `paragraph`
-and `dtm`. `paragraph` is a data.frame whose rows are paragraphs^[We've filtered
-very short paragraphs; e.g., from dialogue.] from the book. `dtm` is a
-`DocumentTermMatrix` containing word counts across the same paragraphs -- the
-$i^{th}$ row of `dtm` corresponds to the $i^{th}$ row of `paragraph`.
-    
+
+1. [Topics in _Pride and Prejudice_] This problem uses LDA to analyze the full text
+of _Pride and Prejudice_. The object `paragraph` is a data.frame whose rows are
+paragraphs from the book. We've filtered very short paragraphs; e.g., from
+dialogue. We're interested in how the topics appearing in the book vary from the
+start to the end of the book, for example.
+
     ```{r}
     library(tidytext)
-    
-    paragraphs <- read_csv("https://uwmadison.box.com/shared/static/pz1lz301ufhbedzsj9iioee77r95xz4v.csv") 
-    dtm <- paragraphs %>%
-      unnest_tokens(word, text) %>%
-      filter(!word %in% stop_words$word) %>%
-      count(paragraph, word) %>%
-      cast_dtm(paragraph, word, n)
+    paragraphs <- read_csv("https://uwmadison.box.com/shared/static/pz1lz301ufhbedzsj9iioee77r95xz4v.csv")
+    paragraphs
     ```
+          
+    a. Create a Document-Term Matrix containing word counts from across the same
+    paragraphs. That is, the $i^{th}$ row of `dtm` should correspond to the $i^{th}$
+    row of `paragraph`. Make sure to remove all stopwords.
     
-    a. Fit an LDA model to `dtm` using 6 topics. Set the seed by using the argument
+    b. Fit an LDA model to `dtm` using 6 topics. Set the seed by using the argument
     `control = list(seed = 479)` to remove any randomness in the result.
     
-    b. Visualize the top 30 words within each of the fitted topics. Specifically,
-    create a faceted bar chart where the heights of the bars correspond to word
-    probabilities and the facets correspond to topics. Reorder the bars so that each
-    topic's top words are displayed in order of decreasing probability.
+    c. Visualize the top 30 words within each of the fitted topics.
+    Specifically, create a faceted bar chart where the lengths of the bars
+    correspond to word probabilities and the facets correspond to topics.
+    Reorder the bars so that each topic's top words are displayed in order of
+    decreasing probability.
     
-    c. Find the paragraph that is the purest representative of Topic 2. That is, if
-    $\gamma_{ik}$ denotes the weight of topic $k$ in paragraph $i$, then print out
-    paragraph $i^{\ast}$ where $i^{\ast} = \arg \max_{i}\gamma_{i2}$. Verify that
-    the at least a few of the words with high probability for this topic appear.
-    Only copy the first sentence into your solution.
-  
+    d. Find the paragraph that is the purest representative of Topic 2. That is,
+    if $\gamma_{ik}$ denotes the weight of topic $k$ in paragraph $i$, then
+    print out paragraph $i^{\ast}$ where $i^{\ast} = \arg \max_{i}\gamma_{i2}$.
+    Verify that the at least a few of the words with high probability for this
+    topic appear. Only copy the first sentence into your solution.
+    
+1. [Personality Types] This
+[dataset](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week11/exercises/mbti_1.csv?raw=true)
+contains a sample of posts from the Personality Cafe forum, together with labels
+giving the poster's (self-reported) Meyer-Briggs type (e.g., types starting with
+"I" are introverted, those with "E" are extroverted). It is time-consuming to go
+through all the posts manually, but to get a quick overview of the main topics
+that are discussed, we can use a Latent Dirichlet Allocation (LDA) model. This
+problem walks through the steps for (1) preparing a Document-Term matrix for
+LDA, (2) fitting the LDA model, and (3) interpreting the estimated topics and
+memberships.
+
+    a. Transform the raw posts into a collection of per-post word counts. Remove
+    stopwords from across all lexicons in `tidytext::stopwords`.
+    
+    b. Convert the `data.frame` from (a) into a topic models Document-Term
+    matrix (i.e., an object of class `DocumentTermMatrix`). Fit an LDA model
+    with 8 topics to the prepared object.
+    
+    c. Visualize the top 30 words within each of the fitted topics.
+    Specifically, create a faceted bar chart where the lengths of the bars
+    correspond to word probabilities and the facets correspond to topics.
+    Reorder the bars so that each topic's top words are displayed in order of
+    decreasing probability.
+    
+    d. Create a Structure plot displaying the topic memberships for each
+    document. Sort documents according to their order on a hierarchical
+    clustering tree, and facet documents according to personality type. Are
+    there certain topics that appear to be more common in some personality types
+    than others?
+    
+1. [Hotel Reviews] In this problem, we will practice using Latent Dirichlet
+Allocation to understand the topics that come up across hotel reviews from an
+online database. We will also study whether there are certain topics that are
+more common in positive vs. negative reviews.
+
+    a. Transform the raw reviews into a collection of per-review word counts.
+    Remove stopwords from across all lexicons in `tidytext::stopwords`.
+    
+    b. Convert the `data.frame` from (a) into a topic models Document-Term
+    matrix (i.e., an object of class `DocumentTermMatrix`). Fit an LDA model
+    with 8 topics to the prepared object.
+    
+    c. Create a heatmap of topic distributions for the 50 words $d$ with the
+    largest inter-quartile across topics (i.e., largest IQR for
+    $\left(\beta_{dk}\right)_{k = 1}^{8}\right)$. Provide an interpretation for
+    one of the topics, based on the words that have high probability within it.
+    
+    d. Create a Structure plot displaying the topic memberships for each review.
+    Sort reviews according to their order on a hierarchical clustering tree, and
+    facet documents according to hotel rating. Are there certain topics that
+    appear to be more common in negative vs. positive reviews?
+    
 1. [Single-Cell Genomics]  In this problem, we will apply UMAP to a
 [dataset](https://uwmadison.box.com/shared/static/ai539s30rjsw5ke4vxbjrxjaiihq7edk.csv)
 of Peripheral Blood Mononuclear Cells (PBMC) released by 10X Genomics. The first
@@ -1604,7 +1654,6 @@ progress in the field of speech recognition.
     phoneme <- read_csv("https://hastie.su.domains/ElemStatLearn/datasets/phoneme.data") %>%
       separate(speaker, c("split", "dialect_region", "speaker_id", "sentence_id"))
     ```
-    
     a. Create a plot that shows each speaker's series (colnames `x.1` to
     `x.256`), faceted by phoneme. What features of these audio signals might you
     consider using if your goal were to distinguish between phonemes? _Hint: use `pivot_longer(x.1:x.256)` to reshape the data into tidy format._

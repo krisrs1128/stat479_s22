@@ -51,6 +51,7 @@ scores <- juice(umap_prep) %>%
 
 ggplot(scores) +
   geom_point(aes(UMAP1, UMAP2, col = GNLY), size = 0.5, alpha = 0.4) +
-  scale_color_viridis_c()
+  scale_color_viridis_c() +
+  coord_fixed()
 ```
 
