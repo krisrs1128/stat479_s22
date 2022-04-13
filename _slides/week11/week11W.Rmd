@@ -1,0 +1,148 @@
+---
+author: "Kris Sankaran"
+title: "Week11W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Visualizing Topic Models
+
+.pull-left[
+  April 13, 2022
+]
+
+---
+
+### Announcements
+
+* Practice Midterm 2 is posted
+  - I will go over solutions on Friday
+* Midterm 2 is April 18
+* Portfolio 3 Peer Reviews due April 17
+* **Project Peer Reviews due April 20**
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+   * Visualize the memberships and topics fitted by a topic model
+   * Interpret the memberships and topics fitted by a topic model
+
+---
+
+### Exercise Review
+
+[Personality Types] This
+[dataset](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week11/exercises/mbti_1.csv?raw=true)
+contains a sample of posts from the Personality Cafe forum, together with labels
+giving the poster's (self-reported) Meyer-Briggs type (e.g., types starting with
+"I" are introverted, those with "E" are extroverted). It is time-consuming to go
+through all the posts manually, but to get a quick overview of the main topics
+that are discussed, we can use a Latent Dirichlet Allocation (LDA) model. This
+problem walks through the steps for (1) preparing a Document-Term matrix for
+LDA, (2) fitting the LDA model, and (3) interpreting the estimated topics and
+memberships.
+
+
+---
+
+a. Transform the raw posts into a collection of per-post word counts. Remove
+stopwords from across all lexicons in `tidytext::stopwords`.
+
+```{r}
+library(tidytext)
+mbti <- read_csv("https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week11/exercises/mbti_1.csv?raw=true") %>%
+  sample_n(500) %>% # can set sample_n(50) for quick testing
+  mutate(document = as.character(row_number()))
+
+mbti
+```
+
+---
+
+a. Transform the raw posts into a collection of per-post word counts. Remove
+stopwords from across all lexicons in `tidytext::stopwords`.
+
+```{r}
+mbti %>%
+  unnest_tokens(word, posts) %>%
+  filter(!(word %in% stop_words$word))
+```
+
+---
+
+a. Transform the raw posts into a collection of per-post word counts. Remove
+stopwords from across all lexicons in `tidytext::stopwords`.
+
+```{r}
+mbti %>%
+  unnest_tokens(word, posts) %>%
+  filter(!(word %in% stop_words$word)) %>%
+  count(document, word)
+```
+
+---
+
+b. Convert the `data.frame` from (a) into a topic models Document-Term
+matrix (i.e., an object of class `DocumentTermMatrix`). Fit an LDA model
+with 8 topics to the prepared object.
+
+```{r}
+mbti_dtm <- mbti %>%
+  unnest_tokens(word, posts) %>%
+  filter(!(word %in% stop_words$word)) %>%
+  count(document, word) %>%
+  cast_dtm(word, document, n)
+
+mbti_dtm
+```
+
+---
+
+b. Convert the `data.frame` from (a) into a topic models Document-Term
+matrix (i.e., an object of class `DocumentTermMatrix`). Fit an LDA model
+with 8 topics to the prepared object.
+
+```{r}
+library(topicmodels)
+fit <- LDA(mbti_dtm, k = 8)
+```
+
+---
+
+## Live Coding Example
+
+We will work through Exercise  [Pride and Prejudice] in Module 3.
+
+---
+
+### Exercise
+
+* Exercise 11.1 [Personality Types, a-b] on Canvas
+* Can discuss, but submit individually
