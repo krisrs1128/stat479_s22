@@ -1,0 +1,98 @@
+---
+author: ""
+title: "Week 11M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+
+[Topics in _Pride and Prejudice_] This problem uses LDA to analyze the full text
+of _Pride and Prejudice_. The object `paragraph` is a data.frame whose rows are
+paragraphs from the book. We've filtered very short paragraphs; e.g., from
+dialogue. We're interested in how the topics appearing in the book vary from the
+start to the end of the book, for example.
+
+```{r}
+library(tidytext)
+paragraphs <- read_csv("https://uwmadison.box.com/shared/static/pz1lz301ufhbedzsj9iioee77r95xz4v.csv")
+paragraphs
+```
+      
+a. Create a Document-Term Matrix containing word counts from across the same
+paragraphs. That is, the $i^{th}$ row of `dtm` should correspond to the $i^{th}$
+row of `paragraph`. Make sure to remove all stopwords.
+
+```{r}
+stop_words
+```
+
+
+```{r}
+library(tidytext)
+paragraphs_dtm <- paragraphs %>%
+  unnest_tokens(words, text) %>%
+  filter(! (words %in% stop_words$word)) %>%
+  count(paragraph, words) %>%
+  cast_dtm(paragraph, words, n)
+
+paragraphs_dtm
+```
+
+
+b. Fit an LDA model to `dtm` using 6 topics. Set the seed by using the argument
+`control = list(seed = 479)` to remove any randomness in the result.
+
+```{r}
+library(topicmodels)
+fit <- LDA(paragraphs_dtm, k = 6, control = list(seed = 479))
+
+topics <- tidy(fit, matrix = "beta") %>%
+  group_by(topic) %>%
+  slice_max(beta, n = 30)
+
+head(topics)
+```
+
+
+```{r, fig.height = 6, fig.width = 8}
+topics %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot() +
+  geom_col(aes(beta, term)) +
+  scale_y_reordered() +
+  facet_wrap(~ topic, scale = "free")
+```
+
+c. Visualize the top 30 words within each of the fitted topics.
+Specifically, create a faceted bar chart where the lengths of the bars
+correspond to word probabilities and the facets correspond to topics.
+Reorder the bars so that each topic's top words are displayed in order of
+decreasing probability.
+
+d. Find the paragraph that is the purest representative of Topic 2. That is,
+if $\gamma_{ik}$ denotes the weight of topic $k$ in paragraph $i$, then
+print out paragraph $i^{\ast}$ where $i^{\ast} = \arg \max_{i}\gamma_{i2}$.
+Verify that the at least a few of the words with high probability for this
+topic appear. Only copy the first sentence into your solution.
+

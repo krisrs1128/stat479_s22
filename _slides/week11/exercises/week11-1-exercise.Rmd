@@ -1,0 +1,132 @@
+---
+author: ""
+title: "Exercise 11.1 Code Starter"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+Notes:
+
+  * For this problem, it's enough to work with a sample of 500 documents.
+  * Some functions that may be helpful are: `unnest_tokens()` and `cast_dtm()`.
+  * I've included solutions for parts (c) and (d) in case you finish (a-b) early
+  and want to try out the last two parts. I assume the fitted LDA object is in
+  an object called `fit`.
+
+This
+[dataset](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week11/exercises/mbti_1.csv?raw=true)
+contains a sample of posts from the Personality Cafe forum, together with labels
+giving the poster's (self-reported) Meyer-Briggs type (e.g., types starting with
+"I" are introverted, those with "E" are extroverted). It is time-consuming to go
+through all the posts manually, but to get a quick overview of the main types
+that are discussed, we can use a Latent Dirichlet Allocation (LDA) model. This
+problem walks through the steps for (1) preparing a Document-Term matrix for
+LDA, (2) fitting the LDA model, and (3) interpreting the estimated topics and
+memberships.
+
+a. Transform the raw posts into a collection of per-post word counts. Remove
+stopwords from across all lexicons in `tidytext::stopwords`.
+
+For this exercise, it's enough to work with a sample of 500 documents. You may find the `unnest_tokens()` and `anti_join()` functions helpful
+
+```{r}
+library(tidytext)
+mbti <- read_csv("https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week11/exercises/mbti_1.csv?raw=true") %>%
+  sample_n(500) %>% # can set sample_n(50) for quick testing
+  mutate(document = as.character(row_number()))
+
+mbti
+```
+
+b. Convert the `data.frame` from (a) into a topic models Document-Term
+matrix (i.e., an object of class `DocumentTermMatrix`). Fit an LDA model
+with 8 topics to the prepared object.
+
+c. Visualize the top 30 words within each of the fitted topics.
+Specifically, create a faceted bar chart where the lengths of the bars
+correspond to word probabilities and the facets correspond to topics.
+Reorder the bars so that each topic's top words are displayed in order of
+decreasing probability.
+
+We first find the top 30 words per topic.
+
+```{r}
+beta <- tidy(fit, matrix = "beta") %>%
+  group_by(topic) %>%
+  slice_max(beta, n = 30) %>%
+  mutate(term = reorder_within(term, beta, topic))
+```
+
+We can next visualize the words in each topic. It seems like many similar words
+appear across all topics -- it might be more worthwhile to look for
+discriminative words, as discussed in the case study lecture.
+
+```{r, fig.height = 8, fig.width = 4}
+ggplot(beta) +
+  geom_col(aes(beta, term)) +
+  scale_y_reordered() +
+  facet_wrap(~ topic, scales = "free_y", ncol = 3)
+```
+
+d. Create a Structure plot displaying the topic memberships for each
+document. Sort documents according to their order on a hierarchical
+clustering tree, and facet documents according to personality type. Are
+there certain topics that appear to be more common in some personality types
+than others?
+
+We first join in the personality type information with each document's membership.
+
+```{r}
+personality_types <- mbti %>%
+  select(document, type) %>%
+  unique()
+
+memberships <- tidy(fit, matrix = "gamma") %>%
+  left_join(personality_types)
+```
+
+We now reorder documents according to their similarity in topic memberships.
+
+```{r}
+hclust_result <- hclust(dist(fit@gamma))
+document_order <- fit@documents[hclust_result$order]
+memberships <- memberships %>%
+  mutate(document = factor(document, levels = document_order))
+```
+
+We can finally create a structure plot.
+
+```{r, fig.height = 10, fig.width = 6}
+ggplot(memberships) +
+  geom_col(aes(gamma, document, fill = as.factor(topic), col = as.factor(topic))) +
+  facet_grid(type ~ ., scale = "free", space = "free") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_color_brewer(palette = "Set2") +
+  scale_fill_brewer(palette = "Set2") +
+  theme(
+    strip.text.y = element_text(angle = 0),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank()
+  )
+```
