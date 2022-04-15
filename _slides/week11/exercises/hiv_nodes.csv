@@ -1,513 +1,513 @@
-name
-Thailand
-Mexico
-Zimbabwe
-Taiwan
-India
-Mexico
-Guinea
-Brazil
-Taiwan
-United States
-United States
-Rwanda
-Zimbabwe
-United States
-Taiwan
-United States
-South Africa
-Brazil
-China
-Spain
-Mexico
-Brazil
-Brazil
-South Africa
-Taiwan
-Zimbabwe
-Brazil
-Brazil
-China
-Mexico
-Zimbabwe
-Brazil
-Uganda
-South Africa
-United States
-South Africa
-Mexico
-Zimbabwe
-Canada
-China
-Brazil
-United States
-United States
-Cameroon
-United States
-Taiwan
-Mexico
-Nigeria
-France
-Brazil
-Canada
-China
-United States
-Mexico
-Cameroon
-Mexico
-United States
-Canada
-Mexico
-Zimbabwe
-Thailand
-United States
-Thailand
-China
-Iran
-Italy
-China
-United States
-Mexico
-Vietnam
-Morocco
-Uganda
-United States
-Taiwan
-Niger
-Zimbabwe
-Uganda
-Zimbabwe
-Mexico
-Kenya
-China
-Zimbabwe
-Vietnam
-Nigeria
-Taiwan
-China
-United States
-United States
-Nigeria
-United States
-Brazil
-Vietnam
-Brazil
-Mexico
-Mexico
-Mexico
-China
-Brazil
-Brazil
-Thailand
-Brazil
-Nigeria
-Zimbabwe
-Thailand
-Uganda
-Canada
-Uganda
-Nigeria
-Brazil
-Thailand
-Venezuela
-Thailand
-France
-Brazil
-Italy
-Mexico
-United States
-Nigeria
-Uganda
-Iran
-Mexico
-Nigeria
-Niger
-China
-Mexico
-Taiwan
-Taiwan
-Kenya
-United States
-Brazil
-China
-China
-Kenya
-South Africa
-United States
-Taiwan
-Zimbabwe
-Guinea
-United States
-France
-Uganda
-Mexico
-Cameroon
-United States
-Benin
-United States
-Zimbabwe
-United States
-China
-Morocco
-United States
-Mexico
-Mexico
-Australia
-Benin
-Brazil
-Sweden
-United States
-Canada
-Mexico
-United States
-Mexico
-Malawi
-Brazil
-United States
-Mexico
-Uganda
-United States
-Cameroon
-Mexico
-Cyprus
-Benin
-South Africa
-Brazil
-Cyprus
-Zimbabwe
-Brazil
-Cambodia
-Uganda
-Kenya
-Zimbabwe
-United States
-Brazil
-Taiwan
-China
-Zambia
-Niger
-Taiwan
-Brazil
-Taiwan
-Benin
-Kenya
-United States
-Brazil
-Brazil
-South Africa
-Brazil
-Mexico
-Kenya
-Sweden
-Vietnam
-United States
-China
-Kenya
-Mexico
-South Africa
-Zimbabwe
-Brazil
-South Africa
-Niger
-United States
-United States
-Nigeria
-Brazil
-United States
-Taiwan
-China
-South Africa
-Spain
-Taiwan
-Zimbabwe
-Vietnam
-Cameroon
-Nigeria
-Cuba
-China
-China
-Guinea
-Nigeria
-Brazil
-Canada
-Zimbabwe
-Mexico
-United States
-Brazil
-France
-China
-Canada
-France
-Brazil
-Thailand
-China
-Nigeria
-Brazil
-Brazil
-Taiwan
-Brazil
-United States
-Thailand
-United States
-China
-Brazil
-Brazil
-Kenya
-United States
-Taiwan
-Kenya
-Brazil
-Cuba
-China
-Niger
-Uganda
-Brazil
-France
-Cameroon
-Australia
-Spain
-Brazil
-Canada
-Mexico
-Brazil
-Kenya
-South Africa
-Taiwan
-United States
-Brazil
-United States
-Mexico
-United States
-South Africa
-Zimbabwe
-Cameroon
-Mexico
-Guinea
-Italy
-Zimbabwe
-Thailand
-Niger
-China
-Nigeria
-Mexico
-Kenya
-China
-Brazil
-Mexico
-Italy
-Mexico
-Nigeria
-Thailand
-United States
-South Africa
-Nigeria
-Australia
-Taiwan
-South Africa
-Thailand
-Brazil
-Zambia
-Brazil
-United States
-United States
-South Africa
-Spain
-China
-Zimbabwe
-Niger
-Mexico
-Brazil
-Cuba
-Brazil
-Cambodia
-Brazil
-United States
-Nigeria
-Zimbabwe
-Taiwan
-Kenya
-United States
-United States
-South Africa
-China
-China
-China
-United States
-Benin
-South Africa
-Brazil
-Mexico
-Brazil
-China
-Niger
-United States
-Mexico
-Kenya
-Taiwan
-Cuba
-United States
-Taiwan
-Brazil
-Brazil
-United States
-Canada
-Brazil
-Mexico
-Brazil
-Mexico
-Brazil
-Taiwan
-Sweden
-Mexico
-Benin
-United States
-Brazil
-Uganda
-Venezuela
-Vietnam
-Canada
-Zimbabwe
-Brazil
-United States
-France
-Cameroon
-Nigeria
-China
-Zimbabwe
-Brazil
-Brazil
-Canada
-Kenya
-South Africa
-China
-France
-United States
-United States
-Brazil
-United States
-China
-Taiwan
-Kenya
-Mexico
-Brazil
-Thailand
-Mexico
-China
-Brazil
-China
-China
-Kenya
-Mexico
-Mexico
-Mexico
-Uganda
-United States
-Uganda
-China
-Niger
-Canada
-China
-Brazil
-South Africa
-United States
-Brazil
-Mexico
-Nigeria
-Canada
-Kenya
-Mexico
-Mexico
-Australia
-United States
-Guinea
-Australia
-United States
-Thailand
-China
-Zimbabwe
-Brazil
-Venezuela
-Mexico
-Brazil
-Australia
-United States
-United States
-France
-South Africa
-Mexico
-Canada
-Mexico
-Guinea
-China
-China
-Brazil
-Kenya
-Brazil
-Brazil
-Taiwan
-Thailand
-United States
-Brazil
-Mexico
-Zimbabwe
-China
-Brazil
-China
-Spain
-Guinea
-Brazil
-Taiwan
-United States
-Nigeria
-Brazil
-Nigeria
-United States
-United States
-United States
-Mexico
-Kenya
-Brazil
-Vietnam
-India
-Brazil
-Thailand
-United States
-Guinea
-Mexico
-South Africa
-Mexico
-Sweden
-Niger
-Kenya
-Zimbabwe
-Thailand
-United States
-Canada
-Brazil
-South Africa
-Canada
-Venezuela
-Taiwan
-Mexico
-Thailand
-South Africa
-Cyprus
-Mexico
-Malawi
-Venezuela
-Niger
-Mexico
-Brazil
-Mexico
-China
-Zambia
-Niger
-Nigeria
-Taiwan
-Mexico
-Morocco
-Uganda
-Venezuela
-Guinea
-Vietnam
-Cameroon
+sequence_id,name
+1,Thailand
+2,Mexico
+3,Zimbabwe
+4,Taiwan
+5,India
+6,Mexico
+7,Guinea
+8,Brazil
+9,Taiwan
+10,United States
+11,United States
+12,Rwanda
+13,Zimbabwe
+14,United States
+15,Taiwan
+16,United States
+17,South Africa
+18,Brazil
+19,China
+20,Spain
+21,Mexico
+22,Brazil
+23,Brazil
+24,South Africa
+25,Taiwan
+26,Zimbabwe
+27,Brazil
+28,Brazil
+29,China
+30,Mexico
+31,Zimbabwe
+32,Brazil
+33,Uganda
+34,South Africa
+35,United States
+36,South Africa
+37,Mexico
+38,Zimbabwe
+39,Canada
+40,China
+41,Brazil
+42,United States
+43,United States
+44,Cameroon
+45,United States
+46,Taiwan
+47,Mexico
+48,Nigeria
+49,France
+50,Brazil
+51,Canada
+52,China
+53,United States
+54,Mexico
+55,Cameroon
+56,Mexico
+57,United States
+58,Canada
+59,Mexico
+60,Zimbabwe
+61,Thailand
+62,United States
+63,Thailand
+64,China
+65,Iran
+66,Italy
+67,China
+68,United States
+69,Mexico
+70,Vietnam
+71,Morocco
+72,Uganda
+73,United States
+74,Taiwan
+75,Niger
+76,Zimbabwe
+77,Uganda
+78,Zimbabwe
+79,Mexico
+80,Kenya
+81,China
+82,Zimbabwe
+83,Vietnam
+84,Nigeria
+85,Taiwan
+86,China
+87,United States
+88,United States
+89,Nigeria
+90,United States
+91,Brazil
+92,Vietnam
+93,Brazil
+94,Mexico
+95,Mexico
+96,Mexico
+97,China
+98,Brazil
+99,Brazil
+100,Thailand
+101,Brazil
+102,Nigeria
+103,Zimbabwe
+104,Thailand
+105,Uganda
+106,Canada
+107,Uganda
+108,Nigeria
+109,Brazil
+110,Thailand
+111,Venezuela
+112,Thailand
+113,France
+114,Brazil
+115,Italy
+116,Mexico
+117,United States
+118,Nigeria
+119,Uganda
+120,Iran
+121,Mexico
+122,Nigeria
+123,Niger
+124,China
+125,Mexico
+126,Taiwan
+127,Taiwan
+128,Kenya
+129,United States
+130,Brazil
+131,China
+132,China
+133,Kenya
+134,South Africa
+135,United States
+136,Taiwan
+137,Zimbabwe
+138,Guinea
+139,United States
+140,France
+141,Uganda
+142,Mexico
+143,Cameroon
+144,United States
+145,Benin
+146,United States
+147,Zimbabwe
+148,United States
+149,China
+150,Morocco
+151,United States
+152,Mexico
+153,Mexico
+154,Australia
+155,Benin
+156,Brazil
+157,Sweden
+158,United States
+159,Canada
+160,Mexico
+161,United States
+162,Mexico
+163,Malawi
+164,Brazil
+165,United States
+166,Mexico
+167,Uganda
+168,United States
+169,Cameroon
+170,Mexico
+171,Cyprus
+172,Benin
+173,South Africa
+174,Brazil
+175,Cyprus
+176,Zimbabwe
+177,Brazil
+178,Cambodia
+179,Uganda
+180,Kenya
+181,Zimbabwe
+182,United States
+183,Brazil
+184,Taiwan
+185,China
+186,Zambia
+187,Niger
+188,Taiwan
+189,Brazil
+190,Taiwan
+191,Benin
+192,Kenya
+193,United States
+194,Brazil
+195,Brazil
+196,South Africa
+197,Brazil
+198,Mexico
+199,Kenya
+200,Sweden
+201,Vietnam
+202,United States
+203,China
+204,Kenya
+205,Mexico
+206,South Africa
+207,Zimbabwe
+208,Brazil
+209,South Africa
+210,Niger
+211,United States
+212,United States
+213,Nigeria
+214,Brazil
+215,United States
+216,Taiwan
+217,China
+218,South Africa
+219,Spain
+220,Taiwan
+221,Zimbabwe
+222,Vietnam
+223,Cameroon
+224,Nigeria
+225,Cuba
+226,China
+227,China
+228,Guinea
+229,Nigeria
+230,Brazil
+231,Canada
+232,Zimbabwe
+233,Mexico
+234,United States
+235,Brazil
+236,France
+237,China
+238,Canada
+239,France
+240,Brazil
+241,Thailand
+242,China
+243,Nigeria
+244,Brazil
+245,Brazil
+246,Taiwan
+247,Brazil
+248,United States
+249,Thailand
+250,United States
+251,China
+252,Brazil
+253,Brazil
+254,Kenya
+255,United States
+256,Taiwan
+257,Kenya
+258,Brazil
+259,Cuba
+260,China
+261,Niger
+262,Uganda
+263,Brazil
+264,France
+265,Cameroon
+266,Australia
+267,Spain
+268,Brazil
+269,Canada
+270,Mexico
+271,Brazil
+272,Kenya
+273,South Africa
+274,Taiwan
+275,United States
+276,Brazil
+277,United States
+278,Mexico
+279,United States
+280,South Africa
+281,Zimbabwe
+282,Cameroon
+283,Mexico
+284,Guinea
+285,Italy
+286,Zimbabwe
+287,Thailand
+288,Niger
+289,China
+290,Nigeria
+291,Mexico
+292,Kenya
+293,China
+294,Brazil
+295,Mexico
+296,Italy
+297,Mexico
+298,Nigeria
+299,Thailand
+300,United States
+301,South Africa
+302,Nigeria
+303,Australia
+304,Taiwan
+305,South Africa
+306,Thailand
+307,Brazil
+308,Zambia
+309,Brazil
+310,United States
+311,United States
+312,South Africa
+313,Spain
+314,China
+315,Zimbabwe
+316,Niger
+317,Mexico
+318,Brazil
+319,Cuba
+320,Brazil
+321,Cambodia
+322,Brazil
+323,United States
+324,Nigeria
+325,Zimbabwe
+326,Taiwan
+327,Kenya
+328,United States
+329,United States
+330,South Africa
+331,China
+332,China
+333,China
+334,United States
+335,Benin
+336,South Africa
+337,Brazil
+338,Mexico
+339,Brazil
+340,China
+341,Niger
+342,United States
+343,Mexico
+344,Kenya
+345,Taiwan
+346,Cuba
+347,United States
+348,Taiwan
+349,Brazil
+350,Brazil
+351,United States
+352,Canada
+353,Brazil
+354,Mexico
+355,Brazil
+356,Mexico
+357,Brazil
+358,Taiwan
+359,Sweden
+360,Mexico
+361,Benin
+362,United States
+363,Brazil
+364,Uganda
+365,Venezuela
+366,Vietnam
+367,Canada
+368,Zimbabwe
+369,Brazil
+370,United States
+371,France
+372,Cameroon
+373,Nigeria
+374,China
+375,Zimbabwe
+376,Brazil
+377,Brazil
+378,Canada
+379,Kenya
+380,South Africa
+381,China
+382,France
+383,United States
+384,United States
+385,Brazil
+386,United States
+387,China
+388,Taiwan
+389,Kenya
+390,Mexico
+391,Brazil
+392,Thailand
+393,Mexico
+394,China
+395,Brazil
+396,China
+397,China
+398,Kenya
+399,Mexico
+400,Mexico
+401,Mexico
+402,Uganda
+403,United States
+404,Uganda
+405,China
+406,Niger
+407,Canada
+408,China
+409,Brazil
+410,South Africa
+411,United States
+412,Brazil
+413,Mexico
+414,Nigeria
+415,Canada
+416,Kenya
+417,Mexico
+418,Mexico
+419,Australia
+420,United States
+421,Guinea
+422,Australia
+423,United States
+424,Thailand
+425,China
+426,Zimbabwe
+427,Brazil
+428,Venezuela
+429,Mexico
+430,Brazil
+431,Australia
+432,United States
+433,United States
+434,France
+435,South Africa
+436,Mexico
+437,Canada
+438,Mexico
+439,Guinea
+440,China
+441,China
+442,Brazil
+443,Kenya
+444,Brazil
+445,Brazil
+446,Taiwan
+447,Thailand
+448,United States
+449,Brazil
+450,Mexico
+451,Zimbabwe
+452,China
+453,Brazil
+454,China
+455,Spain
+456,Guinea
+457,Brazil
+458,Taiwan
+459,United States
+460,Nigeria
+461,Brazil
+462,Nigeria
+463,United States
+464,United States
+465,United States
+466,Mexico
+467,Kenya
+468,Brazil
+469,Vietnam
+470,India
+471,Brazil
+472,Thailand
+473,United States
+474,Guinea
+475,Mexico
+476,South Africa
+477,Mexico
+478,Sweden
+479,Niger
+480,Kenya
+481,Zimbabwe
+482,Thailand
+483,United States
+484,Canada
+485,Brazil
+486,South Africa
+487,Canada
+488,Venezuela
+489,Taiwan
+490,Mexico
+491,Thailand
+492,South Africa
+493,Cyprus
+494,Mexico
+495,Malawi
+496,Venezuela
+497,Niger
+498,Mexico
+499,Brazil
+500,Mexico
+501,China
+502,Zambia
+503,Niger
+504,Nigeria
+505,Taiwan
+506,Mexico
+507,Morocco
+508,Uganda
+509,Venezuela
+510,Guinea
+511,Vietnam
+512,Cameroon
