@@ -1,0 +1,56 @@
+---
+author: "Kris Sankaran"
+title: "Week11F"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Midterm Review
+
+.pull-left[
+  April 15, 2022
+]
+
+---
+
+### Announcements
+
+* Midterm 2 is April 18
+* Portfolio 3 Peer Reviews due April 17
+* Project Peer Reviews due April 20
+* Kris' Office Hours Changed,
+  - *2:20 - 3:20pm ~~Mondays~~ Tuesdays*
+  - Still available for scheduled meetings
+
+---
+
+### Today
+
+* Midterm Review
+* [25 minutes] Prepare [exam notes](https://docs.google.com/presentation/d/1clAfjZp_wnC97aWou_VHF6XPE4rDDEdMwL6k2M08Pao/edit?usp=sharing) with team
+* [25 minutes] Go over [solutions](https://canvas.wisc.edu/courses/294873/files/25681635?module_item_id=4905394) together
+
