@@ -1,0 +1,243 @@
+---
+title: "STAT 479: MIDTERM 2"
+geometry: margin=2cm
+output: 
+  pdf_document:
+    keep_tex: true
+---
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(raster)
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, cache = TRUE)
+```
+\rule[-1mm]{19.3cm}{1mm}
+Name: \rule[0pt]{7cm}{.5pt}\vspace{3mm}
+
+* This exam lasts from 1:20 - 2:10pm on April 18, 2022. There are 6 questions.
+* This exam is closed notes and closed computer.
+* You may use a 1-page cheat sheet (8.5 x 11in or A4 size). You may use both
+sides, but the cheat sheet must be handwritten.
+* If you need extra space, you may write on the back of the page. Please
+indicate somewhere that your answer continues.
+* The instructors will only be able to answer clarifying questions during the
+exam. They will be sitting at the back of the room.
+
+| Question | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Total |
+| ---- | -- | -- | -- | -- | -- | -- | -- |
+| Score |  |  |  |  |  |  |  |  | |
+| Possible |  4 | 4 | 5 | 6 | 5 | 6 | 30  |
+
+\rule[1mm]{19.3cm}{1mm}
+
+### Q1 (4 points)
+
+Circle TRUE or FALSE for all statements below about time series and geospatial
+visualization.
+
+  * TRUE or FALSE: The `geom_sf` layer can be used to visualize collection of
+  spatial polygons of class `sf`.
+  * TRUE or FALSE: The `geom_raster` layer can be used to visualize a
+  multi-channel raster as an RGB image.
+  * TRUE or FALSE: A gradually decreasing slope in an ACF visualization
+  indicates a time series with strong seasonal structure.
+  * TRUE or FALSE: If `x` is a data.frame with columns `date`, `city`, and
+  `temperature`, then command `as_tsibble(x, key = city, index = date)` will
+  correctly create a `tsibble` object containing the time series collection,
+  assuming there are no gaps in time.
+  * TRUE or FALSE: A per-pixel grid of temperature data is an example of a
+  spatial vector dataset.
+
+### Q2 (4 points)
+
+Circle TRUE or FALSE for all statements below about clustering and topic models.
+    
+  * TRUE or FALSE: If all samples in a cluster have large silhouette statistics, then that
+  cluster is poorly-defined.
+  * TRUE or FALSE: Consider the `survey` dataset below,
+        
+    ```
+      Country     `WBL Report Year` Question answer
+      <chr>                   <dbl> <fct>     <dbl>
+    1 Afghanistan              1971 Q1            0
+    2 Afghanistan              1971 Q2            1
+    3 Afghanistan              1971 Q3            0
+    4 Afghanistan              1971 Q4            1
+    ```
+  
+    To use $K$-means to cluster country $\times$ year combinations by their pattern of question responses, we would need to first pivot it using the command,
+      
+    ```{r, eval = FALSE}
+    survey %>%
+    	pivot_wider(names_from = "Country", values_from = "answer")
+    ```	
+      
+  * TRUE or FALSE: Suppose a data.frame has a column, `reviews`, containing raw
+  text from across a collection of reviews (one review per row). Then, the
+  `cast_dtm` function can be used to split the raw text so that one word appears
+  on each row.
+  * TRUE or FALSE: A Structure plot visualizes the `n_samples` $\times$
+  `K`-dimensional matrix of mixed memberships fitted by a topic model.
+  * TRUE or FALSE: When cutting a hierarchical clustering tree at two heights,
+  the clusters found at the height closer to the leaves will always be nested
+  within the clusters found at the height closer to the root.
+  
+### Q3 (5 points)
+
+Imagine that you have been tasked with training models of glacial change in the
+Himalaya mountain range. You decide to first generate exploratory visualizations
+of the relevant spatial data.
+
+a. [2 points] The block below reads in an `sf` object with one row per glacier.
+Provide code for visualizing these glaciers, faceted by the `Glaciers` category.
+An example result is given in Figure \ref{fig:glaciers_sf}.
+    
+```{r}
+library(sf)
+glaciers <- read_sf("https://uwmadison.box.com/shared/static/k6htkjqj0w48g8oixfwq0zaobsny04jh.geojson") %>%
+  filter(Longitude < 86.91, Longitude > 86.1, Latitude < 27.81, Latitude > 27.7)
+
+glaciers[1:2, 1:5]
+```
+  
+```{r, fig.cap = "An example result for Q3a. \\label{fig:glaciers_sf}", fig.align = "center", out.width = "0.5\\textwidth", echo = FALSE}
+ggplot(glaciers) +
+  geom_sf() +
+  facet_wrap(~ Glaciers)
+```
+
+$$\\[1in]$$
+
+b. [1 point] The block below reads in a raster image for the same region. The
+15th channel of this dataset contains information about the slope at each pixel
+in the image. Provide code that could be used to visualize the slope at each
+location in the dataset.
+
+```{r}
+image <- brick("https://uwmadison.box.com/shared/static/2z3apyg4t7ct5qd4mcwh9rpr63t02jql.tif")
+```  
+
+$$\\[1in]$$
+
+c. [2 points] Suggest an approach to layering the glacier boundaries from (a)
+onto the slope map from (b). An example result is given in Figure
+\ref{fig:glaciersoverlay}.
+
+```{r, fig.cap = "\\label{fig:glaciersoverlay} An example result for Q3c.", fig.align = "center", out.width = "0.5\\textwidth", echo = FALSE}
+library(RStoolbox)
+ggRGB(image, r = 15, g = 15, b = 15, alpha = 0.3) +
+  geom_sf(data = glaciers, col = "red") +
+  facet_wrap(~ Glaciers)
+```
+
+$$\\[1in]$$
+
+### Q4 (6 points)
+
+In this problem, we will see how a heatmap can visualize user ratings across a
+collection of movies.
+
+```{r}
+movies_mat <- read_csv("https://uwmadison.box.com/shared/static/wj1ln9xtigaoubbxow86y2gqmqcsu2jk.csv") %>%
+  column_to_rownames(var = "title")
+movies_mat[1:2, 1:10]
+```
+
+a. [2 points] Provide code to generate the heatmap shown in Figure \ref{fig:movies}.
+
+```{r, echo = FALSE, fig.height = 10, fig.width = 18, out.width = "0.6\\textwidth", fig.cap = "\\label{fig:movies} A heatmap of movie ratings for Q4a.", fig.align = "center"}
+library(superheat)
+superheat(movies_mat, pretty.order.rows = TRUE, pretty.order.cols = TRUE)
+```
+
+$$\\[2in]$$
+
+b. [2 points] In this visualization, how do you interpret sets of similar rows?
+Similar columns?
+
+$$\\[1in]$$
+
+c. [2 points] Propose an alternative compound plot that also allows readers to
+easily find average movie ratings. Draw a simple sketch of what the output would
+look like and describe any necessary modifications to the code in part (a).
+
+$$\\[1in]$$
+
+### Q5 (5 points)
+
+The code below reads in nodes and edges for a graph describing the similarity of
+512 HIV samples collected across 32 countries. Two samples are linked if they
+have similar genetic sequences.
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
+library(tidygraph)
+nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week11/exercises/hiv_nodes.csv")
+edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week11/exercises/hiv_edges.csv")
+G <- tbl_graph(nodes, edges)
+G
+```
+
+a. [2 points] Provide code to generate a node-link visualization similar to that
+in Figure \ref{fig:hiv_graph}. Make at least one style customization that
+improves the visualization. Justify your choice.
+
+```{r, echo = FALSE, fig.width = 10, fig.height = 10, out.width = "0.5\\textwidth", fig.cap = "\\label{fig:hiv_graph} A network between HIV sequences, labeled by the country from which they originated.", fig.align = "center"}
+library(ggraph)
+ggraph(G) +
+  geom_edge_link(colour = "#d3d3d3", alpha = 0.9, width = 2) +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+```
+
+$$\\[1.5in]$$
+  
+b. [1 point] The figure below shows the node-link visualization for a simple
+graph. Sketch its exact adjacency matrix.
+
+```{r, echo = FALSE, out.width = "0.3\\textwidth", fig.width = 5, fig.height = 5, fig.align = "left"}
+set.seed(123)
+G <- as_tbl_graph(sample_pa(5)) %>%
+  mutate(node = 1:5)
+ggraph(G, layout = "kk") +
+  geom_edge_link() +
+  geom_node_label(aes(label = node)) +
+  theme_void()
+```
+
+$$\\[1.5in]$$
+
+c. [2 points] The figure below shows the node-link visualization for a
+more complex graph. How do you expect its corresponding adjacency matrix
+visualization to look? Provide a rough sketch and a one-sentence justification.
+
+```{r, echo = FALSE, out.width = "0.3\\textwidth", fig.width = 10, fig.height = 10, fig.align = "left"}
+G <- as_tbl_graph(sample_islands(3, 40, .12, 2))
+ggraph(G) +
+  geom_edge_link() +
+  geom_node_point() +
+  coord_fixed() +
+  theme_void()
+```
+
+$$\\[1.5in]$$
+
+### Q6 (6 points)
+
+This problem asks you to explain, in your own words, a few conceptual and
+practical aspects for **one of the following** dimensionality reduction
+techniques,
+
+  * Principal Components Analysis (PCA)
+  * Uniform Manifold Approximation and Projection (UMAP)
+  * Latent Dirichlet Allocation (LDA)
+  
+a. [3 points] Outline how you would implement this method in R and extract
+output needed for downstream visualizations. Make sure to highlight the the most
+important steps and functions and briefly explain any code you write down.
+
+$$\\[4in]$$
+
+b. [3 points] Describe the outputs from (a). How is each part interpreted? Be as
+specific as possible.
+
+$$\\[4in]$$
