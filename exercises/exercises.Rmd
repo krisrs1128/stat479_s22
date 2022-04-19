@@ -1613,8 +1613,8 @@ more common in positive vs. negative reviews.
     with 8 topics to the prepared object.
     
     c. Create a heatmap of topic distributions for the 50 words $d$ with the
-    largest inter-quartile across topics (i.e., largest IQR for
-    $\left(\beta_{dk}\right)_{k = 1}^{8}\right)$. Provide an interpretation for
+    largest inter-quartile across topics, i.e., largest IQR for
+    $\left(\beta_{dk}\right)_{k = 1}^{8})$. Provide an interpretation for
     one of the topics, based on the words that have high probability within it.
     
     d. Create a Structure plot displaying the topic memberships for each review.
@@ -1687,7 +1687,7 @@ and the resulting topicmodels object is
     $\gamma_{dk}$ either over time, across blogs, or in relation to political
     leaning. Suggest some interpretations for patterns that you see.
 
-9. [A Bikesharing Model] In this and the next problem, we will visualize models
+1. [A Bikesharing Model] In this and the next problem, we will visualize models
 fitted to predict bikesharing demand in a subset of the Capitol Bikesharing
 [dataset](https://uwmadison.box.com/shared/static/aa91qdqehagag8wg8mqsm4z5b4g2hu0x.csv).
 We will see what types of features are learned by different types of models,
@@ -1734,6 +1734,72 @@ predictors and bikesharing demand.
     hyper <- data.frame(cp = 0.01)
     fit_cart <- train(x = x, y = bike$count, method = "rpart", tuneGrid = hyper)
     ```
+    
+1. [Gender Pay Gap] This problem uses CP profiles to investigate the gender gap
+in a Glassdoor dataset of employee salaries. It is helpful to use a model,
+because it allows us to control for multiple other factors -- a direct plot of
+salary vs. gender could be criticized as not accounting for confounding
+variables. The code below trains a gradient boosting machine model on `BasePay`
+variable (yearly salary in USD), using all potential predictors in the dataset.
+    
+    ```{r, warning = FALSE, message = FALSE}
+    salary <- read_csv("https://github.com/krisrs1128/stat479_s22/raw/main/_slides/week12/exercises/Glassdoor%20Gender%20Pay%20Gap.csv")
+    library(caret)
+    
+    x <- salary %>%
+      select(Gender:Seniority) %>%
+      mutate(across(where(is.character), as.factor)) # gbm needs chr -> factor
+    y <- salary$BasePay
+    fit <- train(x, y, method = "gbm", verbose = FALSE)
+    ```
+    
+    a. Before attempting to explain the model, it is helpful to consider its
+    accuracy. Make a plot of the truth (`y`) against model predictions (`y_hat <- predict(fit)`) and comment on model performance.
+    
+    b. Compute aggregate CP profiles grouped by gender and comment on the extent
+    of the gender pay gap. According to the fitted prediction surface, is there
+    more or less of a pay gap at certain ages or levels of seniority?
+  
+    c. Show the analogous display without aggregating (i.e., `geom =
+    "profiles"). What is the interpretation of each line in this plot? In what
+    ways does it deepen your interpretation from part (b)?
+  
+1. [Overfitting `sin(x)`] We can use contrastive PD plots to visually evaluate
+model over / underfitting. To illustrate, we will fit two $K$-nearest neighbors
+models on a simple dataset, simulated below.
+      
+    ```{r, out.width = "0.4\\textwidth", fig.width = 6,, fig.height = 3, fig.align = "center", fig.cap = "A simulated sine wave dataset, used to evaluate overfitting."}
+    N <- 100
+    df <- data.frame(x = runif(N, -pi, pi)) %>%
+      mutate(y = sin(x) + rnorm(N, 0, 0.2))
+    
+    ggplot(df) +
+      geom_point(aes(x, y))
+    ```
+    
+    Below, we train three models to fit this curve, averaging over the 2, 10, and
+    50 nearest neighbors before making a prediction at a new location.
+    
+    ```{r}
+    library(caret)
+    
+    hyper <- map(c(2, 10, 50), ~ data.frame(k = .))
+    fits <- map(
+      hyper, 
+      ~ train(x = df %>% select(x), y = df$y, method = "knn", tuneGrid = .)
+    )
+    ```
+    
+    a. Create an `explainer` object for each of the fits above. Use these to
+    create contrastive PD profiles between the three models. _Hint: It will be important to label each of the derived profile objects._
+      
+    b. Interpret the result from (a). Which models seem over / underfit? Which
+    would you use in practice, and how did you draw this conclusion?
+    
+    c. Repeat the same analysis with a random forest model (`method = "rf"` in
+    caret). Instead of varying the `k` parameter, try several values of `mtry`. Is
+    this class of models more or less sensitive to overfitting than $K$-nearest
+    neighbors?
   
 1. [Representation Analysis for CIFAR10] This problem asks you to investigate
 the features learned by a deep learning model trained to the [CIFAR10
