@@ -1760,9 +1760,7 @@ variable (yearly salary in USD), using all potential predictors in the dataset.
     of the gender pay gap. According to the fitted prediction surface, is there
     more or less of a pay gap at certain ages or levels of seniority?
   
-    c. Show the analogous display without aggregating (i.e., `geom =
-    "profiles"). What is the interpretation of each line in this plot? In what
-    ways does it deepen your interpretation from part (b)?
+    c. Show the analogous display without aggregating (i.e., `geom = "profiles"`). What is the interpretation of each line in this plot?
   
 1. [Overfitting `sin(x)`] We can use contrastive PD plots to visually evaluate
 model over / underfitting. To illustrate, we will fit two $K$-nearest neighbors
