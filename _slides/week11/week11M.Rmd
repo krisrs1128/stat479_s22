@@ -138,11 +138,11 @@ fit <- LDA(mbti_dtm, k = 8)
 
 ## Live Coding Example
 
-We will work through Exercise  [Pride and Prejudice] in Module 3.
+We will work through Exercise  [Hotel Reviews] in Module 3.
 
 ---
 
 ### Exercise
 
-* Exercise 11.1 [Personality Types, a-b] on Canvas
-* Can discuss, but submit individually
+* Exercise 11.2 [Midterm Review] on Canvas
+* Submit as a group

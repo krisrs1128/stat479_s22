@@ -60,10 +60,28 @@ $\left(\beta_{dk}\right)_{k = 1}^{8}\right)$. Provide an interpretation for
 one of the topics, based on the words that have high probability within it.
 
 ```{r}
+topics <- tidy(fit, matrix = "beta")
+topics_mat <- topics %>%
+  pivot_wider(names_from = "topic", values_from = "beta") %>%
+  column_to_rownames("term")
 ```
+
+```{r}
+term_order <- topics %>%
+  group_by(term) %>%
+  summarise(iqr = IQR(beta)) %>%
+  arrange(-iqr) %>%
+  pull(term)
+```
+
+```{r}
+term_order[1:10]
+```
+
 
 ```{r, fig.width = 8, fig.height = 20}
 library(superheat)
+superheat(topics_mat[term_order[1:40], ], pretty.order.cols = TRUE)
 ```
 
 d. Create a Structure plot displaying the topic memberships for each review.
@@ -72,6 +90,13 @@ facet documents according to hotel rating. Are there certain topics that
 appear to be more common in negative vs. positive reviews?
 
 ```{r}
+hclust_result <- hclust(dist(fit@gamma))
+document_order <- fit@documents[hclust_result$order]
+memberships <- tidy(fit, matrix = "gamma") %>%
+  mutate(document = factor(document, levels = document_order))
+
+ggplot(memberships) +
+  geom_col(aes(gamma, document, fill = as.factor(topic), col = as.factor(topic)))
 ```
 
 We can finally create a structure plot.

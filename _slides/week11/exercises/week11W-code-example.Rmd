@@ -75,7 +75,7 @@ topic_mat <- topics %>%
 
 ```{r, fig.width = 8, fig.height = 20}
 library(superheat)
-superheat(topic_mat[term_order[50:1], ], pretty.order.rows = TRUE, pretty.order.cols = TRUE)
+superheat(topic_mat[term_order[50:1], ], pretty.order.cols = TRUE)
 ```
 
 d. Create a Structure plot displaying the topic memberships for each review.
