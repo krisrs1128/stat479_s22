@@ -1,0 +1,41 @@
+---
+title: "STAT 479: MIDTERM 2"
+geometry: margin=2cm
+output: 
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, cache = TRUE)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+```{r}
+scores <- read_csv("~/Downloads/2022-04-20T1155_Grades-SP22_STAT_479_001.csv") %>%
+  select(starts_with("Midterm"))
+```
+
+```{r}
+scores
+
+ggplot(scores) +
+  geom_dotplot(aes(`Midterm 2 (1488385)`))
+ggsave("~/Downloads/midterm2_dot.png")
+
+ggplot(scores) +
+  geom_abline(slope = 1) +
+  geom_point(aes(`Midterm 1 (1488384)`, `Midterm 2 (1488385)`)) +
+  coord_fixed()
+ggsave("~/Downloads/midterm_scatter.png")
+```
+
