@@ -39,9 +39,11 @@ class: bottom
 
 ### Announcements
 
-* Midterm solutions are posted. No more exams.
 * Project peer reviews due tonight (April 20)
-* Instructions for portfolio 4 are posted
+  - Mistake on PDF, and we will be flexible
+* Plan for the remainder of the semester
+  - Visualizing supervised models
+  - Revising your projects and favorite portfolio
 
 ---
 
@@ -62,6 +64,20 @@ By the end of the class, you should be able to...
   - Components: These are derived, linear features that maximize variance
   - Scores: Each observation is a mixture of these derived features. Think of
   the scores as mixing weights.
+  
+---
+
+.pull-left[
+```{r, echo = FALSE}
+include_graphics("midterm2_dot.png")
+```
+]
+
+.pull-right[
+```{r, echo =FALSE}
+include_graphics("midterm_scatter.png")
+```
+]
 
 ---
 

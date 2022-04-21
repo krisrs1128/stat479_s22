@@ -1,0 +1,77 @@
+---
+author: ""
+title: "Week 12W"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+1. [A Bikesharing Model] In this and the next problem, we will visualize models
+fitted to predict bikesharing demand in a subset of the Capitol Bikesharing
+[dataset](https://uwmadison.box.com/shared/static/aa91qdqehagag8wg8mqsm4z5b4g2hu0x.csv).
+We will see what types of features are learned by different types of models,
+whether there are any interactions between features, and whether linear and
+nonlinear approaches are substantively different.
+
+a. The code below fits a gradient boosting machine (GBM) to predict bikesharing
+demand (count) using all features available, except day of the year. Visualize
+the Ceteris Paribus profiles for the temperature and humidity variables, and
+provide a brief interpretation.
+      
+```{r, echo = TRUE, include = TRUE}
+library(caret)
+bike <- read_csv("https://uwmadison.box.com/shared/static/aa91qdqehagag8wg8mqsm4z5b4g2hu0x.csv")
+x <- dplyr::select(bike, -count, -dteday)
+hyper <- data.frame(n.trees = 100, interaction.depth = 4, shrinkage = 0.1, n.minobsinnode = 10)
+fit <- train(x = x, y = bike$count, method = "gbm", tuneGrid = hyper, verbose = FALSE)
+```
+
+```{r}
+library(DALEX)
+
+explanation <- explain(model = fit, data = x, y = bike$count, label = "gbm")
+profile <- model_profile(explanation)
+plot(profile, geom = "profiles") + th
+
+plot(profile, geom = "profiles", variables = c("temp", "hum")) + th
+```
+
+Fewer bikes are rented when humiditiy is high. For temperature, rentals tend to
+increase with temperature, except above a point when it becomes too hot. In both
+plots, the CP profiles suggest the existence of an interaction – for example,
+for temperature, there is a cluster of curves with low predictions at all
+temperatures and another with the clear hill.
+
+b. Has the GBM learned an interaction effect between the hour of day (`hr`) and
+weekend (`weekend`) features? Briefly justify your answer using a grouped CP
+plot.
+
+```{r}
+profile <- model_profile(explanation, groups = "weekend")
+plot(profile, geom = "profiles", variables = "hr") +
+  scale_color_brewer(palette = "Set2") +
+  th
+```
+
+Yes, the model has learned an interaction, because the shapes of the curves are
+not translations of one another.

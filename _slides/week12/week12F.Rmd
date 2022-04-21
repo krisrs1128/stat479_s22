@@ -33,12 +33,16 @@ class: bottom
 # Partial Dependence Plots (Part 2)
 
 .pull-left[
-  April 20, 2022
+  April 22, 2022
 ]
 
 ---
 
 ### Announcements
+
+* Portfolio Assignment 4 is on Canvas
+* Midterm solutions will be on Canvas next week (can come to OH for paper
+copies)
 
 ---
 
@@ -78,8 +82,8 @@ accuracy. Make a plot of the truth (`y`) against model predictions (`y_hat <- pr
 ```{r}
 data.frame(y = y, y_hat = predict(fit)) %>%
   ggplot() +
-    geom_point(aes(y, y_hat), alpha = 0.6, size = 0.5) +
     geom_abline(slope = 1, col = "red", size = 1) +
+    geom_point(aes(y, y_hat), alpha = 0.6, size = 0.5) +
     coord_fixed()
 ```
 
@@ -103,17 +107,18 @@ more or less of a pay gap at certain ages or levels of seniority?
 
 ```{r}
 profiles <- model_profile(explanation, groups = "Gender")
-plot(profiles)
+plot(profiles) + th
 ```
 
-There appears to be a gender gap uniformly across all other variables.
+The model appears to have learned a more or less constant gender pay gap across
+all of the other measured variables.
 
 ---
   
 c. Show the analogous display without aggregating (i.e., `geom = "profiles"`). What is the interpretation of each line in this plot? 
 
 ```{r}
-plot(profiles, geom = "profiles")
+plot(profiles, geom = "profiles") + th
 ```
 
 Each line corresponds to a sample. Its $\left(x, y\right)$ coordinates
@@ -121,7 +126,6 @@ correspond to predicted salaries $y$ after intervening on the plotted variable's
 $x$.
 
 ---
-
 
 ## Live Coding Example
 
@@ -131,5 +135,5 @@ We will work through Exercise  [Contrastive Profiles for Bikesharing] in Module 
 
 ### Exercise
 
-* Exercise 12.2 [Overfitting `sin(x)`] on Canvas
+* Exercise 12.2 [Overfitting `sin(x)`, a - b] on Canvas
 * Can discuss, but submit individually
