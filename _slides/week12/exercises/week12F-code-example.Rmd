@@ -1,0 +1,77 @@
+---
+author: ""
+title: "Week 12F"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+[Contrastive Profiles for Bikesharing] This problem continues the exploration in
+the previous one. Here, we study whether the choice of GBM was critical, or
+whether any other model would have learned the same relationship between the
+predictors and bikesharing demand.
+
+a. The code below fits a lasso model to the same input and output dataset.
+Provide contrastive partial dependence profiles between the lasso and the GBM
+from the previous problem, focusing on the hour (`hr`), humidity (`hum`), and
+temperature (`temp`) features. Comment on the result.
+
+```{r, echo = TRUE, include = TRUE}
+library(tidyverse)
+library(caret)
+
+bike <- read_csv("https://uwmadison.box.com/shared/static/aa91qdqehagag8wg8mqsm4z5b4g2hu0x.csv")
+x <- select(bike, -count, -dteday)
+fits <- list()
+
+hyper <- data.frame(n.trees = 100, interaction.depth = 4, shrinkage = 0.1, n.minobsinnode = 10)
+fits[["gbm"]] <- train(x = x, y = bike$count, method = "gbm", tuneGrid = hyper, verbose = FALSE)
+
+hyper <- data.frame(lambda = 0.001, alpha = 0)
+fits[["lm"]] <- train(x = x, y = bike$count, method = "glmnet", tuneGrid = hyper)
+```
+ 
+```{r}
+library(DALEX)
+explanations <- imap(fits, ~ explain(.x, data = x, y = y, label = .y))
+profiles <- map(explanations, model_profile)
+```
+
+```{r}
+plot(profiles[[1]], profiles[[2]])
+```
+ 
+ 
+b. Repeat part (a), but comparing the GBM with the CART model fitted below.
+Comment on the result.
+  
+```{r, echo = TRUE, include = TRUE}
+library(caret)
+hyper <- data.frame(cp = 0.01)
+fits[["cart"]] <- train(x = x, y = bike$count, method = "rpart", tuneGrid = hyper)
+
+explanations <- imap(fits, ~ explain(.x, data = x, y = y, label = .y))
+profiles <- map(explanations, model_profile)
+
+plot(profiles[["gbm"]], profiles[["cart"]])
+```
