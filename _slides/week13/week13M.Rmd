@@ -1,0 +1,135 @@
+---
+author: "Kris Sankaran"
+title: "Week13M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(caret)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Deep Learning Visualization
+
+.pull-left[
+  April 25, 2022
+]
+
+---
+
+## Exercise Review
+
+[Overfitting `sin(x)`] We can use contrastive PD plots to visually evaluate
+model over / underfitting. To illustrate, we will fit two $K$-nearest neighbors
+models on a simple dataset, simulated below.
+      
+```{r, out.width = "0.4\\textwidth", fig.width = 6,, fig.height = 3, fig.align = "center", fig.cap = "A simulated sine wave dataset, used to evaluate overfitting."}
+N <- 100
+df <- data.frame(x = runif(N, -pi, pi)) %>%
+  mutate(y = sin(x) + rnorm(N, 0, 0.2))
+
+ggplot(df) +
+  geom_point(aes(x, y))
+```
+
+---
+
+Below, we train three models to fit this curve, averaging over the 2, 10, and
+50 nearest neighbors before making a prediction at a new location.
+
+```{r}
+library(caret)
+
+hyper <- map(c(2, 10, 50), ~ data.frame(k = .))
+fits <- map(
+  hyper, 
+  ~ train(x = df %>% select(x), y = df$y, method = "knn", tuneGrid = .)
+)
+
+fits
+```
+
+---
+
+a. Create an `explainer` object for each of the fits above. Use these to create
+contrastive PD profiles between the three models.
+
+```{r}
+library(DALEX)
+x <- df %>% select(starts_with("x"))
+explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y))
+profiles <- map(explanations, model_profile)
+plot(profiles[[1]], profiles[[2]], profiles[[3]])
+```
+
+---
+
+b. Interpret the result from (a). Which models seem over / underfit? Which
+would you use in practice, and how did you draw this conclusion?
+
+The model with $K = 50$ is underfit -- it "fills the valleys" and "trims the
+hills." The model with $K = 2$ seems to include the noise in the fitted
+regression.
+
+```{r}
+plot(profiles[[1]], profiles[[2]], profiles[[3]])
+```
+
+---
+
+c. Repeat the same analysis with a random forest model (`method = "rf"` in
+caret). Instead of varying the `k` parameter, try several values of `mtry`. Is
+this class of models more or less sensitive to overfitting than $K$-nearest
+neighbors?
+  
+```{r}
+hyper <- map(c(10, 50, 200), ~ data.frame(mtry = .))
+fits <- map(
+  hyper, 
+  ~ train(x = df %>% select(x), y = df$y, tuneGrid = .)
+)
+```
+
+---
+
+The `mtry` parameter doesn't seem to have much influence in this problem.
+
+```{r}
+explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y))
+profiles <- map(explanations, model_profile)
+plot(profiles[[1]], profiles[[2]], profiles[[3]])
+```
+
+---
+
+## Live Coding Example
+
+We will work through Exercise [Deep Learning as a Mixture of Separating Hyperplanes] in Module 3.
+
+---
+
+### Exercise
+
+* Exercise 13.1 [Tensorflow Playground] on Canvas
+* Can discuss, but submit individually
