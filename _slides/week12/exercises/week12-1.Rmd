@@ -42,8 +42,8 @@ library(caret)
 
 bike <- read_csv("https://uwmadison.box.com/shared/static/aa91qdqehagag8wg8mqsm4z5b4g2hu0x.csv")
 x <- select(bike, -count, -dteday)
-
 fits <- list()
+
 hyper <- data.frame(n.trees = 100, interaction.depth = 4, shrinkage = 0.1, n.minobsinnode = 10)
 fits[["gbm"]] <- train(x = x, y = bike$count, method = "gbm", tuneGrid = hyper, verbose = FALSE)
 
@@ -53,29 +53,25 @@ fits[["lm"]] <- train(x = x, y = bike$count, method = "glmnet", tuneGrid = hyper
  
 ```{r}
 library(DALEX)
-
-# explain
-# model_profile
-imap(fits, ~ print(.y))
-
+explanations <- imap(fits, ~ explain(.x, data = x, y = y, label = .y))
+profiles <- map(explanations, model_profile)
 ```
-
 
 ```{r}
-explanations <- imap(fits, ~ DALEX::explain(.x , data = x, y = bike$count, label = .y))
-library(DALEX)
-profiles <- map(explanations, ~ model_profile(.))
-
-profiles
 plot(profiles[[1]], profiles[[2]])
 ```
- 
  
  
 b. Repeat part (a), but comparing the GBM with the CART model fitted below.
 Comment on the result.
   
 ```{r, echo = TRUE, include = TRUE}
+library(caret)
 hyper <- data.frame(cp = 0.01)
 fits[["cart"]] <- train(x = x, y = bike$count, method = "rpart", tuneGrid = hyper)
+
+explanations <- imap(fits, ~ explain(.x, data = x, y = y, label = .y))
+profiles <- map(explanations, model_profile)
+
+plot(profiles[["gbm"]], profiles[["cart"]])
 ```

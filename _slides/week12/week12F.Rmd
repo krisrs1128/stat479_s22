@@ -41,8 +41,6 @@ class: bottom
 ### Announcements
 
 * Portfolio Assignment 4 is on Canvas
-* Midterm solutions will be on Canvas next week (can come to OH for paper
-copies)
 
 ---
 
@@ -129,11 +127,91 @@ $x$.
 
 ## Live Coding Example
 
-We will work through Exercise  [Contrastive Profiles for Bikesharing] in Module 3.
+[Overfitting `sin(x)`] We can use contrastive PD plots to visually evaluate
+model over / underfitting. To illustrate, we will fit two $K$-nearest neighbors
+models on a simple dataset, simulated below.
+      
+```{r, out.width = "0.4\\textwidth", fig.width = 6,, fig.height = 3, fig.align = "center", fig.cap = "A simulated sine wave dataset, used to evaluate overfitting."}
+N <- 100
+df <- data.frame(x = runif(N, -pi, pi)) %>%
+  mutate(y = sin(x) + rnorm(N, 0, 0.2))
 
+ggplot(df) +
+  geom_point(aes(x, y))
+```
+
+---
+
+Below, we train three models to fit this curve, averaging over the 2, 10, and
+50 nearest neighbors before making a prediction at a new location.
+
+```{r}
+library(caret)
+
+hyper <- map(c(2, 10, 50), ~ data.frame(k = .))
+fits <- map(
+  hyper, 
+  ~ train(x = df %>% select(x), y = df$y, method = "knn", tuneGrid = .)
+)
+
+fits
+```
+
+---
+
+a. Create an `explainer` object for each of the fits above. Use these to create
+contrastive PD profiles between the three models.
+
+```{r}
+library(DALEX)
+x <- df %>% select(starts_with("x"))
+explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y))
+profiles <- map(explanations, model_profile)
+plot(profiles[[1]], profiles[[2]], profiles[[3]])
+```
+
+---
+
+b. Interpret the result from (a). Which models seem over / underfit? Which
+would you use in practice, and how did you draw this conclusion?
+
+The model with $K = 50$ is underfit -- it "fills the valleys" and "trims the
+hills." The model with $K = 2$ seems to include the noise in the fitted
+regression.
+
+```{r}
+plot(profiles[[1]], profiles[[2]], profiles[[3]])
+```
+
+---
+
+c. Repeat the same analysis with a random forest model (`method = "rf"` in
+caret). Instead of varying the `k` parameter, try several values of `mtry`. Is
+this class of models more or less sensitive to overfitting than $K$-nearest
+neighbors?
+  
+```{r}
+hyper <- map(c(10, 50, 200), ~ data.frame(mtry = .))
+fits <- map(
+  hyper, 
+  ~ train(x = df %>% select(x), y = df$y, tuneGrid = .)
+)
+```
+
+---
+
+The `mtry` parameter doesn't seem to have much influence in this problem.
+
+```{r}
+explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y))
+profiles <- map(explanations, model_profile)
+plot(profiles[[1]], profiles[[2]], profiles[[3]])
+```
+
+  
 ---
 
 ### Exercise
 
-* Exercise 12.2 [Overfitting `sin(x)`, a - b] on Canvas
+* Exercise 13.2 [Overfitting `sin(x)`, a - b] on Canvas
 * Can discuss, but submit individually

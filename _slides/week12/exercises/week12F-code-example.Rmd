@@ -50,12 +50,12 @@ fits[["gbm"]] <- train(x = x, y = bike$count, method = "gbm", tuneGrid = hyper, 
 hyper <- data.frame(lambda = 0.001, alpha = 0)
 fits[["lm"]] <- train(x = x, y = bike$count, method = "glmnet", tuneGrid = hyper)
 ```
- 
 ```{r}
-library(DALEX)
-explanations <- imap(fits, ~ explain(.x, data = x, y = y, label = .y))
-profiles <- map(explanations, model_profile)
+map(c(1, 2, 3), ~ .x ^ 2)
+
+imap(c(k1 = fit1, k2 = fit2, c = fit3), ~ c(value = .x ^ 2, name = .y))
 ```
+
 
 ```{r}
 plot(profiles[[1]], profiles[[2]])

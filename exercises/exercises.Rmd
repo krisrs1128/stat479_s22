@@ -1780,6 +1780,7 @@ models on a simple dataset, simulated below.
     
     ```{r}
     library(caret)
+    library(tidyverse)
     
     hyper <- map(c(2, 10, 50), ~ data.frame(k = .))
     fits <- map(
@@ -1798,6 +1799,80 @@ models on a simple dataset, simulated below.
     caret). Instead of varying the `k` parameter, try several values of `mtry`. Is
     this class of models more or less sensitive to overfitting than $K$-nearest
     neighbors?
+    
+1. [Deep Learning as a Mixture of Separating Planes] In this exercise, we will
+visualize the predictions and hidden layer activations in a simple, but
+nonlinear, classification problem. The goal is to illustrate how nonlinear
+decision boundaries can be learned by deeper layers of a neural network, even
+though each neuron is a linear combination of the previous layer's units.
+
+    a. The block below simulates a toy dataset with predictors `x` and response
+    `y`. Provide a visualization for the dataset and comment on why a one-layer
+    deep learning model would not be sufficient to achieve good performance.
+
+    ```{r}
+    x <- matrix(rt(N * 2, 12), N, 2)
+    y <- rowSums(x ^ 2) < 1
+    flip_ix <- sample(N, N / 20) # 5% unavoidable error
+    y[flip_ix] <- !y[flip_ix]
+    simulation <- data.frame(x = x, y = y)
+    ```
+    
+    b. The block below defines and fits a deep learning model with three hidden
+    layers. Design and implement a visualization that shows the predicted
+    probabilities for each sample after the model has converged.
+    
+    ```{r}
+    library(keras)
+    model <- keras_model_sequential() %>% 
+      layer_dense(units = 20, activation = "relu", input_shape = c(2)) %>% 
+      layer_dense(units = 20, activation = "relu", input_shape = c(20)) %>% 
+      layer_dense(units = 20, activation = "relu", input_shape = c(20)) %>% 
+      layer_dense(2, activation = "softmax")
+    
+    model %>% 
+      compile(optimizer = "adam", loss = "categorical_crossentropy") %>%
+      fit(
+        x = simulation %>% select(starts_with("x")) %>% as.matrix(),
+        y = to_categorical(simulation$y),
+        metric = "accuracy",
+        epochs = 60,
+        verbose = 0
+      )
+    ```
+      
+      c. The block below defines a `keras` model that can be used to extract
+      activations from the first hidden layer of the trained deep learning
+      model. Design and implement a visualization to characterize how
+      activations for a single neuron behave, as a function of the input $x$
+      coordinates. Make the analogous visualization for a deeper layer.
+      
+    ```{r}
+    submodel <- keras_model(model$input, model$layers[[1]]$output)
+    ```
+  
+    d. Generate a heatmap of activations across all neurons from some layer of
+    the model. Comment on the structure of the learned features.
+    
+1. [Tensorflow Playground] This
+[website](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.06717&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=true&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false)
+provides an interactive visualization of a deep learning model trained on
+several toy datasets. This problem invites you to explore the visualization and
+reflect on its interpretation and design.
+
+    a. Experiment with several datasets, input features, layer sizes, or network
+    depths. For which setups does the model seem to converge to a solution most
+    easily? When does the model struggle to converge? Describe how you drew your
+    conclusions.
+    
+    b. Comment on the design of this visualization and the visualization
+    concepts that it uses. What do you think are some of its more effective
+    design decisions?
+  
+    c. Pose a question motivated by your experimentation with the interface.
+    For example, this can be something you found confusing about the interface,
+    a question it raised about neural networks more generally, or a thought
+    about visual design.
   
 1. [Representation Analysis for CIFAR10] This problem asks you to investigate
 the features learned by a deep learning model trained to the [CIFAR10
