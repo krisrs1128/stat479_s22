@@ -1,0 +1,66 @@
+---
+author: ""
+title: "Week 13M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+[Representation Analysis for CIFAR10] This problem asks you to investigate the
+features learned by a deep learning model trained to the [CIFAR10
+dataset](https://www.cs.toronto.edu/~kriz/cifar.html). We will study the
+structure of the dataset and develop some intuition for what representations
+different neurons are learning.
+
+a. The code below loads the CIFAR training dataset. Training images and labels
+can be accessed using `cifar$x` and `cifar$y`, respectively. Plot the first 15
+examples from this dataset and print out their class labels. What does class 7
+seem to correspond to?
+
+```{r, echo = TRUE, include = TRUE}
+library(keras)
+cifar <- dataset_cifar10()$train
+```
+
+b. We have trained a small model to this dataset, available at this
+[link](https://uwmadison.box.com/shared/static/c9kkxyrjb9myfj5knj5vnx0j8gn1uh0s.h5).
+Extract and visualize the feature activations associated with the first five
+features in layer 1 (`conv2d_8`) for the first image in the dataset.
+
+```{r, echo = TRUE, include = TRUE}
+f <- tempfile()
+download.file("https://uwmadison.box.com/shared/static/c9kkxyrjb9myfj5knj5vnx0j8gn1uh0s.h5", f)
+model <- load_model_hdf5(f)
+```
+
+c. The block below extracts feature activations associated with layer 7, for the
+first 10% of the dataset. Specifically, the $ij^{th}$ element of `features`
+gives the activation of neuron $j$ (in layer 7) on image $i$. Visualize the 10
+images that have the highest activation for neuron 1. What does this neuron seem
+to be responsive to?
+    
+```{r, echo = TRUE, include = TRUE}
+activation_model <- keras_model(inputs = model$input, outputs = model$layers[[7]]$output)
+features <- activation_model(cifar$x[1:5000,,, ]) %>%
+  as.matrix()
+```

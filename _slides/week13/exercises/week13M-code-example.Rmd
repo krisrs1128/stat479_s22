@@ -37,6 +37,7 @@ a. The block below simulates a toy dataset with predictors `x` and response
 deep learning model would not be sufficient to achieve good performance.
 
 ```{r}
+N <- 100
 x <- matrix(rt(N * 2, 12), N, 2)
 y <- rowSums(x ^ 2) < 1
 flip_ix <- sample(N, N / 20) # 5% unavoidable error

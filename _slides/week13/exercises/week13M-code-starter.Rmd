@@ -37,11 +37,17 @@ a. The block below simulates a toy dataset with predictors `x` and response
 deep learning model would not be sufficient to achieve good performance.
 
 ```{r}
+N <- 100
 x <- matrix(rt(N * 2, 12), N, 2)
 y <- rowSums(x ^ 2) < 1
 flip_ix <- sample(N, N / 20) # 5% unavoidable error
 y[flip_ix] <- !y[flip_ix]
 simulation <- data.frame(x = x, y = y)
+
+ggplot(simulation) +
+  geom_point(aes(x.1, x.2, col = y)) +
+  coord_fixed()
+
 ```
 
 b. The block below defines and fits a deep learning model with three hidden
@@ -67,12 +73,57 @@ model %>%
   )
 ```
   
+```{r}
+x_grid <- seq(-4.5, 3, length = 40)
+x_grid <- expand.grid(x_grid, x_grid)
+
+x_grid$y_hat <- predict(model, as.matrix(x_grid))[, 2]
+ggplot(x_grid) +
+  geom_tile(aes(Var1, Var2, fill = y_hat)) +
+  geom_point(data = simulation, aes(x.1, x.2, col = y)) +
+  scale_fill_distiller(direction = 1) +
+  coord_fixed()
+```
+
+  
 c. The block below defines a `keras` model that can be used to extract
 activations from the first hidden layer of the trained deep learning
 model. Design and implement a visualization to characterize how
 activations for a single neuron behave, as a function of the input $x$
 coordinates. Make the analogous visualization for a deeper layer.
 
+```{r}
+x_grid <- seq(-4.5, 3, length = 40)
+x_grid <- expand.grid(x_grid, x_grid)
+submodel <- keras_model(model$input, model$layers[[3]]$output)
+x_grid$h1 <- predict(submodel, as.matrix(x_grid))[, 1]
+
+ggplot(x_grid) +
+  geom_tile(aes(Var1, Var2, fill = h1)) +
+  geom_point(data = simulation, aes(x.1, x.2, col = y)) +
+  scale_fill_distiller(direction = 1) +
+  coord_fixed()
+
+```
+
+
 d. Generate a heatmap of activations across all neurons from some layer of
 the model. Comment on the structure of the learned features.
+
+
+```{r}
+library(superheat)
+submodel <- keras_model(model$input, model$layers[[1]]$output)
+h <- predict(submodel, as.matrix(simulation[, 1:2]))
+superheat(h, pretty.order.rows = TRUE, pretty.order.cols = TRUE)
+```
+
+
+
+
+
+
+
+
+
 
