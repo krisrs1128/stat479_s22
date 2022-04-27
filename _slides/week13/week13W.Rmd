@@ -1,0 +1,128 @@
+---
+author: "Kris Sankaran"
+title: "Week13M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(caret)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Deep Learning Visualization
+
+.pull-left[
+  April 27, 2022
+]
+
+---
+
+### Announcements
+
+* Poster printing
+
+---
+
+## Exercise Review
+
+[Tensorflow Playground] This
+[website](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.06717&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=true&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false)
+provides an interactive visualization of a deep learning model trained on
+several toy datasets. This problem invites you to explore the visualization and
+reflect on its interpretation and design.
+
+---
+
+a. Experiment with several datasets, input features, layer sizes, or network
+depths. For which setups does the model seem to converge to a solution most
+easily? When does the model struggle to converge? Describe how you drew your
+conclusions.
+
+* More neurons and layers typically leads to faster convergence
+* The mixture-of-gaussians is easiest to fit, the spirals are the hardest
+* There is some random variation in training speeds
+* Draw conclusions by tinkering
+
+---
+
+b. Comment on the design of this visualization and the visualization
+concepts that it uses. What do you think are some of its more effective
+design decisions?
+
+* Dynamic linking lets us inspect individual neurons
+* Consistent visual encodings in the sample classes, predicted probabilities,
+and network edges
+* Visual queries make it feel like we are directly manipulating the network (not
+like a big UI panel)
+* Showing the dynamics of training is much better than just showing performance
+* It is surprisingly addictive
+
+---
+
+c. Pose a question motivated by your experimentation with the interface.
+For example, this can be something you found confusing about the interface,
+a question it raised about neural networks more generally, or a thought
+about visual design.
+
+Themes: 
+
+* In what ways does having more neurons help?
+* In what ways does having more layers help?
+* Should we always have more neurons and layers?
+* Are there good rules of thumb for choosing network parameters?
+* Why don't they let us directly compare two network parameter settings?
+* How to get this to work on the spiral.
+
+---
+
+Themes: 
+
+* In what ways does having more neurons help?
+  - At early layers, more neurons $\to$ complex mixtures of simple features
+* In what ways does having more layers help?
+  - At later layers, we can make simple mixtures of complex features
+* Should we always have more neurons and layers?
+  - More neurons + layers allows more complex decision boundaries
+  - More neurons + layers can create instability in training
+* Are there good rules of thumb for choosing network parameters?
+  - Make the network large enough to overfit
+  - Check to see gradients / changing weights across layers
+  - Paper: Towards Better Analysis of Deep Convolutional Neural Networks
+  - There is also a subfield called Neural Architecture Search
+* Why don't they let us directly compare two network parameter settings?
+  - Likely to keep the visualization simple
+* How to get this to work on the spiral.
+
+---
+
+## Live Coding Example
+
+We will work through Exercise [Representation Analysis for CIFAR10, parts a - b] in Module 3.
+
+---
+
+### Exercise
+
+* Exercise 13.2 [CIFAR, part c] on Canvas
+* Can discuss, but submit individually
