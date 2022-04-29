@@ -1,0 +1,126 @@
+---
+author: "Kris Sankaran"
+title: "Week13F"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(caret)
+opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
+  dpi = 200,
+  fig.align = "center",
+  out.width = 650,
+  fig.height = 3,
+  fig.width = 9
+  )
+th <- theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Deep Learning Visualization
+
+.pull-left[
+  April 29, 2022
+]
+
+---
+
+### Announcements
+
+* Poster sessions on May 4, 6
+* Portfolio 4 due May 8
+* Project Milestone 4 due May 8
+
+---
+
+## Exercise Review
+
+[Representation Analysis for CIFAR10] This problem asks you to investigate the
+features learned by a deep learning model trained to the [CIFAR10
+dataset](https://www.cs.toronto.edu/~kriz/cifar.html). We will study the
+structure of the dataset and develop some intuition for what representations
+different neurons are learning.
+  
+```{r, echo = TRUE, include = TRUE}
+library(keras)
+cifar <- dataset_cifar10()$train
+f <- tempfile()
+download.file("https://uwmadison.box.com/shared/static/c9kkxyrjb9myfj5knj5vnx0j8gn1uh0s.h5", f)
+model <- load_model_hdf5(f)
+```
+
+---
+  
+c. The block below extracts feature activations associated with layer 7, for the
+first 10% of the dataset. Specifically, the $ij^{th}$ element of `features`
+gives the activation of neuron $j$ (in layer 7) on image $i$. Visualize the 10
+images that have the highest activation for neuron 1. What does this neuron seem
+to be responsive to?
+    
+```{r, echo = TRUE, include = TRUE}
+activation_model <- keras_model(inputs = model$input, outputs = model$layers[[7]]$output)
+features <- activation_model(cifar$x[1:5000,,, ]) %>%
+  as.matrix()
+```
+
+---
+
+```{r, fig.height = 8, fig.width = 12}
+library(superheat)
+log(1 + features) %>%
+  t() %>%
+  superheat(pretty.order.cols = TRUE, pretty.order.rows = TRUE)
+```
+
+---
+
+* Strangely enough, this model picks up on military planes and small dogs
+* It seems like the model picked up on several versions of the same image and
+maybe even several angles of the same dog (?)
+
+```{r}
+activation_order <- order(features[, 1], decreasing = TRUE)
+cifar$x[activation_order[1:10],,,] %>%
+  array_tree(1) %>%
+  map(~ plot(as.raster(., max = 255)))
+```
+
+---
+
+## Aside: Installation Errors
+
+---
+
+## Live Coding Example
+
+We will work through Exercise [Histopathology Embeddings] in Module 3.
+
+---
+
+### Exercise
+
+* Exercise 13.2 [Representation Analysis for CIFAR10, part c] on Canvas
+* Can discuss, but submit individually
