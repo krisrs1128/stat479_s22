@@ -1,0 +1,147 @@
+---
+author: "Kris Sankaran"
+title: "Week14M"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/xaringan-themer.css"]
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+    seal: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(caret)
+opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
+  dpi = 200,
+  fig.align = "center",
+  out.width = 650,
+  fig.height = 3,
+  fig.width = 9
+  )
+th <- theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+options(width = 100)
+```
+class: bottom
+
+# Course Reflection
+
+.pull-left[May 2, 2022]
+
+---
+
+### Announcements
+
+* Poster sessions on May 4, 6
+* Portfolio 4 due May 8
+* Project Milestone 4 due May 8
+
+---
+
+## Exercise Review
+
+[Model Visualization Use Cases] The exercise below describes a few
+hypothetical situations where model visualization can be used. Discuss how you
+might approach them.
+
+---
+    
+a. Your colleagues have trained a random forest model to predict whether
+activity observed on a corporate network might be the early signs of a
+cyberattack. The model is based on features like the average network data rate,
+the average packet size, and the port numbers of source traffic. Describe
+visualizations that could help your colleagues understand and improve their
+trained model.
+
+* Since we have trained a nonlinear model to directly interpretable features, it
+would be natural to use CP profiles.
+
+* E.g., As the packet size changes, what is the predicted probability that we
+are experiencing a cyberattack?
+
+* Are there any interactions between data rate and port numbers?
+
+---
+  
+b. You working with a client to analyze data from a crisis text helpline.
+They are interested in the topics that often arise during these support
+sessions. They are also curious whether some topics are are more easily
+resolved than others, as measured by a follow-up survey. Propose an analysis
+strategy and the types of visualizations you expect to be helpful.
+
+* Since the data are collections of short text documents, we could apply topic
+modeling.
+
+* We could generate Structure plots faceted by responses on the follow-up
+survey. An interactive version would allow us to see the content of the text
+messages when we hover over parts of the figure.
+
+---
+  
+c. You have built a deep learning model to detect changes in satellite imagery
+(e.g., before and after a natural disaster). Describe visualization techniques
+that can help you understand the latent image characteristics that may be
+learned by your model.
+
+* We could use any feature visualization techniques. For example, we could
+collect activations for images at the end of the network and create a UMAP
+embeddings.
+
+* We could find the image patches that lead to the highest activation or some
+neurons. E.g., some neurons may detect changes in color, changes in texture, or
+changes in landcover type.
+
+---
+
+### Aside
+
+These three examples are not as hypothetical as they might seem at first.
+
+* (a) is the sort of problem I saw at a cybersecurity startup (Obsidian)
+
+* (b) is motivated by a project I saw at DataKind (a data science volunteer
+organization)
+
+* (c) comes from work one of my friends does for the Microsoft AI for Good
+research lab
+
+---
+
+### Final Lectures
+
+* It won't affect your grade, but I hope you have a chance to read the week 14
+material
+* They are non-technical, but I think they include some of the most important
+points from any lecture in the course
+  - The purpose of data science
+  - The design process
+  - Some history of data visualization
+
+---
+
+### Thank You
+
+* I am grateful for all of the energy and thought you have brought to this course
+
+* I often tell my colleagues about how creative you all are
+
+* Send me some of the visualizations you make in the future, I am always happy
+to hear from former students
+
+* Final [reflection activity](https://docs.google.com/presentation/d/1_whTJRl9BI904SFcgY98gQUtDggp9AbL8uRbp-7NAxw/edit)
