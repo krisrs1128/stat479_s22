@@ -1912,6 +1912,37 @@ different neurons are learning.
     features <- activation_model(cifar$x[1:5000,,, ]) %>%
       as.matrix()
     ```
+    
+1. [Histopathology Embeddings] This problem investigates the features learned by
+a residual network model trained trained to classify histopathology slides.
+Specifically, the script at [this
+link](https://colab.research.google.com/drive/1bPFz718F-YE0iUcdkm2kc0Aeg8g6-Neh?usp=sharing)
+was used to train a model to images from the Pcam [benchmark
+dataset](https://www.kaggle.com/competitions/histopathologic-cancer-detection/data).
+Each image is a tissue slide. The class labels describe whether the center $32 \times 32$ patch within the image contains any cancerous cells.
+
+    In the process, we will also practice using the `reticulate` package to read in
+    numpy arrays produced by the python training script linked above. This language
+    interoperability makes it possible to use the packages best suited to both
+    modeling (`pytorch`) and visualization (`ggplot2`).
+
+    a. We have hosted a subsample of the training images at [this
+    link](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week13/exercises/subset.tar.gz?raw=true).
+    Their corresponding [labels](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week13/exercises/y.npy?raw=true) are stored as numpy arrays. Visualize the raw images corresponding to 10 images from each class. _Hint: To unzip these files from the command line, you can use `tar -zxvf subset.tar.gz`_ 
+    
+    b. For the subsample in part (a), we have saved the residual network
+    features from the final pre-classification layer. They are available
+    at [this
+    link](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week13/exercises/h.npy?raw=true).
+    Generate UMAP embeddings for the images based on these features, and shade
+    in each sample according to its class.
+    
+    c. Using `annotation_raster` layers from `ggplot2`, display the original
+    images from (a) at the locations of the UMAP coordinates from (b). The
+    correspondence between image filenames and features is given by [this
+    array](https://github.com/krisrs1128/stat479_s22/blob/main/_slides/week13/exercises/fnames.npy?raw=true).
+    In particular, the $i^{th}$ element of this array is the source image for
+    the $i^{th}$ row of the features matrix.
 
 1. [Household Radon Levels] This problem analyzes a
 [dataset](https://uwmadison.box.com/shared/static/3yn994tc1ft73z3br4ys18uri700gvik.csv)
@@ -1983,7 +2014,29 @@ visualize their outputs.
       map_dfr(~ add_predicted_draws(radon, .), .id = "model") %>%
       filter(.draw > 990)
     ```
-  
+    
+1. [Model Visualization Use Cases] The exercise below describes a few
+hypothetical situations where model visualization can be used. Discuss how you
+might approach them.
+    
+    a. Your colleagues have trained a random forest model to predict whether
+    activity observed on a corporate network might be the early signs of a
+    cyberattack. The model is based on features like the average network data rate,
+    the average packet size, and the port numbers of source traffic. Describe
+    visualizations that could help your colleagues understand and improve their
+    trained model.
+    
+    b. You working with a client to analyze data from a crisis text helpline.
+    They are interested in the topics that often arise during these support
+    sessions. They are also curious whether some topics are are more easily
+    resolved than others, as measured by a follow-up survey. Propose an analysis
+    strategy and the types of visualizations you expect to be helpful.
+    
+    c. You have built a deep learning model to detect changes in satellite imagery
+    (e.g., before and after a natural disaster). Describe visualization techniques
+    that can help you understand the latent image characteristics that may be
+    learned by your model.
+    
 1. [Reading Response] This problem asks you to reflect on one of the three
 readings from week 14
 ([a](https://www.datasketch.es/project/655-frustrations-doing-data-visualization),
