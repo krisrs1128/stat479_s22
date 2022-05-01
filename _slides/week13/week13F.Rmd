@@ -101,7 +101,7 @@ log(1 + features) %>%
 * It seems like the model picked up on several versions of the same image and
 maybe even several angles of the same dog (?)
 
-```{r}
+```{r, out.width = 100, fig.width = 10, fig.height = 10}
 activation_order <- order(features[, 1], decreasing = TRUE)
 cifar$x[activation_order[1:10],,,] %>%
   array_tree(1) %>%
@@ -111,6 +111,11 @@ cifar$x[activation_order[1:10],,,] %>%
 ---
 
 ## Aside: Installation Errors
+
+* The reason many of you encountered difficulties running `keras` from R is that
+the `keras` package is actually running python code in the background
+  - Advantage: Means that advances in python implementation are immediately accessible from R
+  - Disadvantage: Linking package installation across both R and python is complex
 
 ---
 
@@ -122,5 +127,6 @@ We will work through Exercise [Histopathology Embeddings] in Module 3.
 
 ### Exercise
 
-* Exercise 13.2 [Representation Analysis for CIFAR10, part c] on Canvas
-* Can discuss, but submit individually
+Pick *one* example from [Model Visualization Use Cases] to discuss with your
+project team. Submit your response as a group.
+

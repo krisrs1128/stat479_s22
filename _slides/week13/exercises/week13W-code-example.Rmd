@@ -65,7 +65,7 @@ model <- load_model_hdf5(f)
 ```
 
 
-```{r}
+```{r, fig.width = 10, fig.height = 10}
 library(RColorBrewer)
 activation_model <- keras_model(inputs = model$input, outputs = model$layers[[1]]$output)
 h <- predict(activation_model, cifar$x[1:15,,,])

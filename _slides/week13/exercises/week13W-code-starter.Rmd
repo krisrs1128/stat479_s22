@@ -41,6 +41,23 @@ seem to correspond to?
 library(keras)
 cifar <- dataset_cifar10()$train
 ```
+```{r}
+for (i in 1:15) {
+  plot(as.raster(cifar$x[i,,,], max = 255))
+}
+
+library(tidyverse)
+cifar$x[1:15,,,] %>%
+  array_tree(1) %>%
+  map(~ plot(as.raster(., max = 255)))
+
+cifar$y[1:15]
+```
+
+
+
+
+
 
 b. We have trained a small model to this dataset, available at this
 [link](https://uwmadison.box.com/shared/static/c9kkxyrjb9myfj5knj5vnx0j8gn1uh0s.h5).
@@ -51,6 +68,11 @@ features in layer 1 (`conv2d_8`) for the first image in the dataset.
 f <- tempfile()
 download.file("https://uwmadison.box.com/shared/static/c9kkxyrjb9myfj5knj5vnx0j8gn1uh0s.h5", f)
 model <- load_model_hdf5(f)
+```
+```{r}
+activation_model <- keras_model(inputs = model$input, outputs = model$layers[[1]]$output)
+features <- activation_model(cifar$x[1:15,,, ])
+dim(features)
 ```
 
 c. The block below extracts feature activations associated with layer 7, for the
@@ -64,3 +86,16 @@ activation_model <- keras_model(inputs = model$input, outputs = model$layers[[7]
 features <- activation_model(cifar$x[1:5000,,, ]) %>%
   as.matrix()
 ```
+
+
+```{r}
+which.max(features[,1])
+plot(as.raster(cifar$x[456,,,], max = 255))
+```
+
+
+```{r}
+library(superheat)
+superheat(log(1 + features), pretty.order.rows = TRUE, pretty.order.cols = TRUE)
+```
+

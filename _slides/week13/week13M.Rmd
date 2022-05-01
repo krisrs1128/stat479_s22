@@ -44,14 +44,20 @@ class: bottom
 model over / underfitting. To illustrate, we will fit two $K$-nearest neighbors
 models on a simple dataset, simulated below.
       
-```{r, out.width = "0.4\\textwidth", fig.width = 6,, fig.height = 3, fig.align = "center", fig.cap = "A simulated sine wave dataset, used to evaluate overfitting."}
+.pull-left[
+```{r}
 N <- 100
 df <- data.frame(x = runif(N, -pi, pi)) %>%
   mutate(y = sin(x) + rnorm(N, 0, 0.2))
+```
+]
 
+.pull-right[
+```{r}
 ggplot(df) +
   geom_point(aes(x, y))
 ```
+]
 
 ---
 
@@ -75,10 +81,10 @@ fits
 a. Create an `explainer` object for each of the fits above. Use these to create
 contrastive PD profiles between the three models.
 
-```{r}
+```{r, verbose = FALSE, fig.height = 5, fig.width = 10}
 library(DALEX)
 x <- df %>% select(starts_with("x"))
-explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y))
+explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y, verbose = FALSE))
 profiles <- map(explanations, model_profile)
 plot(profiles[[1]], profiles[[2]], profiles[[3]])
 ```
@@ -89,10 +95,10 @@ b. Interpret the result from (a). Which models seem over / underfit? Which
 would you use in practice, and how did you draw this conclusion?
 
 The model with $K = 50$ is underfit -- it "fills the valleys" and "trims the
-hills." The model with $K = 2$ seems to include the noise in the fitted
-regression.
+hills." The model with $K = 2$ includes noise, treating random
+variation as part of the true regression function.
 
-```{r}
+```{r, fig.height = 5, fig.width = 10, echo = FALSE}
 plot(profiles[[1]], profiles[[2]], profiles[[3]])
 ```
 
@@ -115,8 +121,8 @@ fits <- map(
 
 The `mtry` parameter doesn't seem to have much influence in this problem.
 
-```{r}
-explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y))
+```{r, fig.height = 5, fig.width = 10}
+explanations <- imap(fits, ~ explain(.x, data = x, y = df$y, label = .y, verbose = FALSE))
 profiles <- map(explanations, model_profile)
 plot(profiles[[1]], profiles[[2]], profiles[[3]])
 ```

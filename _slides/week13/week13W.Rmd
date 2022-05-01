@@ -15,8 +15,18 @@ output:
 library(knitr)
 library(tidyverse)
 library(caret)
-opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, dpi = 200, fig.align = "center", out.width = 650, fig.height = 3, fig.width = 9)
-th <- theme_minimal() + 
+opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
+  dpi = 200,
+  fig.align = "center",
+  out.width = 650,
+  fig.height = 3,
+  fig.width = 9
+  )
+th <- theme_minimal() +
   theme(
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = "#f7f7f7"),
@@ -40,7 +50,10 @@ class: bottom
 
 ### Announcements
 
-* Poster printing
+* Poster sessions on May 4, 6
+* Portfolio 4 due May 8
+* Project Milestone 4 due May 8
+* Canvas message about poster printing
 
 ---
 
@@ -124,5 +137,5 @@ We will work through Exercise [Representation Analysis for CIFAR10, parts a - b]
 
 ### Exercise
 
-* Exercise 13.2 [CIFAR, part c] on Canvas
+* Exercise 13.2 [Representation Analysis for CIFAR10, part c] on Canvas
 * Can discuss, but submit individually
