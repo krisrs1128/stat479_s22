@@ -125,9 +125,9 @@ research lab
 
 ### Final Lectures
 
-* It won't affect your grade, but I hope you have a chance to read the week 14
-material
-* They are non-technical, but I think they include some of the most important
+* It won't affect your grade, but do read the week 14 material
+  - Module 3 [Reading Response] guides you through a reflection
+* These readings are non-technical, but they include some of the most important
 points from any lecture in the course
   - The purpose of data science
   - The design process
@@ -137,7 +137,7 @@ points from any lecture in the course
 
 ### Thank You
 
-* I am grateful for all of the energy and thought you have brought to this course
+* I am grateful for the energy and thought you have brought to this course
 
 * I often tell my colleagues about how creative you all are
 
