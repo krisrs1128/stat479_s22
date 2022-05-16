@@ -1,0 +1,25 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+grades <- read_csv("~/Downloads/2022-05-15T1531_Grades-SP22_STAT_479_001.csv") %>%
+  filter(row_number() %in% 3:n()) %>%
+  select(Student, `Final Score`) %>%
+  mutate(
+    `Final Score` = as.numeric(`Final Score`),
+    point_thresholds = cut(`Final Score`, breaks = c(0, 60, 70, 78, 82, 88, 92, 100)),
+    point_thresholds = recode(
+      point_thresholds, 
+      "(70,78]" = "C", "(78,82]" = "BC", "(82,88]" = "B", "(88,92]" = "AB",
+      "(60,70]" = "D", "(92,100]" = "A", "(0,60]" = "F"
+      ),
+    quantiles = cut(`Final Score`, breaks = quantile(`Final Score`, c(0, 5, 10, 30, 45, 65, 75, 100) / 100))
+  )
+
+grades %>%
+  arrange(Student)
+```
+
