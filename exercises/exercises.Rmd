@@ -905,6 +905,7 @@ the Australian Pharmaceutical Benefits Scheme. It is read in below,
     contribution. Provide a brief interpretation of the second principal
     component direction.
     
+    
 1. [NYC Trees] In this problem, we'll use vector data to enrich a visualization
 of trees in New York City. In the process, we'll practice reading in and
 generating summaries of geospatial data.
@@ -1004,6 +1005,55 @@ use case for the function.
     d. `geom_sf`
     
     e. `coord_sf`
+    
+1. [Spatio-temporal T/F] Circle TRUE or FALSE for all statements below about
+time series and geospatial visualization.
+
+    * TRUE or FALSE: The `geom_sf` layer can be used to visualize collection of
+    spatial polygons of class `sf`.
+    * TRUE or FALSE: The `geom_raster` layer can be used to visualize a
+    multi-channel raster as an RGB image.
+    * TRUE or FALSE: A gradually decreasing slope in an ACF visualization
+    indicates a time series with strong seasonal structure.
+    * TRUE or FALSE: If `x` is a data.frame with columns `date`, `city`, and
+    `temperature`, then command `as_tsibble(x, key = city, index = date)` will
+    correctly create a `tsibble` object containing the time series collection,
+    assuming there are no gaps in time.
+    * TRUE or FALSE: A per-pixel grid of temperature data is an example of a
+    spatial vector dataset.
+    
+1. [Clustering vs. Topic Models]  Circle TRUE or FALSE for all statements below
+about clustering and topic models.
+    
+    * TRUE or FALSE: If all samples in a cluster have large silhouette statistics, then that
+    cluster is poorly-defined.
+    * TRUE or FALSE: Consider the `survey` dataset below,
+          
+      ```
+        Country     `WBL Report Year` Question answer
+        <chr>                   <dbl> <fct>     <dbl>
+      1 Afghanistan              1971 Q1            0
+      2 Afghanistan              1971 Q2            1
+      3 Afghanistan              1971 Q3            0
+      4 Afghanistan              1971 Q4            1
+      ```
+    
+      To use $K$-means to cluster country $\times$ year combinations by their pattern of question responses, we would need to first pivot it using the command,
+        
+      ```{r, eval = FALSE}
+      survey %>%
+      	pivot_wider(names_from = "Country", values_from = "answer")
+      ```	
+        
+    * TRUE or FALSE: Suppose a data.frame has a column, `reviews`, containing raw
+    text from across a collection of reviews (one review per row). Then, the
+    `cast_dtm` function can be used to split the raw text so that one word appears
+    on each row.
+    * TRUE or FALSE: A Structure plot visualizes the `n_samples` $\times$
+    `K`-dimensional matrix of mixed memberships fitted by a topic model.
+    * TRUE or FALSE: When cutting a hierarchical clustering tree at two heights,
+    the clusters found at the height closer to the leaves will always be nested
+    within the clusters found at the height closer to the root.
 
 1. [Glacial Lakes]. The data at this [link](https://github.com/krisrs1128/stat479_s22/tree/main/_slides/week7/exercises/data/glacial_lakes) contain labels of glacial lakes the
 Hindu Kush Himalaya, created during an ecological survey in 2015 by the
@@ -1100,6 +1150,81 @@ also bought these other books").
     * For tasks related to local topology, node-link diagrams are preferable to adjacency matrix visualizations.
     * It is possible to visually encode edge weight in either node-link or adjacency matrix visualizations.
     * It is possible to visually encode node category in either node-link or adjacency matrix visualizations.
+    * TRUE or FALSE: If `G` is a `tbl_graph` defining a network, then an adjacency matrix visualization can be created using
+   
+    ```{r, eval = FALSE}
+    ggraph(G) +
+      geom_adjaceny()
+    ```
+ 
+    * TRUE or FALSE: The `treemap` and `circlepack` layouts in `ggraph` can be used to visually represent enclosure relationships between nodes in a graph.
+    * TRUE or FALSE: The adjacency matrix visualization of a directed graph will generally be symmetric across the diagonal.
+    
+1. [HIV Network] The code below reads in nodes and edges for a graph describing
+the similarity of 512 HIV samples collected across 32 countries. Two samples are
+linked if they have similar genetic sequences.
+
+    ```{r, echo = TRUE, warning = FALSE, message = FALSE}
+    library(tidygraph)
+    nodes <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week11/exercises/hiv_nodes.csv")
+    edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week11/exercises/hiv_edges.csv")
+    G <- tbl_graph(nodes, edges)
+    G
+    ```
+    
+    a. [2 points] Provide code to generate a node-link visualization similar to that
+    in Figure \ref{fig:hiv_graph}. Make at least one style customization that
+    improves the visualization. Justify your choice.
+    
+    ```{r, echo = FALSE, fig.width = 10, fig.height = 10, out.width = "0.5\\textwidth", fig.cap = "\\label{fig:hiv_graph} A network between HIV sequences, labeled by the country from which they originated.", fig.align = "center"}
+    library(ggraph)
+    ggraph(G) +
+      geom_edge_link(colour = "#d3d3d3", alpha = 0.9, width = 2) +
+      geom_node_text(aes(label = name)) +
+      theme_void()
+    ```
+      
+    b. [1 point] The figure below shows the node-link visualization for a simple
+    graph. Sketch its exact adjacency matrix.
+    
+    ```{r, echo = FALSE, out.width = "0.3\\textwidth", fig.width = 5, fig.height = 5, fig.align = "left"}
+    set.seed(123)
+    library(igraph)
+    G <- as_tbl_graph(sample_pa(5)) %>%
+      mutate(node = 1:5)
+    ggraph(G, layout = "kk") +
+      geom_edge_link() +
+      geom_node_label(aes(label = node)) +
+      theme_void()
+    ```
+    
+    c. [2 points] The figure below shows the node-link visualization for a
+    more complex graph. How do you expect its corresponding adjacency matrix
+    visualization to look? Provide a rough sketch and a one-sentence justification.
+    
+    ```{r, echo = FALSE, out.width = "0.3\\textwidth", fig.width = 10, fig.height = 10, fig.align = "left"}
+    G <- as_tbl_graph(sample_islands(3, 40, .12, 2))
+    ggraph(G) +
+      geom_edge_link() +
+      geom_node_point() +
+      coord_fixed() +
+      theme_void()
+    ```
+
+1. [Dimensionality Reduction Review]  This problem asks you to explain, in your
+own words, a few conceptual and practical aspects for **one of the following**
+dimensionality reduction techniques,
+
+      * Principal Components Analysis (PCA)
+      * Uniform Manifold Approximation and Projection (UMAP)
+      * Latent Dirichlet Allocation (LDA)
+      
+    a. Outline how you would implement this method in R and extract output
+    needed for downstream visualizations. Make sure to highlight the the most
+    important steps and functions and briefly explain any code you write down.
+    
+    b. Describe the outputs from (a). How is each part interpreted? Be as
+    specific as possible.
     
 1. [Movie Genres] How do movie genres relate to one another? Is romance + comedy
 a more common combination than fantasy + adventure? We will use the dataset
@@ -1253,6 +1378,43 @@ states).
     visualizing a collection of time series as a heatmap, instead of as a collection
     of line plots.
     
+1. [Polio conceptual] The polio dataset contains weekly counts of new polio
+cases across each state in the United States, starting as early as 1912. In this
+question, our goal is to apply $K$-means to group states with similar incidence
+patterns.
+
+    ```{r}
+    polio <- read_csv("https://uwmadison.box.com/shared/static/nm7yku4y9q7ylvz5kbxya3ouj2njd0x6.csv")
+    head(polio)
+    ```
+      
+    a. Is it necessary to reshape the data before it can be used in the
+    `kmeans` function? If so, provide the code. If not, provide a brief
+    explanation.
+    
+    b. Let `x` contain the output from part (a). Compare the two
+    approaches to $K$-means in the code block below. Which would you recommend
+    using? Justify your choice.
+    
+    Option 1:
+    ```{r, eval = FALSE}
+    x %>%
+      select(-state) %>%
+      kmeans(centers = 5)
+    ```
+            
+    Option 2:
+    ```{r, eval = FALSE}
+    x %>%
+      select(-state) %>%
+      scale() %>%
+      kmeans(centers = 5)
+    ```
+      
+    c. Provide code needed for extracting and visualizing centroids
+    from the $K$-means fit made in part (b). Draw a rough sketch of the expected
+    result and include annotations that would help a reader understand the output.
+    
 1. [Chicago Traffic Accidents] The dataset [here](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/_slides/week9/exercises/chicago_crashes.csv) is a preprocessed version of a
 dataset downloaded from Chicago's official traffic accidents
 [database](https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if/data).
@@ -1268,6 +1430,30 @@ and over the year are associated with the highest number of traffic accidents.
     arguments to `superheat`._
   
     c. Provide a brief interpretion of your final visualization.
+    
+1. [Movies K-means] In this problem, we will see how a heatmap can visualize
+user ratings across a collection of movies.
+    
+    ```{r}
+    movies_mat <- read_csv("https://uwmadison.box.com/shared/static/wj1ln9xtigaoubbxow86y2gqmqcsu2jk.csv") %>%
+      column_to_rownames(var = "title")
+    movies_mat[1:2, 1:10]
+    ```
+    
+    a. Provide code to generate the heatmap shown in Figure \ref{fig:movies}.
+    
+    ```{r, echo = FALSE, fig.height = 10, fig.width = 18, out.width = "0.6\\textwidth", fig.cap = "\\label{fig:movies} A heatmap of movie ratings for Q4a.", fig.align = "center"}
+    library(superheat)
+    superheat(movies_mat, pretty.order.rows = TRUE, pretty.order.cols = TRUE)
+    ```
+    
+    b. In this visualization, how do you interpret sets of similar rows?
+    Similar columns?
+    
+    c. Propose an alternative compound plot that also allows readers to
+    easily find average movie ratings. Draw a simple sketch of what the output would
+    look like and describe any necessary modifications to the code in part (a).
+    
     
 1. [Women, Business and the Law] The World Bank's Women, Business, and the Law
 program has curated a dataset about gender equality across countries since 1971.
@@ -1665,6 +1851,16 @@ progress in the field of speech recognition.
       
     c. Create a visualization of your UMAP embeddings from (b). Which phonemes
     seem the most similar to one another in the high-dimensional audio space?
+    
+1. [UMAP vs. PCA] This problem asks you to compare and contrast dimensionality reduction using and
+UMAP and PCA.
+
+    a. Provide an example of a dataset for which using PCA would be
+    more appropriate than UMAP. Justify your choice.
+    
+    b. Provide an example of a dataset for which using UMAP would be
+    more appropriate than PCA. Justify your choice.
+    
  
 1. [Political Blogs] In this problem, we will use topic modeling to see how the topics discussed
 across the political blogsphere evolved over course of 2008. We have fitted a
