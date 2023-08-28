@@ -1,0 +1,12 @@
+---
+title: "Statistical Data Visualization - Spring 2022"
+description: |
+  Public materials for STAT 479 at UW Madison.
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+This page contains notes and links to readings / recordings for STAT 479.

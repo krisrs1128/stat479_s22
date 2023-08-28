@@ -1,0 +1,28 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this site",
+      "description": "Some additional details about the website",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2022-02-20T09:59:32-06:00"
+    },
+    {
+      "path": "index.html",
+      "title": "Statistical Data Visualization - Spring 2022",
+      "description": "Public materials for STAT 479 at UW Madison.\n",
+      "author": [],
+      "contents": "\nThis page contains notes and links to readings / recordings for STAT 479.\n\n\n\n",
+      "last_modified": "2022-02-20T09:59:33-06:00"
+    },
+    {
+      "path": "notes.html",
+      "title": "Notes",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2022-02-20T09:59:33-06:00"
+    }
+  ],
+  "collections": ["posts/posts.json"]
+}
